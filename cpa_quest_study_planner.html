@@ -1,0 +1,620 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@400;500;600&display=swap');
+*{box-sizing:border-box;margin:0;padding:0}
+.app{font-family:'DM Sans',sans-serif;color:var(--color-text-primary);background:var(--color-background-primary)}
+.topbar{background:#0f0e17;padding:14px 18px;display:flex;align-items:center;gap:12px;border-radius:12px 12px 0 0}
+.logo{font-family:'Space Mono',monospace;font-size:20px;font-weight:700;color:#f0c040;letter-spacing:-1px;white-space:nowrap}
+.logo span{color:#7eb8f7}
+.topbar-mid{flex:1;display:flex;flex-direction:column;gap:4px}
+.xp-row{display:flex;justify-content:space-between;font-size:11px;color:#888}
+.xp-track{height:7px;background:rgba(255,255,255,0.12);border-radius:4px;overflow:hidden}
+.xp-fill{height:100%;background:#f0c040;border-radius:4px;transition:width 0.7s cubic-bezier(.22,1,.36,1)}
+.lvl-pill{background:#f0c040;color:#0f0e17;font-family:'Space Mono',monospace;font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;white-space:nowrap}
+
+.boss-bar-wrap{background:#1a0a0a;border:1px solid #5a1a1a;padding:12px 18px;display:flex;align-items:center;gap:14px}
+.boss-icon{font-size:28px;flex-shrink:0;animation:bossFloat 3s ease-in-out infinite}
+@keyframes bossFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.boss-info{flex:1}
+.boss-name{font-family:'Space Mono',monospace;font-size:13px;color:#ff6b6b;font-weight:700;margin-bottom:5px}
+.boss-hp-track{height:12px;background:#2a0a0a;border-radius:6px;overflow:hidden;position:relative}
+.boss-hp-fill{height:100%;border-radius:6px;transition:width 1s cubic-bezier(.22,1,.36,1)}
+.boss-hp-text{font-size:11px;color:#888;margin-top:4px;display:flex;justify-content:space-between}
+.boss-rage{font-size:11px;color:#ff6b6b;font-family:'Space Mono',monospace}
+
+.nav{display:flex;background:var(--color-background-secondary);border-bottom:0.5px solid var(--color-border-tertiary)}
+.ntab{flex:1;padding:10px 4px;font-size:12px;font-weight:500;text-align:center;cursor:pointer;color:var(--color-text-secondary);border:none;background:none;border-bottom:2px solid transparent;transition:all .2s;font-family:'DM Sans',sans-serif}
+.ntab.on{color:var(--color-text-primary);border-bottom-color:#f0c040;background:var(--color-background-primary)}
+
+.panel{display:none;padding:16px}
+.panel.on{display:block}
+
+.sec-lbl{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px}
+
+.class-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:16px}
+.class-card{border:1px solid var(--color-border-tertiary);border-radius:10px;padding:12px 8px;text-align:center;cursor:pointer;transition:all .2s;background:var(--color-background-secondary)}
+.class-card:hover{border-color:var(--color-border-secondary)}
+.class-card.picked{border-color:#f0c040;background:#1a1600}
+.class-icon{font-size:26px;margin-bottom:6px}
+.class-name{font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:3px}
+.class-bonus{font-size:10px;color:var(--color-text-secondary);line-height:1.4}
+.class-card.picked .class-name{color:#f0c040}
+
+.ig{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.ig label{font-size:12px;color:var(--color-text-secondary);font-weight:500;display:block;margin-bottom:4px}
+.ig select,.ig input{font-family:'DM Sans',sans-serif;font-size:14px;width:100%}
+
+.skill-tree{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.skill-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:8px;padding:10px 12px}
+.skill-left{min-width:0}
+.skill-name{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+.skill-pips{display:flex;gap:4px}
+.pip{width:18px;height:8px;border-radius:3px;background:var(--color-border-tertiary);transition:background .3s}
+.pip.bronze{background:#cd7f32}
+.pip.silver{background:#a8a9ad}
+.pip.gold{background:#f0c040}
+.pip.plat{background:#7eb8f7}
+.skill-tier{font-size:10px;color:var(--color-text-secondary);margin-top:3px}
+.skill-right{white-space:nowrap;font-size:11px;color:var(--color-text-secondary);text-align:right}
+
+.gen-btn{width:100%;padding:13px;background:#0f0e17;color:#f0c040;border:none;border-radius:8px;font-family:'Space Mono',monospace;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.02em;transition:all .2s}
+.gen-btn:hover{background:#1e1d2e;transform:translateY(-1px)}
+.gen-btn:active{transform:scale(.98)}
+
+.countdown{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:16px}
+.cd{background:#0f0e17;border-radius:8px;padding:10px 6px;text-align:center}
+.cd-n{font-family:'Space Mono',monospace;font-size:24px;font-weight:700;color:#f0c040;line-height:1}
+.cd-l{font-size:10px;color:#888;text-transform:uppercase;margin-top:3px;letter-spacing:.06em}
+
+.ready-wrap{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:10px;padding:14px;margin-bottom:16px}
+.ready-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.ready-score{font-family:'Space Mono',monospace;font-size:26px;font-weight:700;color:#f0c040}
+.ready-track{height:12px;background:var(--color-border-tertiary);border-radius:6px;overflow:hidden;margin-bottom:6px}
+.ready-fill{height:100%;background:#f0c040;border-radius:6px;transition:width 1s cubic-bezier(.22,1,.36,1)}
+.ready-msg{font-size:12px;color:var(--color-text-secondary)}
+
+.day-list{display:flex;flex-direction:column;gap:6px;max-height:300px;overflow-y:auto;padding-right:2px}
+.day-row{display:flex;align-items:center;gap:10px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:8px;padding:9px 12px;transition:all .15s}
+.day-row.is-today{border-color:#f0c040;border-width:1.5px}
+.day-row.done{opacity:.65;border-color:var(--color-border-success)}
+.day-num{font-family:'Space Mono',monospace;font-size:11px;color:var(--color-text-secondary);min-width:36px}
+.day-info{flex:1;min-width:0}
+.day-topic{font-size:13px;font-weight:500;color:var(--color-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.day-sub{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+.day-icon{font-size:15px;flex-shrink:0;width:20px;text-align:center}
+
+.stat3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:14px}
+.sbox{background:var(--color-background-secondary);border-radius:8px;padding:12px;text-align:center}
+.sval{font-family:'Space Mono',monospace;font-size:20px;font-weight:700;color:var(--color-text-primary)}
+.slab{font-size:10px;color:var(--color-text-secondary);margin-top:2px;text-transform:uppercase;letter-spacing:.05em}
+
+.hmap{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:14px}
+.hc{aspect-ratio:1;border-radius:3px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary)}
+.hc.hdone{background:#639922;border-color:#639922}
+.hc.htoday{background:#f0c040;border-color:#f0c040}
+.hc.hmiss{background:#e24b4a;border-color:#e24b4a;opacity:.5}
+
+.btn-row{display:flex;gap:8px;margin-top:12px}
+.abtn{flex:1;padding:11px 8px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;color:var(--color-text-primary);transition:all .15s}
+.abtn:hover{border-color:var(--color-border-secondary)}
+.abtn.gold{background:#f0c040;color:#0f0e17;border-color:#f0c040;font-weight:600}
+.abtn.red{background:#e24b4a;color:#fff;border-color:#e24b4a}
+
+.streak-banner{display:flex;align-items:center;gap:14px;background:#0f0e17;border-radius:10px;padding:14px 16px;margin-bottom:14px}
+.streak-fire{font-size:30px}
+.streak-num{font-family:'Space Mono',monospace;font-size:28px;font-weight:700;color:#f0c040;line-height:1}
+.streak-lbl{font-size:12px;color:#888}
+.streak-r{margin-left:auto;text-align:right}
+.streak-best{font-size:11px;color:#888}
+.streak-xp{font-size:12px;color:#f0c040;margin-top:3px;font-family:'Space Mono',monospace}
+
+.badge-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:16px}
+.bcard{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:8px;padding:12px 8px;text-align:center;transition:all .2s}
+.bcard.earned{background:#0f0e17;border-color:#f0c040}
+.bicon{font-size:22px;margin-bottom:5px;filter:grayscale(1);opacity:.35}
+.bcard.earned .bicon{filter:none;opacity:1}
+.bname{font-size:11px;font-weight:500;color:var(--color-text-secondary)}
+.bcard.earned .bname{color:#f0c040}
+.bdesc{font-size:10px;color:var(--color-text-secondary);margin-top:2px;line-height:1.3}
+
+.wheel-overlay{position:absolute;top:0;left:0;right:0;min-height:500px;background:rgba(15,14,23,0.95);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;border-radius:12px;padding:24px}
+.wheel-title{font-family:'Space Mono',monospace;font-size:16px;color:#f0c040;font-weight:700;margin-bottom:6px;text-align:center}
+.wheel-sub{font-size:12px;color:#888;margin-bottom:20px;text-align:center}
+.wheel-canvas-wrap{position:relative;width:220px;height:220px;margin-bottom:20px}
+.wheel-pointer{position:absolute;top:-10px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-top:20px solid #f0c040;z-index:10}
+.spin-btn{padding:12px 32px;background:#f0c040;color:#0f0e17;border:none;border-radius:8px;font-family:'Space Mono',monospace;font-size:14px;font-weight:700;cursor:pointer;transition:all .2s}
+.spin-btn:disabled{opacity:.5;cursor:not-allowed}
+.wheel-result{font-family:'Space Mono',monospace;font-size:15px;color:#f0c040;margin-top:14px;min-height:22px;text-align:center}
+.wheel-close{margin-top:14px;font-size:12px;color:#888;cursor:pointer;text-decoration:underline}
+
+.lvlup-overlay{position:absolute;top:0;left:0;right:0;min-height:500px;background:rgba(15,14,23,0.97);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:200;border-radius:12px;padding:24px;text-align:center}
+.lvlup-num{font-family:'Space Mono',monospace;font-size:56px;font-weight:700;color:#f0c040;line-height:1;animation:pulse 0.6s ease-in-out infinite alternate}
+@keyframes pulse{from{transform:scale(1)}to{transform:scale(1.08)}}
+.lvlup-title{font-family:'Space Mono',monospace;font-size:14px;color:#7eb8f7;margin-top:6px}
+.lvlup-name{font-size:18px;font-weight:500;color:#fff;margin-top:10px}
+.lvlup-close{margin-top:20px;padding:10px 28px;background:#f0c040;color:#0f0e17;border:none;border-radius:8px;font-family:'Space Mono',monospace;font-size:13px;font-weight:700;cursor:pointer}
+
+.toast{position:absolute;bottom:16px;left:50%;transform:translateX(-50%) translateY(50px);background:#0f0e17;color:#f0c040;font-family:'Space Mono',monospace;font-size:12px;padding:9px 18px;border-radius:20px;border:1px solid #f0c040;transition:transform .3s ease;z-index:300;white-space:nowrap;opacity:0}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+.wrapper{position:relative;overflow:hidden}
+</style>
+
+<div class="app wrapper" id="app">
+
+<div class="topbar">
+  <div class="logo">CPA<span>Quest</span> <span style="font-size:11px;color:#888">v2</span></div>
+  <div class="topbar-mid">
+    <div class="xp-row"><span id="xp-cur">0 XP</span><span id="xp-nxt">500 XP to next level</span></div>
+    <div class="xp-track"><div class="xp-fill" id="xp-fill" style="width:0%"></div></div>
+  </div>
+  <div class="lvl-pill" id="lvl-pill">LVL 1</div>
+</div>
+
+<div class="boss-bar-wrap" id="boss-bar-wrap">
+  <div class="boss-icon" id="boss-icon">👹</div>
+  <div class="boss-info">
+    <div class="boss-name" id="boss-name">THE CPA EXAM BOSS — FAR</div>
+    <div class="boss-hp-track"><div class="boss-hp-fill" id="boss-hp" style="width:100%;background:#e24b4a"></div></div>
+    <div class="boss-hp-text">
+      <span id="boss-hp-txt">HP: 1000 / 1000</span>
+      <span class="boss-rage" id="boss-rage">ENRAGED</span>
+    </div>
+  </div>
+</div>
+
+<div class="nav">
+  <button class="ntab on" onclick="goTab('setup')">Setup</button>
+  <button class="ntab" onclick="goTab('plan')">Plan</button>
+  <button class="ntab" onclick="goTab('progress')">Progress</button>
+  <button class="ntab" onclick="goTab('badges')">Badges</button>
+</div>
+
+<div class="panel on" id="tab-setup">
+  <div class="sec-lbl">Choose your class</div>
+  <div class="class-grid" id="class-grid">
+    <div class="class-card" onclick="pickClass(0)" id="cls0">
+      <div class="class-icon">⚔️</div>
+      <div class="class-name">The Grinder</div>
+      <div class="class-bonus">+20% XP for every session logged</div>
+    </div>
+    <div class="class-card" onclick="pickClass(1)" id="cls1">
+      <div class="class-icon">🧠</div>
+      <div class="class-name">The Strategist</div>
+      <div class="class-bonus">Weak topics generate 2x boss damage</div>
+    </div>
+    <div class="class-card" onclick="pickClass(2)" id="cls2">
+      <div class="class-icon">⚡</div>
+      <div class="class-name">The Clutch Artist</div>
+      <div class="class-bonus">Streak bonus multiplies by 1.5x</div>
+    </div>
+  </div>
+  <div class="sec-lbl">Exam info</div>
+  <div class="ig">
+    <div><label>CPA section</label>
+      <select id="sect" onchange="loadTopics()">
+        <option value="FAR">FAR — Financial Accounting</option>
+        <option value="AUD">AUD — Auditing & Attestation</option>
+        <option value="REG">REG — Tax & Regulation</option>
+        <option value="BAR">BAR — Business Analysis</option>
+        <option value="ISC">ISC — Info Systems</option>
+        <option value="TCP">TCP — Tax Compliance</option>
+      </select>
+    </div>
+    <div><label>Exam date</label><input type="date" id="edate"></div>
+    <div><label>Hours / day</label><input type="number" id="dhrs" value="3" min="1" max="12"></div>
+    <div><label>Becker % done</label><input type="number" id="bpct" value="0" min="0" max="100"></div>
+  </div>
+  <div class="sec-lbl">Skill mastery — rate yourself</div>
+  <div class="skill-tree" id="skill-tree"></div>
+  <button class="gen-btn" onclick="generate()">GENERATE PLAN + ENTER THE DUNGEON →</button>
+</div>
+
+<div class="panel" id="tab-plan">
+  <div id="plan-empty" style="text-align:center;padding:40px 20px;color:var(--color-text-secondary)">
+    <div style="font-size:32px;margin-bottom:10px">🗺️</div>
+    <div style="font-size:14px">Set up your exam first.</div>
+  </div>
+  <div id="plan-body" style="display:none">
+    <div class="countdown" id="countdown"></div>
+    <div class="ready-wrap">
+      <div class="ready-top">
+        <div>
+          <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:2px">Exam readiness</div>
+          <div class="ready-score" id="rscore">0%</div>
+        </div>
+        <div style="text-align:right;font-size:11px;color:var(--color-text-secondary)" id="plan-meta"></div>
+      </div>
+      <div class="ready-track"><div class="ready-fill" id="rfill" style="width:0%"></div></div>
+      <div class="ready-msg" id="rmsg">Complete daily goals to build readiness.</div>
+    </div>
+    <div class="sec-lbl">Daily schedule</div>
+    <div class="day-list" id="day-list"></div>
+  </div>
+</div>
+
+<div class="panel" id="tab-progress">
+  <div id="prog-empty" style="text-align:center;padding:40px 20px;color:var(--color-text-secondary)">
+    <div style="font-size:32px;margin-bottom:10px">📊</div>
+    <div style="font-size:14px">Generate your plan first.</div>
+  </div>
+  <div id="prog-body" style="display:none">
+    <div class="stat3">
+      <div class="sbox"><div class="sval" id="p-days">0</div><div class="slab">Sessions</div></div>
+      <div class="sbox"><div class="sval" id="p-hrs">0</div><div class="slab">Hours</div></div>
+      <div class="sbox"><div class="sval" id="p-streak">0</div><div class="slab">🔥 Streak</div></div>
+    </div>
+    <div class="sec-lbl">Activity heatmap</div>
+    <div class="hmap" id="hmap"></div>
+    <div class="sec-lbl">Skill mastery levels</div>
+    <div id="mastery-bars"></div>
+    <div class="btn-row">
+      <button class="abtn gold" onclick="logDay()">Log session +XP</button>
+      <button class="abtn red" onclick="bossBattle()">Boss battle ⚔️</button>
+      <button class="abtn" onclick="openWheel()" id="wheel-btn" style="opacity:.4" disabled>Spin loot 🎰</button>
+    </div>
+    <div style="font-size:11px;color:var(--color-text-secondary);margin-top:8px;text-align:center" id="wheel-hint">Log 5 sessions to unlock the loot wheel</div>
+  </div>
+</div>
+
+<div class="panel" id="tab-badges">
+  <div class="streak-banner">
+    <div class="streak-fire">🔥</div>
+    <div>
+      <div class="streak-num" id="sb-streak">0</div>
+      <div class="streak-lbl">day streak</div>
+    </div>
+    <div class="streak-r">
+      <div class="streak-best" id="sb-best">Best: 0</div>
+      <div class="streak-xp" id="sb-xp">0 XP total</div>
+    </div>
+  </div>
+  <div class="sec-lbl">Achievements</div>
+  <div class="badge-grid" id="badge-grid"></div>
+</div>
+
+<div class="wheel-overlay" id="wheel-overlay" style="display:none">
+  <div class="wheel-title">LOOT WHEEL</div>
+  <div class="wheel-sub">You earned a spin! What will fate deliver?</div>
+  <div class="wheel-canvas-wrap">
+    <div class="wheel-pointer"></div>
+    <canvas id="wheel-canvas" width="220" height="220"></canvas>
+  </div>
+  <button class="spin-btn" id="spin-btn" onclick="spinWheel()">SPIN</button>
+  <div class="wheel-result" id="wheel-result"></div>
+  <div class="wheel-close" onclick="closeWheel()">close</div>
+</div>
+
+<div class="lvlup-overlay" id="lvlup-overlay" style="display:none">
+  <div style="font-size:13px;color:#888;font-family:'Space Mono',monospace;margin-bottom:4px">LEVEL UP!</div>
+  <div class="lvlup-num" id="lu-num">2</div>
+  <div class="lvlup-title" id="lu-title">NEW RANK UNLOCKED</div>
+  <div class="lvlup-name" id="lu-name">Tax Novice</div>
+  <button class="lvlup-close" onclick="closeLvlUp()">CONTINUE →</button>
+</div>
+
+<div class="toast" id="toast"></div>
+</div>
+
+<script>
+const TOPICS={FAR:[{n:"Financial Statements",w:"25-35%"},{n:"Transactions",w:"20-30%"},{n:"State & Local Gov.",w:"5-15%"},{n:"Not-for-Profit",w:"5-15%"},{n:"Select Transactions",w:"10-20%"},{n:"Employee Benefits",w:"5-10%"}],AUD:[{n:"Ethics & Independence",w:"15-25%"},{n:"Risk Assessment",w:"25-35%"},{n:"Audit Procedures",w:"20-30%"},{n:"Forming Conclusions",w:"15-20%"}],REG:[{n:"Ethics & Law",w:"10-20%"},{n:"Individual Tax",w:"15-25%"},{n:"Entity Tax",w:"28-38%"},{n:"Property Transactions",w:"10-20%"},{n:"Multijurisdictional",w:"5-10%"}],BAR:[{n:"Business Analysis",w:"40-50%"},{n:"Financial Risk",w:"20-30%"},{n:"Operations Mgmt",w:"10-20%"},{n:"Financial Statements",w:"10-20%"}],ISC:[{n:"IT Systems",w:"35-45%"},{n:"Security & Privacy",w:"25-35%"},{n:"Emerging Tech",w:"10-20%"},{n:"Business Processes",w:"10-20%"}],TCP:[{n:"Individual Planning",w:"30-40%"},{n:"Entity Planning",w:"30-40%"},{n:"Property Transactions",w:"10-20%"},{n:"Multi-jurisdictional",w:"10-20%"}]};
+const TIERS=["unranked","bronze","silver","gold","platinum"];
+const TIER_LABELS=["Unranked","Bronze","Silver","Gold","Platinum"];
+const TIER_COLORS=["#444","#cd7f32","#a8a9ad","#f0c040","#7eb8f7"];
+const CLASSES=[{name:"The Grinder",bonus:"xp"},{name:"The Strategist",bonus:"weak"},{name:"The Clutch Artist",bonus:"streak"}];
+const BADGES=[{id:"start",icon:"🚀",name:"Journey begins",desc:"Generate first plan"},{id:"s3",icon:"🔥",name:"On fire",desc:"3-day streak"},{id:"s7",icon:"⚡",name:"Week warrior",desc:"7-day streak"},{id:"log1",icon:"✏️",name:"First step",desc:"Log first session"},{id:"log5",icon:"🏃",name:"Momentum",desc:"5 sessions logged"},{id:"boss1",icon:"⚔️",name:"Boss slayer",desc:"Win a boss battle"},{id:"half",icon:"🎯",name:"Halfway",desc:"50% readiness"},{id:"ready",icon:"🏆",name:"Board ready",desc:"80% readiness"},{id:"spin1",icon:"🎰",name:"Lucky spin",desc:"Spin the loot wheel"},{id:"gold1",icon:"🌟",name:"Gold mastery",desc:"Gold-tier any topic"},{id:"plat1",icon:"💎",name:"Platinum",desc:"Platinum any topic"},{id:"hrs10",icon:"📚",name:"Scholar",desc:"10+ hours logged"}];
+const LEVEL_NAMES=["Candidate","Tax Novice","MCQ Apprentice","Audit Analyst","CPA Contender","Board Warrior","CPA Legend"];
+const LEVEL_XP=[0,500,1200,2500,4500,7000,10000];
+const WHEEL_PRIZES=[{label:"+200 XP",color:"#f0c040",val:200,type:"xp"},{label:"Streak Shield",color:"#7eb8f7",val:1,type:"shield"},{label:"+100 XP",color:"#ef9f27",val:100,type:"xp"},{label:"Boss -10% HP",color:"#e24b4a",val:10,type:"bossdmg"},{label:"+50 XP",color:"#639922",val:50,type:"xp"},{label:"2x XP Day",color:"#cd7f32",val:1,type:"2xp"},{label:"+150 XP",color:"#7f77dd",val:150,type:"xp"},{label:"Topic Boost",color:"#5dcaa5",val:1,type:"boost"}];
+
+let S={plan:false,cls:-1,sect:"FAR",edate:null,dhrs:3,bpct:0,strength:{},mastery:{},schedule:[],activity:{},streak:0,bestStreak:0,sessions:0,hrs:0,readiness:0,xp:0,level:1,bossHp:1000,bossMaxHp:1000,bossBattles:0,earned:[],shield:0,doubleXp:false,wheelSpins:0,spinsUsed:0};
+
+function pickClass(i){S.cls=i;[0,1,2].forEach(j=>{document.getElementById("cls"+j).className="class-card"+(j===i?" picked":"")});showToast(CLASSES[i].name+" selected!")}
+
+function loadTopics(){
+  const sec=document.getElementById("sect").value;
+  S.sect=sec;
+  const topics=TOPICS[sec];
+  const tree=document.getElementById("skill-tree");
+  tree.innerHTML="";
+  topics.forEach((t,i)=>{
+    const tier=S.mastery[i]||0;
+    const row=document.createElement("div");row.className="skill-row";
+    row.innerHTML=`<div class="skill-left"><div class="skill-name">${t.n}</div><div class="skill-pips" id="pips-${i}">${renderPips(tier)}</div><div class="skill-tier" id="tier-lbl-${i}">${TIER_LABELS[tier]} · ${t.w}</div></div><div class="skill-right"><button onclick="bumpTier(${i},-1)" style="padding:3px 7px;font-size:11px;border-radius:4px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);cursor:pointer;color:var(--color-text-primary)">−</button>&nbsp;<button onclick="bumpTier(${i},1)" style="padding:3px 7px;font-size:11px;border-radius:4px;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);cursor:pointer;color:var(--color-text-primary)">+</button></div>`;
+    tree.appendChild(row);
+  });
+}
+
+function renderPips(tier){
+  let h="";
+  for(let i=0;i<4;i++){
+    let cls="pip";
+    if(i<tier){cls+=" "+(i===0?"bronze":i===1?"silver":i===2?"gold":"plat")}
+    h+=`<div class="${cls}"></div>`;
+  }
+  return h;
+}
+
+function bumpTier(i,dir){
+  const cur=S.mastery[i]||0;
+  const nxt=Math.max(0,Math.min(4,cur+dir));
+  S.mastery[i]=nxt;
+  document.getElementById("pips-"+i).innerHTML=renderPips(nxt);
+  document.getElementById("tier-lbl-"+i).textContent=TIER_LABELS[nxt]+" · "+TOPICS[S.sect][i].w;
+}
+
+function generate(){
+  const dv=document.getElementById("edate").value;
+  if(!dv){showToast("Pick your exam date!");return;}
+  if(S.cls<0){showToast("Choose a class first!");return;}
+  const ed=new Date(dv);const today=new Date();today.setHours(0,0,0,0);
+  const dl=Math.ceil((ed-today)/86400000);
+  if(dl<=0){showToast("Exam date must be in the future!");return;}
+  S.edate=ed;S.dhrs=parseInt(document.getElementById("dhrs").value)||3;
+  S.bpct=parseInt(document.getElementById("bpct").value)||0;
+  S.sect=document.getElementById("sect").value;
+  S.plan=true;S.schedule=[];
+  const topics=TOPICS[S.sect];
+  let pool=[];
+  topics.forEach((t,i)=>{const m=S.mastery[i]||0;const wt=m<=1?3:m<=2?2:1;for(let x=0;x<wt;x++)pool.push(t.n)});
+  const revDays=Math.max(2,Math.round(dl*0.12));
+  for(let d=0;d<dl;d++){
+    const dt=new Date(today);dt.setDate(today.getDate()+d);
+    const isRev=d>=dl-revDays,isPrac=(d%6===5)&&!isRev;
+    let topic=isPrac?"MCQ Practice":isRev?"Full Review":pool[d%pool.length];
+    let type=isPrac?"practice":isRev?"review":"content";
+    S.schedule.push({day:d+1,date:dt,topic,type,done:false});
+  }
+  S.bossMaxHp=dl*20;S.bossHp=S.bossMaxHp;
+  S.readiness=Math.min(35,Math.round(S.bpct*0.35));
+  addXP(100,"Plan created! +100 XP");
+  document.getElementById("boss-name").textContent="THE CPA EXAM BOSS — "+S.sect;
+  updateBossBar();
+  checkBadges();
+  renderPlan();renderProg();renderBadges();
+  goTab("plan");
+}
+
+function updateBossBar(){
+  const pct=Math.max(0,Math.round(S.bossHp/S.bossMaxHp*100));
+  const fill=document.getElementById("boss-hp");
+  fill.style.width=pct+"%";
+  fill.style.background=pct>60?"#e24b4a":pct>30?"#ef9f27":"#639922";
+  document.getElementById("boss-hp-txt").textContent="HP: "+Math.round(S.bossHp)+" / "+S.bossMaxHp;
+  document.getElementById("boss-rage").textContent=pct>60?"ENRAGED":pct>30?"WEAKENED":"NEAR DEFEAT!";
+  document.getElementById("boss-icon").textContent=pct>60?"👹":pct>30?"😤":"💀";
+}
+
+function renderPlan(){
+  if(!S.plan)return;
+  document.getElementById("plan-empty").style.display="none";
+  document.getElementById("plan-body").style.display="block";
+  updateCountdown();
+  setInterval(updateCountdown,60000);
+  document.getElementById("plan-meta").innerHTML=S.sect+" section<br>"+S.schedule.length+" days · "+S.dhrs+"h/day";
+  updateReadiness();
+  const today=new Date();today.setHours(0,0,0,0);
+  const dl=document.getElementById("day-list");dl.innerHTML="";
+  S.schedule.forEach((d)=>{
+    const isT=d.date.toDateString()===today.toDateString();
+    const row=document.createElement("div");
+    row.className="day-row"+(d.done?" done":"")+(isT?" is-today":"");
+    const ico=d.done?"✅":isT?"⭐":d.type==="practice"?"🎯":d.type==="review"?"📖":"📝";
+    row.innerHTML=`<div class="day-num">Day ${d.day}</div><div class="day-info"><div class="day-topic">${d.topic}</div><div class="day-sub">${S.dhrs}h · ${d.date.toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"})}</div></div><div class="day-icon">${ico}</div>`;
+    dl.appendChild(row);
+  });
+}
+
+function updateCountdown(){
+  if(!S.edate)return;
+  const diff=S.edate-new Date();
+  if(diff<=0){document.getElementById("countdown").innerHTML="<div style='color:#e24b4a;font-weight:600;padding:12px;text-align:center;grid-column:1/-1'>Exam day!</div>";return;}
+  const days=Math.floor(diff/86400000),wks=Math.floor(days/7),hrs=Math.floor((diff%86400000)/3600000),mins=Math.floor((diff%3600000)/60000);
+  document.getElementById("countdown").innerHTML=["Days","Weeks","Hours","Mins"].map((l,i)=>`<div class="cd"><div class="cd-n">${[days,wks,hrs,mins][i]}</div><div class="cd-l">${l}</div></div>`).join("");
+}
+
+function updateReadiness(){
+  const p=Math.min(100,S.readiness);
+  document.getElementById("rscore").textContent=p+"%";
+  document.getElementById("rfill").style.width=p+"%";
+  document.getElementById("rmsg").textContent=p<30?"Keep grinding — momentum is building!":p<60?"Solid progress. Stay consistent!":p<80?"You're looking strong. Push for it!":"Board ready! Keep reviewing.";
+}
+
+function logDay(){
+  const today=new Date();today.setHours(0,0,0,0);
+  const key=today.toISOString().slice(0,10);
+  if(S.activity[key]==="done"){showToast("Already logged today!");return;}
+  S.activity[key]="done";
+  S.sessions++;S.hrs+=S.dhrs;
+  const yk=new Date(today);yk.setDate(today.getDate()-1);
+  const ykey=yk.toISOString().slice(0,10);
+  if(S.activity[ykey]==="done"||S.sessions===1){S.streak++;}else{S.streak=1;}
+  if(S.streak>S.bestStreak)S.bestStreak=S.streak;
+  let base=50+S.streak*10;
+  if(S.cls===0)base=Math.round(base*1.2);
+  if(S.cls===2)base=Math.round(base*(1+S.streak*0.05));
+  if(S.doubleXp){base*=2;S.doubleXp=false;showToast("2x XP DAY triggered! +"+base+" XP");}
+  S.readiness=Math.min(100,S.readiness+Math.round(80/Math.max(S.schedule.length,30)));
+  const dmg=S.cls===1?40:20;S.bossHp=Math.max(0,S.bossHp-dmg);
+  updateBossBar();
+  if(S.sessions%5===0){S.wheelSpins++;unlockWheel();}
+  upgradeMastery();
+  addXP(base,"Session logged! +"+base+" XP");
+  checkBadges();renderProg();updateReadiness();
+}
+
+function upgradeMastery(){
+  const topics=TOPICS[S.sect];
+  topics.forEach((t,i)=>{
+    const cur=S.mastery[i]||0;
+    if(cur<4&&S.sessions>0&&Math.random()<0.25){
+      S.mastery[i]=Math.min(4,cur+1);
+      if(S.mastery[i]===3)showToast(t.n+" reached GOLD!");
+      if(S.mastery[i]===4)showToast(t.n+" reached PLATINUM!");
+    }
+  });
+}
+
+function bossBattle(){
+  S.bossBattles++;
+  const score=Math.floor(Math.random()*40)+55;
+  const win=score>=70;
+  const dmg=win?80:30;
+  S.bossHp=Math.max(0,S.bossHp-dmg);
+  S.readiness=Math.min(100,S.readiness+Math.round(win?5:2));
+  const xpGain=win?200:80;
+  addXP(xpGain,"Boss battle: "+score+"/100! "+(win?"VICTORY!":"Keep fighting!")); 
+  updateBossBar();checkBadges();renderProg();updateReadiness();
+  if(win&&S.bossHp<=0)showToast("BOSS DEFEATED! The exam has been slain!");
+}
+
+function unlockWheel(){
+  const btn=document.getElementById("wheel-btn");
+  btn.disabled=false;btn.style.opacity="1";
+  document.getElementById("wheel-hint").textContent="Loot wheel ready! You have "+S.wheelSpins+" spin(s).";
+}
+
+function openWheel(){
+  if(S.wheelSpins<=0){showToast("No spins available yet!");return;}
+  document.getElementById("wheel-overlay").style.display="flex";
+  document.getElementById("spin-btn").disabled=false;
+  document.getElementById("wheel-result").textContent="";
+  drawWheel(0);
+}
+function closeWheel(){document.getElementById("wheel-overlay").style.display="none";}
+
+let wheelAngle=0,spinning=false;
+function drawWheel(rot){
+  const c=document.getElementById("wheel-canvas");
+  if(!c)return;
+  const ctx=c.getContext("2d");
+  const cx=110,cy=110,r=100,slices=WHEEL_PRIZES.length;
+  const arc=2*Math.PI/slices;
+  ctx.clearRect(0,0,220,220);
+  WHEEL_PRIZES.forEach((p,i)=>{
+    const start=rot+i*arc,end=rot+(i+1)*arc;
+    ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,start,end);ctx.closePath();
+    ctx.fillStyle=p.color;ctx.fill();
+    ctx.strokeStyle="#0f0e17";ctx.lineWidth=2;ctx.stroke();
+    ctx.save();ctx.translate(cx,cy);ctx.rotate(rot+(i+0.5)*arc);
+    ctx.textAlign="right";ctx.fillStyle="#0f0e17";ctx.font="bold 11px 'DM Sans',sans-serif";
+    ctx.fillText(p.label,r-8,4);ctx.restore();
+  });
+  ctx.beginPath();ctx.arc(cx,cy,14,0,2*Math.PI);ctx.fillStyle="#0f0e17";ctx.fill();
+  ctx.strokeStyle="#f0c040";ctx.lineWidth=3;ctx.stroke();
+}
+
+function spinWheel(){
+  if(spinning||S.wheelSpins<=0)return;
+  spinning=true;S.wheelSpins--;S.spinsUsed++;
+  document.getElementById("spin-btn").disabled=true;
+  document.getElementById("wheel-result").textContent="";
+  const totalRot=(Math.random()*2*Math.PI)+(8*2*Math.PI);
+  const duration=3500;const start=performance.now();
+  const initAngle=wheelAngle;
+  function frame(now){
+    const t=Math.min(1,(now-start)/duration);
+    const ease=1-Math.pow(1-t,4);
+    wheelAngle=initAngle+totalRot*ease;
+    drawWheel(wheelAngle);
+    if(t<1){requestAnimationFrame(frame);}else{
+      spinning=false;
+      const slices=WHEEL_PRIZES.length;const arc=2*Math.PI/slices;
+      const norm=(((-wheelAngle%(2*Math.PI))+2*Math.PI))%(2*Math.PI);
+      const idx=Math.floor(norm/arc)%slices;
+      const prize=WHEEL_PRIZES[(slices-1-idx+slices)%slices];
+      applyPrize(prize);
+      document.getElementById("wheel-result").textContent="YOU WON: "+prize.label+"!";
+      checkBadges();renderProg();renderBadges();
+      if(S.wheelSpins>0){setTimeout(()=>{document.getElementById("spin-btn").disabled=false;},500);}
+    }
+  }
+  requestAnimationFrame(frame);
+}
+
+function applyPrize(p){
+  if(p.type==="xp")addXP(p.val,"Loot: +"+p.val+" XP!");
+  else if(p.type==="shield"){S.shield++;showToast("Streak Shield earned!");}
+  else if(p.type==="bossdmg"){S.bossHp=Math.max(0,S.bossHp-S.bossMaxHp*0.1);updateBossBar();showToast("Boss took 10% damage!");}
+  else if(p.type==="2xp"){S.doubleXp=true;showToast("2x XP active for next session!");}
+  else if(p.type==="boost"){const keys=Object.keys(S.mastery);if(keys.length){const k=keys[Math.floor(Math.random()*keys.length)];S.mastery[k]=Math.min(4,(S.mastery[k]||0)+1);showToast("Random topic boosted!");}}
+}
+
+function renderProg(){
+  if(!S.plan)return;
+  document.getElementById("prog-empty").style.display="none";
+  document.getElementById("prog-body").style.display="block";
+  document.getElementById("p-days").textContent=S.sessions;
+  document.getElementById("p-hrs").textContent=S.hrs.toFixed(1);
+  document.getElementById("p-streak").textContent=S.streak;
+  document.getElementById("sb-streak").textContent=S.streak;
+  document.getElementById("sb-best").textContent="Best: "+S.bestStreak;
+  document.getElementById("sb-xp").textContent=S.xp+" XP total";
+  const hm=document.getElementById("hmap");hm.innerHTML="";
+  const today=new Date();today.setHours(0,0,0,0);
+  for(let i=34;i>=0;i--){const d=new Date(today);d.setDate(today.getDate()-i);const k=d.toISOString().slice(0,10);const cell=document.createElement("div");cell.className="hc"+(i===0?" htoday":S.activity[k]==="done"?" hdone":S.activity[k]==="missed"?" hmiss":"");hm.appendChild(cell);}
+  const mb=document.getElementById("mastery-bars");
+  mb.innerHTML=TOPICS[S.sect].map((t,i)=>{
+    const tier=S.mastery[i]||0;const col=TIER_COLORS[tier];const pct=[0,25,50,75,100][tier];
+    return`<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:var(--color-text-primary)">${t.n}</span><span style="color:${col};font-weight:500">${TIER_LABELS[tier]}</span></div><div style="height:7px;background:var(--color-background-secondary);border-radius:4px;overflow:hidden"><div style="height:100%;width:${pct}%;background:${col};border-radius:4px;transition:width 0.6s ease"></div></div></div>`;
+  }).join("");
+  if(S.wheelSpins>0)unlockWheel();
+}
+
+function renderBadges(){
+  document.getElementById("badge-grid").innerHTML=BADGES.map(b=>{
+    const e=S.earned.includes(b.id);
+    return`<div class="bcard${e?" earned":""}"><div class="bicon">${b.icon}</div><div class="bname">${b.name}</div><div class="bdesc">${b.desc}</div></div>`;
+  }).join("");
+  document.getElementById("sb-streak").textContent=S.streak;
+  document.getElementById("sb-best").textContent="Best: "+S.bestStreak;
+  document.getElementById("sb-xp").textContent=S.xp+" XP total";
+}
+
+function checkBadges(){
+  const checks={start:()=>S.plan,s3:()=>S.streak>=3,s7:()=>S.streak>=7,log1:()=>S.sessions>=1,log5:()=>S.sessions>=5,boss1:()=>S.bossBattles>=1,half:()=>S.readiness>=50,ready:()=>S.readiness>=80,spin1:()=>S.spinsUsed>=1,gold1:()=>Object.values(S.mastery).some(v=>v>=3),plat1:()=>Object.values(S.mastery).some(v=>v>=4),hrs10:()=>S.hrs>=10};
+  BADGES.forEach(b=>{if(!S.earned.includes(b.id)&&checks[b.id]&&checks[b.id]()){S.earned.push(b.id);setTimeout(()=>showToast("Badge: "+b.name+" "+b.icon),600);}});
+  renderBadges();
+}
+
+let prevLevel=1;
+function addXP(amt,msg){
+  S.xp+=amt;
+  let lv=1;
+  for(let i=0;i<LEVEL_XP.length;i++){if(S.xp>=LEVEL_XP[i])lv=i+1;}
+  const cur=LEVEL_XP[lv-1]||0,nxt=LEVEL_XP[lv]||(LEVEL_XP[LEVEL_XP.length-1]+2000);
+  const pct=Math.round(((S.xp-cur)/(nxt-cur))*100);
+  document.getElementById("xp-fill").style.width=pct+"%";
+  document.getElementById("xp-cur").textContent=S.xp+" XP";
+  document.getElementById("xp-nxt").textContent=nxt+" XP to next level";
+  document.getElementById("lvl-pill").textContent="LVL "+lv;
+  S.level=lv;
+  if(lv>prevLevel){prevLevel=lv;showLvlUp(lv);}
+  else if(msg)showToast(msg);
+}
+
+function showLvlUp(lv){
+  document.getElementById("lu-num").textContent=lv;
+  document.getElementById("lu-name").textContent=LEVEL_NAMES[lv-1]||"CPA Legend";
+  document.getElementById("lvlup-overlay").style.display="flex";
+}
+function closeLvlUp(){document.getElementById("lvlup-overlay").style.display="none";}
+
+let toastT;
+function showToast(msg){
+  const t=document.getElementById("toast");
+  t.textContent=msg;t.classList.add("show");
+  clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove("show"),2800);
+}
+
+function goTab(name){
+  ["setup","plan","progress","badges"].forEach((n,i)=>{
+    document.getElementById("tab-"+n).className="panel"+(n===name?" on":"");
+    document.querySelectorAll(".ntab")[i].className="ntab"+(n===name?" on":"");
+  });
+}
+
+const def=new Date();def.setDate(def.getDate()+60);
+document.getElementById("edate").value=def.toISOString().slice(0,10);
+loadTopics();renderBadges();drawWheel(0);
+</script>
