@@ -169,6 +169,8 @@ h1,h2,h3,h4 { font-family: 'Press Start 2P', monospace; font-weight: normal; }
   pointer-events: none;
   z-index: 999;
 }
+.no-crt .crt::after,
+.no-crt .crt::before { display: none; }
 
 /* =========== LAYOUT =========== */
 .app-wrap {
