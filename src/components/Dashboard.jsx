@@ -198,21 +198,6 @@ export default function Dashboard({ state, setState, showToast }) {
                 </div>
             }
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 10, marginTop: 16 }}>
-              <button className="px-btn blood" disabled={!mobForArena || mobForArena.mobHp <= 0} onClick={() => attack(false)}>
-                ⚔ ATTACK
-              </button>
-              <button className="px-btn sky" disabled={!todayQuest || todayQuest.done}
-                      onClick={() => todayQuest && completeQuest(schedule.indexOf(todayQuest))}>
-                ✓ COMPLETE QUEST
-              </button>
-              <button className="px-btn grass" onClick={bossBattle} disabled={state.bossHp <= 0}>
-                👑 BOSS HIT
-              </button>
-              <button className="px-btn ghost" onClick={() => showToast('Defend: +10 HP next turn')}>
-                🛡 DEFEND
-              </button>
-            </div>
           </div>
 
           <div>
