@@ -53,7 +53,7 @@ export default function SectionPicker({ hero, onComplete }) {
               </div>
               <div className="tiny mt-12" style={{ color: 'var(--blood)' }}>▲ BOSS: {s.boss.name}</div>
               <div className="tiny" style={{ color: 'var(--ash)' }}>{s.boss.tagline}</div>
-              <div className="tiny mt-8">{s.topics.length} mini-bosses · {s.topics.map(t => t.mob).join(' ')}</div>
+              <div className="tiny mt-8">{s.topics.length} topics · {s.minHrs}–{s.maxHrs} hrs baseline</div>
             </div>
           ))}
         </div>
@@ -73,6 +73,37 @@ export default function SectionPicker({ hero, onComplete }) {
             <input type="number" min={0} max={100} className="px-input" value={bpct} onChange={e => setBpct(e.target.value)} />
           </div>
         </div>
+
+        {(() => {
+          const dlyHrs = Math.max(1, Number(dhrs) || 3)
+          const midHrs = (sectData.minHrs + sectData.maxHrs) / 2
+          const recDays = Math.round(midHrs / dlyHrs)
+          const today = new Date(); today.setHours(0,0,0,0)
+          const examDate = new Date(edate)
+          const availDays = Math.ceil((examDate - today) / 86400000)
+          const pacing = availDays >= recDays ? 'ok' : availDays >= recDays * 0.75 ? 'tight' : 'danger'
+          const pacingColor = pacing === 'ok' ? 'var(--grass)' : pacing === 'tight' ? 'var(--gold)' : 'var(--blood)'
+          const pacingLabel = pacing === 'ok' ? 'ON TRACK' : pacing === 'tight' ? 'TIGHT' : 'VERY TIGHT'
+          return (
+            <div className="px-panel mb-16" style={{ display: 'flex', alignItems: 'center', gap: 24, flexWrap: 'wrap' }}>
+              <div>
+                <div className="input-label">ESTIMATED HOURS</div>
+                <div className="ps" style={{ color: 'var(--gold)', fontSize: 13 }}>{sectData.minHrs}–{sectData.maxHrs} hrs</div>
+              </div>
+              <div>
+                <div className="input-label">RECOMMENDED DAYS</div>
+                <div className="ps" style={{ color: 'var(--bone)', fontSize: 13 }}>~{recDays} days at {dlyHrs}h/day</div>
+              </div>
+              <div>
+                <div className="input-label">YOUR TIMELINE</div>
+                <div className="ps" style={{ color: 'var(--bone)', fontSize: 13 }}>{availDays} days available</div>
+              </div>
+              <div style={{ marginLeft: 'auto' }}>
+                <div className="chip" style={{ background: pacingColor, color: 'var(--ink)' }}>{pacingLabel}</div>
+              </div>
+            </div>
+          )
+        })()}
 
         <div className="section-hero mb-16">
           <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>

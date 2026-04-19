@@ -39,23 +39,61 @@ function loadState() {
 function saveState(s) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)) } catch {} }
 
 function buildSchedule(sect, edate, dhrs, bpct) {
-  const topics = SECTIONS[sect].topics
+  const sectInfo = SECTIONS[sect]
+  const topics = sectInfo.topics
   const ed = new Date(edate)
   const today = new Date(); today.setHours(0,0,0,0)
-  const dl = Math.max(1, Math.ceil((ed - today) / 86400000))
-  const pool = []
-  topics.forEach(t => { for (let i = 0; i < 3; i++) pool.push(t.n) })
-  const revDays = Math.max(2, Math.round(dl * 0.12))
+  const dlyHrs = Math.max(1, Number(dhrs) || 3)
+
+  // Recommended days based on baseline hours (midpoint of range)
+  const midHrs = (sectInfo.minHrs + sectInfo.maxHrs) / 2
+  const recommendedDays = Math.round(midHrs / dlyHrs)
+
+  // Use exam date if provided, otherwise fall back to recommended
+  const rawDays = edate ? Math.max(topics.length + 3, Math.ceil((ed - today) / 86400000)) : recommendedDays
+  const dl = rawDays
+
+  // Reserve last 12% (min 3) for full review
+  const revDays = Math.max(3, Math.round(dl * 0.12))
+  const contentDays = dl - revDays
+
+  // Distribute content days evenly across topics (block schedule: finish one before starting next)
+  const daysPerTopic = Math.max(1, Math.floor(contentDays / topics.length))
+
   const schedule = []
-  for (let d = 0; d < dl; d++) {
-    const dt = new Date(today); dt.setDate(today.getDate() + d)
-    const isRev = d >= dl - revDays
-    const isPrac = (d % 6 === 5) && !isRev
-    const topic = isPrac ? 'MCQ Practice' : isRev ? 'Full Review' : pool[d % pool.length]
-    const type = isPrac ? 'practice' : isRev ? 'review' : 'content'
-    schedule.push({ day: d + 1, date: dt.toISOString(), topic, type, done: false })
+  let dayIdx = 0
+
+  for (let t = 0; t < topics.length; t++) {
+    const topic = topics[t]
+    // Last topic absorbs any leftover days so we don't overshoot contentDays
+    const days = t === topics.length - 1 ? (contentDays - dayIdx) : daysPerTopic
+    for (let i = 0; i < days && dayIdx < contentDays; i++) {
+      const dt = new Date(today); dt.setDate(today.getDate() + dayIdx)
+      const isPrac = (dayIdx % 6 === 5)
+      schedule.push({
+        day: dayIdx + 1,
+        date: dt.toISOString(),
+        topic: isPrac ? 'MCQ Practice' : topic.n,
+        type: isPrac ? 'practice' : 'content',
+        done: false,
+      })
+      dayIdx++
+    }
   }
-  return { schedule, bossMaxHp: Math.max(600, dl * 20), initialReadiness: Math.min(35, Math.round(bpct * 0.35)) }
+
+  // Full review block at the end
+  for (let r = 0; r < revDays; r++) {
+    const dt = new Date(today); dt.setDate(today.getDate() + dayIdx)
+    schedule.push({ day: dayIdx + 1, date: dt.toISOString(), topic: 'Full Review', type: 'review', done: false })
+    dayIdx++
+  }
+
+  return {
+    schedule,
+    bossMaxHp: Math.max(600, dl * 20),
+    initialReadiness: Math.min(35, Math.round(bpct * 0.35)),
+    recommendedDays,
+  }
 }
 
 export default function App() {
