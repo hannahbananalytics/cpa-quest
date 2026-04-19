@@ -25,23 +25,20 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
   const [bossReveal, setBossReveal] = useState(false)
   const [victoryBanner, setVictoryBanner] = useState(false)
 
-  // Active quest = first undone quest in sequence (used for UI like "today's quest")
+  // Active quest = first undone quest in sequence
   const activeIdx = schedule.findIndex(q => !q.done)
   const activeQuest = activeIdx >= 0 ? schedule[activeIdx] : null
 
-  // Fight quest = the quest whose mob is currently being fought. Driven by
-  // state.kills (one mob killed per quest completion) so rapid-fire check-offs
-  // play out as a sequential combat chain rather than snapping to the new
-  // activeQuest and skipping intermediate mobs.
-  const fightIdx = state.kills
-  const fightQuest = fightIdx < schedule.length ? schedule[fightIdx] : activeQuest
+  // Full Review phase is driven by the active quest type.
+  const inReviewPhase = activeQuest?.type === 'review'
 
-  // Full Review phase based on the fight pointer, not activeQuest.
-  const inReviewPhase = fightQuest?.type === 'review'
-
-  // Damage per review quest: boss total HP divided evenly across all review quests
+  // Damage per review hit: boss total HP divided evenly across all review quests
   const reviewCount = Math.max(1, schedule.filter(q => q.type === 'review').length)
   const dmgPerReview = Math.ceil(state.bossMaxHp / reviewCount)
+
+  // Constant per-hit damage for content mobs. Mob HP is sized so the last
+  // content quest of a topic is the killing blow exactly.
+  const PER_HIT = 50
 
   // Detect transition into review phase and show boss reveal overlay.
   // The ref is initialized to the current type on first render so loading
@@ -54,55 +51,76 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
   }
   useEffect(() => {
     const prev = prevQuestTypeRef.current
-    const curr = fightQuest?.type
+    const curr = activeQuest?.type
     if (curr === 'review' && prev !== 'review') {
       setBossReveal(true)
       const t = setTimeout(() => setBossReveal(false), 4000)
       return () => clearTimeout(t)
     }
     prevQuestTypeRef.current = curr
-  }, [fightQuest?.type])
+  }, [activeQuest?.type])
 
   const currentMob = useMemo(() => {
-    if (mobState && mobState.mobHp > 0) return mobState
-    if (!fightQuest) return null
+    // Keep the existing mob through its death animation — don't swap mid-faint.
+    if (mobState) return mobState
+    if (!activeQuest) return null
 
-    if (inReviewPhase) {
-      // Boss phase: the final boss IS the mob for each review encounter
+    if (activeQuest.type === 'review') {
+      // Persistent boss across the whole review phase
       return {
-        topicIdx: -1,
+        topicKey: 'REVIEW',
         mob: boss.emoji,
         mobName: boss.name,
         level: 99,
         isBoss: true,
         isMiniBoss: false,
-        mobMaxHp: dmgPerReview,
-        mobHp: dmgPerReview,
+        mobMaxHp: state.bossMaxHp,
+        mobHp: state.bossHp > 0 ? state.bossHp : state.bossMaxHp,
         lastDmg: 0,
       }
     }
 
-    // Normal phase: regular topic mob or mini-boss (practice quests only).
-    const topicIdx = sectData.topics.findIndex(t => t.n === fightQuest.topic)
-    const topic = topicIdx >= 0 ? sectData.topics[topicIdx] : sectData.topics[0]
-    const isMiniBoss = fightQuest.type === 'practice'
-    const maxHp = isMiniBoss ? 180 : 60 + Math.floor(Math.random() * 40)
+    if (activeQuest.type === 'practice') {
+      // Mini-boss checkpoint — uses the prior content topic for flavor.
+      const prevContent = [...schedule.slice(0, activeIdx)].reverse().find(q => q.type === 'content')
+      const topic = sectData.topics.find(t => t.n === prevContent?.topic) || sectData.topics[0]
+      return {
+        topicKey: 'PRACTICE:' + activeIdx,
+        mob: '👺',
+        mobName: (topic.n + ' MINI-BOSS'),
+        level: Math.max(1, hero.level + 2),
+        isBoss: false,
+        isMiniBoss: true,
+        mobMaxHp: 180,
+        mobHp: 180,
+        lastDmg: 0,
+      }
+    }
+
+    // Content: persistent topic mob. HP = (# of content quests in this topic) × PER_HIT
+    const topic = sectData.topics.find(t => t.n === activeQuest.topic)
+    if (!topic) return null
+    const topicQuestCount = schedule.filter(q => q.topic === activeQuest.topic && q.type === 'content').length
+    const mobMaxHp = Math.max(PER_HIT, topicQuestCount * PER_HIT)
     return {
-      topicIdx: topicIdx >= 0 ? topicIdx : 0,
-      mob: isMiniBoss ? '👺' : topic.mob,
-      mobName: isMiniBoss ? (topic.n + ' MINI-BOSS') : topic.mobName,
-      level: Math.max(1, hero.level + (isMiniBoss ? 2 : 0)),
+      topicKey: activeQuest.topic,
+      mob: topic.mob,
+      mobName: topic.mobName,
+      level: Math.max(1, hero.level),
       isBoss: false,
-      isMiniBoss,
-      mobMaxHp: maxHp,
-      mobHp: maxHp,
+      isMiniBoss: false,
+      mobMaxHp,
+      mobHp: mobMaxHp,
       lastDmg: 0,
     }
-  }, [mobState, fightQuest, fightIdx, inReviewPhase, dmgPerReview, boss, sect, hero.level, sectData.topics])
+  }, [mobState, activeQuest, activeIdx, sect, sectData.topics, hero.level, schedule, state.bossMaxHp, state.bossHp, boss])
 
   useEffect(() => {
     if (!mobState && currentMob) {
-      setState(p => ({ ...p, mobState: currentMob }))
+      const t = setTimeout(() => {
+        setState(p => (p.mobState ? p : { ...p, mobState: currentMob }))
+      }, 600)
+      return () => clearTimeout(t)
     }
   }, [currentMob, mobState, setState])
 
@@ -115,19 +133,28 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
   }, [currentMob?.mobName, currentMob?.isBoss, boss.name])
 
   const attacking = useRef(false)
-  const pendingKills = useRef(0)
+  const pendingAttacks = useRef(0)
   const attackRef = useRef()
   const attacksUntilThrow = useRef(1 + Math.floor(Math.random() * 4))
-  async function attack(isComplete = false) {
+
+  async function attack() {
     if (attacking.current || !currentMob || currentMob.mobHp <= 0) return
     attacking.current = true
 
     const crit = Math.random() < (hero.clsId === 'clutch' ? 0.25 : 0.1)
-    const base = hero.clsId === 'strategist' ? 28 : 22
-    // Quest check-off is always a one-shot kill
-    const dmg = isComplete
-      ? currentMob.mobHp
-      : Math.floor(base + Math.random() * 12) * (crit ? 2 : 1)
+
+    // Damage: content mobs take flat PER_HIT; mini-bosses one-shot;
+    // boss takes dmgPerReview (+50% on crit, ×1.5 again for Strategist).
+    let dmg
+    if (currentMob.isBoss) {
+      dmg = crit ? Math.ceil(dmgPerReview * 1.5) : dmgPerReview
+      if (hero.clsId === 'strategist') dmg = Math.ceil(dmg * 1.5)
+    } else if (currentMob.isMiniBoss) {
+      dmg = currentMob.mobHp        // mini-boss is a one-shot checkpoint
+    } else {
+      dmg = PER_HIT                 // content mob: uniform per-hit
+    }
+    dmg = Math.min(dmg, currentMob.mobHp)
     setLastDmgMob(dmg)
 
     attacksUntilThrow.current -= 1
@@ -138,16 +165,23 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
     setBattlePhase(isThrow ? 'hero-throw' : 'hero-attack')
     await wait(isThrow ? 550 : 450)
     setBattlePhase('hit-foe')
-    setState(p => ({ ...p, mobState: { ...p.mobState, mobHp: Math.max(0, p.mobState.mobHp - dmg), lastDmg: dmg } }))
+    setState(p => ({
+      ...p,
+      mobState: { ...p.mobState, mobHp: Math.max(0, p.mobState.mobHp - dmg), lastDmg: dmg },
+      // Keep authoritative boss HP in sync during review phase
+      bossHp: p.mobState?.isBoss ? Math.max(0, p.bossHp - dmg) : p.bossHp,
+    }))
     await wait(500)
 
     const newMobHp = Math.max(0, currentMob.mobHp - dmg)
+
     if (newMobHp <= 0) {
-      const xpGain = currentMob.isBoss ? 250 : (currentMob.isMiniBoss ? 150 : 60)
-      const isFinalBlow = currentMob.isBoss && state.bossHp <= dmgPerReview
+      // --- KILL ---
+      const baseKillXp = currentMob.isBoss ? 250 : (currentMob.isMiniBoss ? 150 : 100)
+      const xpGain = crit ? Math.ceil(baseKillXp * 1.5) : baseKillXp
+      const isFinalBlow = currentMob.isBoss
 
       if (isFinalBlow) {
-        // Epic finisher sequence for the final boss kill
         setBattleMsg('☠ FINAL BLOW! ☠')
         setBattlePhase('boss-finisher')
         await wait(700)
@@ -159,39 +193,35 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
         setBattlePhase('faint-foe')
         await wait(700)
       }
+
       setState(p => {
         const newXp = p.hero.xp + xpGain
         const newLv = computeLevel(newXp)
-        // Boss HP only decreases during review phase (boss encounters)
-        // Normal mobs and mini-bosses do NOT damage the boss
-        const newBossHp = p.mobState.isBoss
-          ? Math.max(0, p.bossHp - dmgPerReview)
-          : p.bossHp
         const newKills = p.kills + 1
         const newEarned = [...p.earned]
-        if (!newEarned.includes('log1') && isComplete) newEarned.push('log1')
         if (newKills >= 10 && !newEarned.includes('mob10')) newEarned.push('mob10')
-        if (p.mobState.isMiniBoss && !newEarned.includes('mini1')) newEarned.push('mini1')
-        if (p.mobState.isBoss && newBossHp <= 0 && !newEarned.includes('boss1')) newEarned.push('boss1')
+        if (p.mobState?.isMiniBoss && !newEarned.includes('mini1')) newEarned.push('mini1')
+        if (p.mobState?.isBoss && !newEarned.includes('boss1')) newEarned.push('boss1')
         return {
           ...p,
           hero: { ...p.hero, xp: newXp, level: newLv },
-          bossHp: newBossHp,
           kills: newKills,
           earned: newEarned,
           mobState: null,
         }
       })
       setBattlePhase('idle')
-      pendingKills.current = Math.max(0, pendingKills.current - 1)
 
       if (isFinalBlow) {
         setVictoryBanner(true)
         setTimeout(() => setVictoryBanner(false), 5000)
       }
     } else {
+      // --- MOB SURVIVES — COUNTER-ATTACK ---
       await wait(250)
-      const foeDmg = Math.floor(8 + Math.random() * 8)
+      const foeDmg = currentMob.isBoss
+        ? Math.floor(14 + Math.random() * 12)  // boss: 14–25
+        : Math.floor(5 + Math.random() * 7)    // mob:  5–11
       setLastDmgHero(foeDmg)
       setBattleMsg(`${currentMob.mobName} strikes back!`)
       setBattlePhase('foe-attack')
@@ -205,25 +235,27 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
       setBattlePhase('idle')
       setBattleMsg(`What will ${hero.name} do?`)
     }
+
     attacking.current = false
+    pendingAttacks.current = Math.max(0, pendingAttacks.current - 1)
+
+    // Chain the next attack if more are queued.
+    // Longer delay after a kill so the 600 ms respawn has time to commit.
+    if (pendingAttacks.current > 0) {
+      const chainDelay = newMobHp <= 0 ? 950 : 300
+      setTimeout(() => {
+        if (!attacking.current && pendingAttacks.current > 0) {
+          attackRef.current?.()
+        }
+      }, chainDelay)
+    }
   }
   attackRef.current = attack
 
-  // Chain the next attack when a fresh mob spawns and kills are still pending.
-  useEffect(() => {
-    if (
-      mobState &&
-      mobState.mobHp === mobState.mobMaxHp &&
-      pendingKills.current > 0 &&
-      !attacking.current
-    ) {
-      const t = setTimeout(() => attackRef.current?.(true), 350)
-      return () => clearTimeout(t)
-    }
-  }, [mobState])
-
   function completeQuest(idx) {
     if (schedule[idx].done) return
+    const questType = schedule[idx].type
+
     setState(p => {
       const newSchedule = p.schedule.map((s, i) => i === idx ? { ...s, done: true } : s)
       const sessions = p.sessions + 1
@@ -238,7 +270,17 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
       if (p.hero.clsId === 'grinder') xpGain = Math.round(xpGain * 1.2)
       const newXp = p.hero.xp + xpGain
       const newLv = computeLevel(newXp)
-      const newHp = Math.min(p.hero.maxHp, p.hero.hp + 10)
+
+      // Heal per quest type. Practice is a rest beat (Scholar boost).
+      let healAmount
+      if (questType === 'practice') {
+        healAmount = p.hero.clsId === 'scholar' ? 38 : 25
+      } else if (questType === 'review') {
+        healAmount = 0
+      } else {
+        healAmount = 8
+      }
+      const newHp = Math.min(p.hero.maxHp, p.hero.hp + healAmount)
 
       const earned = [...p.earned]
       if (!earned.includes('log1')) earned.push('log1')
@@ -257,12 +299,17 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
         earned,
       }
     })
-    showToast(inReviewPhase ? '⚔ BOSS HIT! +XP  +HP' : 'QUEST COMPLETE! +XP  +HP')
-    pendingKills.current += 1
-    // If nothing is currently animating, kick off the first attack.
-    // Subsequent completions stay queued and auto-chain after each mob respawns.
+
+    const toastMsg = questType === 'review' ? '⚔ BOSS HIT!'
+      : questType === 'practice' ? '✦ MINI-BOSS INCOMING!'
+      : 'QUEST COMPLETE! +XP'
+    showToast(toastMsg)
+
+    // Every quest triggers one combat beat — subsequent completions chain
+    // via the attack function's end-of-attack self-scheduling.
+    pendingAttacks.current += 1
     if (!attacking.current) {
-      setTimeout(() => attackRef.current?.(true), 350)
+      setTimeout(() => attackRef.current?.(), 350)
     }
   }
 

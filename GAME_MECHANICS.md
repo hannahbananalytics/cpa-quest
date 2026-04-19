@@ -80,10 +80,10 @@ maxHp: 100
 
 | ID | Name | Real Effect |
 |----|------|-------------|
-| `grinder` | The Grinder | Quest XP gain × 1.2 |
-| `strategist` | The Strategist | Base attack damage 28 (others: 22) |
+| `grinder` | The Grinder | Quest-complete XP × 1.2 |
+| `strategist` | The Strategist | Boss damage × 1.5 (stacks on crit multiplier) |
 | `clutch` | The Clutch | Crit chance 25% (others: 10%) |
-| `scholar` | The Scholar | **Not implemented** — bonus is cosmetic only |
+| `scholar` | The Scholar | Practice-quest heal × 1.5 (25 → 38 HP) |
 
 ### Weapons — all cosmetic
 
@@ -238,83 +238,105 @@ Runs in this order:
 5. `readiness += round(80 / max(schedule.length, 30))`, capped at 100
 6. `xpGain = 80 + (streak × 10)` — if Grinder class, `xpGain × 1.2`
 7. `hero.xp += xpGain`, level recalculated via `computeLevel(xp)`
-8. `hero.hp = min(maxHp, hp + 10)` — heals 10 HP on quest complete
+8. Heal applied based on quest type:
+   - **content**: `hero.hp += 8`
+   - **practice**: `hero.hp += 25` (Scholar: `+38`)
+   - **review**: no heal
+   (capped at `maxHp`)
 9. `activity[todayKey()] = 'done'`
 10. Badge checks run (see §13)
-11. Triggers `attack(true)` after 350ms delay → one-shot kills the current mob
+11. Increments `pendingAttacks`; triggers `attack()` after 350ms if idle. Subsequent completions queue via the same ref and chain at the end of each attack.
 
 ### MCQ / TBS Practice Quests
 
 One **MCQ / TBS Practice** quest is inserted automatically after every topic block. There is no user-configurable frequency — the number of practice quests always equals the number of topics in the section (12–22 depending on section).
 
-These quests spawn a **mini-boss** encounter (see §7). Completing a practice quest follows the same XP/readiness logic as any content quest.
+These quests spawn a **mini-boss** encounter (see §7) — a one-shot checkpoint fight that also heals the hero by 25 HP (38 for Scholar).
 
 ---
 
 ## 6. Combat System
 
-Combat runs automatically. Players have no manual attack button. All animations are handled by the `BattleArena` component (a separate file, `BattleArena.jsx`).
+Combat is **topic-persistent**. Each content topic has **one** mob instance that persists in `mobState` across every content quest in that topic; each content quest lands one hit. The mob only despawns on death or when the schedule advances past its topic. Mini-bosses (practice quests) remain one-shot checkpoints. The boss persists across the Full Review phase.
 
-### Quest Complete Attack (`attack(isComplete = true)`)
+All animations are handled by the `BattleArena` component (`BattleArena.jsx`). Combat runs automatically — there is no manual attack button.
 
-When a quest is marked done, a special attack fires that always kills the mob in one hit:
+### Attack (`attack()`)
+
+One call = one back-and-forth beat. Called automatically after each `completeQuest` for any quest type. No `isComplete` parameter — every attack is a quest-triggered hit.
+
+**Damage per hit:**
+
 ```
-dmg = currentMob.mobHp
-```
+PER_HIT = 50   // flat damage vs. content mobs
 
-### Regular Attack (`attack(isComplete = false)`)
-
-Not currently exposed to the user via UI, but the logic still exists:
-```
 crit = random() < (clutch: 0.25, others: 0.10)
-base = (strategist: 28, others: 22)
-dmg = floor(base + random(0–12)) × (crit ? 2 : 1)
+
+if currentMob.isBoss:
+  dmg = crit ? ceil(dmgPerReview × 1.5) : dmgPerReview
+  if strategist: dmg = ceil(dmg × 1.5)
+else if currentMob.isMiniBoss:
+  dmg = currentMob.mobHp          // one-shot the mini-boss
+else:
+  dmg = PER_HIT                   // content mob: flat; crit does not boost damage
+
+dmg = min(dmg, mobHp)             // never overkill
 ```
+
+Because content mob HP = `topicQuestCount × 50` (§7), exactly `topicQuestCount` content hits kill the topic mob — the final content quest of a topic is always the killing blow.
 
 ### Weapon Throw
 
-A separate `attacksUntilThrow` ref tracks when the next throw occurs. It resets to `1 + floor(random × 4)` (so 1–4 attacks until the next throw). When a throw triggers, the `hero-throw` animation phase fires instead of `hero-attack`, the weapon emoji flies across the screen as a projectile, and the attack takes 550ms instead of 450ms. Throw animation uses the weapon selected in character creation.
+A separate `attacksUntilThrow` ref resets to `1 + floor(random × 4)` (1–4 attacks until the next throw). When a throw triggers, the `hero-throw` animation phase fires instead of `hero-attack`, the weapon emoji flies across the screen as a projectile, and the attack takes 550ms instead of 450ms. Purely cosmetic — no damage difference.
 
-### Mob Counterattack
+### Mob Counter-attack
 
-If the mob survives a regular attack:
+**Always fires when the mob survives a hit** (hero HP now matters):
+
 ```
-foeDmg = floor(8 + random(0–8))   // 8–16 damage
-hero.hp -= foeDmg
+if mob is content:   foeDmg = 5 + random(0–6)   // 5–11
+if mob is boss:      foeDmg = 14 + random(0–11) // 14–25
+
+hero.hp = max(0, hero.hp - foeDmg)
 ```
 
-### Attack Chaining (Rapid Completions)
+No counter on the killing blow. Mini-bosses never counter (always one-shot).
 
-`pendingKills` is a ref that queues up mobs to kill when multiple quests are checked off quickly. When a fresh mob spawns and `pendingKills > 0`, the next `attack(true)` fires automatically after 350ms. This means checking off several quests in a row plays out as a sequential combat chain rather than jumping immediately to the new active quest.
+### Attack Queue (Rapid Completions)
 
-### Mob Death Rewards
+`pendingAttacks` is a ref counter:
 
-During the **normal quest phase** (content and practice quests):
+- Incremented by `completeQuest` for every quest type (content, practice, review).
+- Decremented at the end of `attack()` (whether mob survives or dies).
+- At the end of `attack()`, if `pendingAttacks > 0`, schedules the next attack:
+  - `300ms` delay if the current mob survived (immediate follow-up hit).
+  - `950ms` delay if the mob died (gives time for faint + 600ms respawn).
+
+Rapidly checking 5 quests in the same topic → 5 sequential attacks draining the mob by 50 each, killing it on the 5th.
+
+### Kill Rewards
+
 ```
-xpGain = isMiniBoss ? 150 : 60
-hero.xp += xpGain
-bossHp unchanged   // boss HP does NOT change from normal mob kills
+// Content mob
+xpGain = crit ? 150 : 100
+
+// Mini-boss (practice quest)
+xpGain = crit ? 225 : 150
+
+// Boss (last review quest hit)
+xpGain = crit ? 375 : 250
+
 kills += 1
 mobState = null
 ```
 
-During the **Full Review phase** (boss battles — see §8):
-```
-xpGain = 250   // isBoss
-hero.xp += xpGain
-bossHp -= dmgPerReview   // = ceil(bossMaxHp / reviewCount)
-kills += 1
-mobState = null
-if bossHp <= 0: earn 'boss1' badge
-```
-
-**Boss HP is only reduced during the Full Review phase.** Normal mob kills, including mini-bosses, do not damage the final boss.
+Boss HP (`state.bossHp`) is authoritative during review and is kept in sync with `mobState.mobHp` on every hit — both drop by `dmg`. The boss is declared dead when `mobHp` hits 0, earning the `boss1` badge.
 
 ### Final Blow Sequence
 
-When the last review quest lands (`isBoss && bossHp <= dmgPerReview`), a special finisher plays instead of the normal faint:
+When the boss is killed (`currentMob.isBoss` and damage reduces `mobHp` to 0), the finisher plays instead of the normal faint:
 ```
-phase → 'boss-finisher' → wait 700ms → message: "☠ FINAL BLOW! ☠"
+phase → 'boss-finisher' → wait 700ms  → message: "☠ FINAL BLOW! ☠"
 phase → 'boss-shatter'  → wait 1700ms → message: "{boss.name} IS VANQUISHED!"
 ```
 After the finisher, a `victoryBanner` state fires and auto-dismisses after 5 seconds (see §8).
@@ -323,73 +345,91 @@ After the finisher, a `victoryBanner` state fires and auto-dismisses after 5 sec
 
 ## 7. Mob System
 
-A new mob spawns whenever `mobState` is null. Mob type depends on the current game phase.
+A mob spawns whenever `mobState` is null and the active quest demands one. Spawning is delayed by 600 ms after a kill to give the faint animation room to play. The mob persists in `mobState` (and therefore localStorage) until killed or until the schedule advances past the mob's topic.
 
-### Fight Pointer vs. Active Quest
+Each mob carries a `topicKey` to identify what it represents:
 
-Two separate pointers exist:
+| `topicKey` | Meaning |
+|------------|---------|
+| topic name (e.g. `'Revenue Recognition'`) | Persistent content-topic mob |
+| `'PRACTICE:<idx>'` | One-shot mini-boss checkpoint after a topic block |
+| `'REVIEW'` | Persistent final boss during the Full Review phase |
 
-- `activeIdx` — first undone quest in the schedule. Used for UI labels (`▶ CURRENT`) and the Pace Tracker.
-- `fightIdx = state.kills` — drives which mob spawns. Because one kill is recorded per quest completion, this pointer trails behind `activeIdx` when quests are completed faster than combat animations play out, enabling the attack-chaining queue (see §6).
-
-`inReviewPhase` is determined by `fightQuest?.type === 'review'` (not `activeQuest`), so the boss reveal and boss HP bar switch to review mode in sync with the actual combat, not the quest log cursor.
-
-### Normal Quest Phase (content & practice quests)
-
-Quest type directly determines encounter type — no interval or positional logic:
-
-| Quest type | Encounter |
-|------------|-----------|
-| `content` | Normal mob (topic mob emoji, 60–100 HP) |
-| `practice` | Mini-boss (topic emoji from fallback, 180 HP) |
-| `review` | Final boss (see Full Review Phase below) |
+### Active Quest Drives Spawning
 
 ```
-fightIdx = state.kills
-fightQuest = schedule[fightIdx]
-topicIdx = sectData.topics.findIndex(t => t.n === fightQuest.topic)
-topic = sectData.topics[topicIdx]  (falls back to topics[0] if not found)
+activeIdx = schedule.findIndex(q => !q.done)
+activeQuest = schedule[activeIdx]
 
-isMiniBoss = fightQuest.type === 'practice'
-
-Regular mob (content quest):
-  emoji    = topic.mob
-  name     = topic.mobName
-  hp       = 60 + floor(random × 40)   // 60–100 HP
-  level    = hero.level
-  isBoss   = false
-
-Mini-boss (practice quest):
-  emoji    = 👺
-  name     = topic.n + ' MINI-BOSS'
-  hp       = 180
-  level    = hero.level + 2
-  isBoss   = false
+inReviewPhase = activeQuest?.type === 'review'
 ```
 
-- Practice quests use `topics[0]` as the fallback topic (since `'MCQ / TBS Practice'` is not in the topic list).
+When `mobState` is null, `currentMob` is derived from `activeQuest`. When `mobState` is non-null, it is returned unchanged (even at 0 HP during faint) so the death animation can finish without a sprite swap.
 
-### Full Review Phase (boss quests)
+### Content Mob (Persistent per Topic)
 
-When `fightQuest.type === 'review'`, `currentMob` returns the section's final boss instead of a topic mob:
+For a content topic with N content quests, the mob has `mobMaxHp = N × 50`. Each content-quest hit deals a flat 50 damage, so the last content quest of the topic is always the kill.
+
+```
+topicKey = activeQuest.topic
+topicObj = sectData.topics.find(t => t.n === topicKey)
+topicQuestCount = schedule.filter(q => q.topic === topicKey && q.type === 'content').length
+mobMaxHp = max(50, topicQuestCount × 50)
+
+mob:
+  topicKey  = topicKey
+  mob       = topicObj.mob
+  mobName   = topicObj.mobName
+  level     = hero.level
+  isBoss    = false
+  isMiniBoss = false
+  mobMaxHp  = N × 50
+  mobHp     = mobMaxHp   (on spawn)
+```
+
+Counter-attacks fire on every non-killing hit (see §6), so `hero.hp` drops across a topic fight and needs managing.
+
+### Mini-boss (Practice Quest)
+
+```
+Prev content = nearest content quest before this practice in the schedule
+topic        = sectData.topics.find(t.n === prevContent.topic) ?? topics[0]
+
+mob:
+  topicKey   = 'PRACTICE:' + activeIdx
+  mob        = 👺
+  mobName    = topic.n + ' MINI-BOSS'
+  level      = hero.level + 2
+  isBoss     = false
+  isMiniBoss = true
+  mobMaxHp   = 180
+  mobHp      = 180
+```
+
+Mini-bosses are **one-shot** — the attack deals `currentMob.mobHp` damage and skips the counter.
+
+### Final Boss (Review Phase, Persistent)
+
+When `activeQuest.type === 'review'`, `currentMob` returns the section's final boss — the **same mob** across every review quest:
 
 ```
 reviewCount = schedule.filter(q => q.type === 'review').length
 dmgPerReview = ceil(bossMaxHp / reviewCount)
 
-Boss mob:
-  emoji      = boss.emoji
-  name       = boss.name
-  level      = 99
-  isBoss     = true
+mob:
+  topicKey  = 'REVIEW'
+  mob       = boss.emoji
+  mobName   = boss.name
+  level     = 99
+  isBoss    = true
   isMiniBoss = false
-  mobMaxHp   = dmgPerReview
-  mobHp      = dmgPerReview
+  mobMaxHp  = state.bossMaxHp
+  mobHp     = state.bossHp   (reflects cumulative damage)
 ```
 
-Each review quest spawns the boss with exactly `dmgPerReview` HP, so completing all review quests deals exactly `bossMaxHp` total damage, guaranteed to drop boss HP to 0.
+Each review-quest hit deals `dmgPerReview` damage (+50% on crit, ×1.5 again for Strategist). Crits and Strategist bonus damage can end the boss phase early — remaining review quests still complete normally but fight nothing.
 
-- `mobState` is persisted to localStorage, so the same mob reappears on refresh.
+`mobState` is persisted to localStorage so the same mob (at the same HP) reappears on reload.
 
 ---
 
@@ -410,13 +450,22 @@ The Boss HP bar is **hidden during normal quests** (content and practice phases)
 
 ### Boss HP Loss
 
-Boss HP decreases **only during the Full Review phase**, one hit per review quest completed:
+Boss HP decreases **only during the Full Review phase**. Each review quest deals `dmgPerReview` damage (possibly more on crit or with Strategist — see §6):
 ```
 dmgPerReview = ceil(bossMaxHp / reviewCount)
-on each review quest complete: bossHp -= dmgPerReview
+on each review-quest hit: bossHp -= dmg, mobState.mobHp -= dmg
 ```
 
-This guarantees `bossHp` reaches exactly 0 after all review quests are done, regardless of HP rounding.
+Both `state.bossHp` and `mobState.mobHp` stay in sync across hits. With base damage exactly `dmgPerReview`, completing all review quests drops `bossHp` to 0. Crits or Strategist multipliers can end the boss phase early — any remaining review quests still complete normally but find no boss to fight.
+
+### Boss Counter-attacks
+
+Unlike content mobs, the boss counters hard when it survives a hit:
+```
+foeDmg = 14 + random(0–11)   // 14–25 damage
+```
+
+This makes hero HP management meaningful during the boss push — entering review at low HP is dangerous. Practice quests interleaved earlier in the schedule can be used to top up HP.
 
 ### Boss Reveal Overlay
 
@@ -488,9 +537,14 @@ Run complete. Well done.
 |-------|-----------|
 | Quest complete (base) | 80 + (streak × 10) |
 | Quest complete (Grinder) | (80 + streak × 10) × 1.2 |
-| Regular mob kill | 60 |
-| Mini-boss kill | 150 |
+| Content mob kill (final hit of topic) | 100 |
+| Content mob kill on crit | 150 |
+| Mini-boss kill (one-shot) | 150 |
+| Mini-boss kill on crit | 225 |
 | Boss mob kill (review phase) | 250 |
+| Boss mob kill on crit | 375 |
+
+XP is awarded twice: once by `completeQuest()` (per check-off) and again by `attack()` when the hit actually kills a mob. For one topic: `(N × quest XP) + 100` for the kill bonus.
 
 ### Level Computation
 
@@ -740,8 +794,6 @@ On mount, `loadState()` reads and parses this key. If absent or unparseable, `de
 |------|----------|-------|
 | `mastery` state | App.jsx, Dashboard.jsx | State field exists, SkillTree renders it, but nothing ever writes to it. All topics permanently show tier 0. `gold1` badge is unreachable. |
 | `xpMult` | App.jsx defaultState | Always `1`, never read or applied. |
-| Scholar class bonus | constants.js | Described as "MCQ review grants bonus HP" — never implemented. |
 | Weapon stats | constants.js | All weapon `desc` values mention stat bonuses — none are read by any game logic. Purely cosmetic. |
 | Title choice | CharacterCreator.jsx | Purely cosmetic, no gameplay effect. |
-| Stale saves | localStorage | Saves from before this refactor may contain `mcqFreq` in state or old `'MCQ Practice'` topic strings. These fields are harmless but the topic label in old saves will show "MCQ Practice" instead of "MCQ / TBS Practice". Reset clears this. |
-| Regular attack UI | Dashboard.jsx | `attack(false)` logic exists but is never triggered via UI. Combat only happens automatically via `attack(true)` on quest complete. |
+| Stale saves | localStorage | Saves from before the topic-persistent combat refactor may contain `mobState` with the old shape (`topicIdx`, no `topicKey`, wrong HP sizing). These are overwritten on the next spawn. Saves from before the scheduling refactor contain `mcqFreq` in state or old `'MCQ Practice'` topic strings — harmless but may display inconsistent labels until reset. |
