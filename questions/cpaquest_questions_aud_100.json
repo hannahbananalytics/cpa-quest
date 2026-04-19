@@ -1,0 +1,3436 @@
+[
+  {
+    "id": "AUD_001",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Ethics and independence",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "A CPAQuest candidate is studying ethics and independence. Independence in fact and appearance are both important in an audit engagement.",
+    "choices": [
+      {
+        "key": "A",
+        "text": "Only independence in fact matters"
+      },
+      {
+        "key": "B",
+        "text": "Only independence in appearance matters"
+      },
+      {
+        "key": "C",
+        "text": "Both independence in fact and appearance matter"
+      },
+      {
+        "key": "D",
+        "text": "Neither matters if disclosure is made"
+      }
+    ],
+    "answer": "C",
+    "explanation": "Audit credibility depends on the auditor being independent both actually and from the perspective of users.",
+    "tags": [
+      "ethics",
+      "independence",
+      "ethics_and_independence"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_002",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Ethics and independence",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "When a threat to independence is identified, the auditor should first",
+    "choices": [
+      {
+        "key": "A",
+        "text": "ignore it if immaterial"
+      },
+      {
+        "key": "B",
+        "text": "evaluate whether safeguards can reduce the threat to an acceptable level"
+      },
+      {
+        "key": "C",
+        "text": "issue a qualified opinion"
+      },
+      {
+        "key": "D",
+        "text": "withdraw from every engagement"
+      }
+    ],
+    "answer": "B",
+    "explanation": "The conceptual approach is to identify threats, evaluate significance, and apply safeguards when possible.",
+    "tags": [
+      "ethics",
+      "safeguards",
+      "ethics_and_independence"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_003",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Ethics and independence",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "Independence in fact and appearance are both important in an audit engagement.",
+    "choices": [
+      {
+        "key": "A",
+        "text": "Only independence in fact matters"
+      },
+      {
+        "key": "B",
+        "text": "Only independence in appearance matters"
+      },
+      {
+        "key": "C",
+        "text": "Both independence in fact and appearance matter"
+      },
+      {
+        "key": "D",
+        "text": "Neither matters if disclosure is made"
+      }
+    ],
+    "answer": "C",
+    "explanation": "Audit credibility depends on the auditor being independent both actually and from the perspective of users.",
+    "tags": [
+      "ethics",
+      "independence",
+      "ethics_and_independence"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_004",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Ethics and independence",
+    "type": "TBS",
+    "difficulty": "medium",
+    "question": "Task-Based Simulation:\nA client scenario involves ethics and independence. Using the facts provided, determine the most appropriate conclusion.\nKey issue: When a threat to independence is identified, the auditor should first",
+    "choices": [
+      {
+        "key": "A",
+        "text": "ignore it if immaterial"
+      },
+      {
+        "key": "B",
+        "text": "evaluate whether safeguards can reduce the threat to an acceptable level"
+      },
+      {
+        "key": "C",
+        "text": "issue a qualified opinion"
+      },
+      {
+        "key": "D",
+        "text": "withdraw from every engagement"
+      }
+    ],
+    "answer": "B",
+    "explanation": "The conceptual approach is to identify threats, evaluate significance, and apply safeguards when possible.",
+    "tags": [
+      "ethics",
+      "safeguards",
+      "ethics_and_independence"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_005",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Ethics and independence",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "Independence in fact and appearance are both important in an audit engagement.",
+    "choices": [
+      {
+        "key": "A",
+        "text": "Only independence in fact matters"
+      },
+      {
+        "key": "B",
+        "text": "Only independence in appearance matters"
+      },
+      {
+        "key": "C",
+        "text": "Both independence in fact and appearance matter"
+      },
+      {
+        "key": "D",
+        "text": "Neither matters if disclosure is made"
+      }
+    ],
+    "answer": "C",
+    "explanation": "Audit credibility depends on the auditor being independent both actually and from the perspective of users.",
+    "tags": [
+      "ethics",
+      "independence",
+      "ethics_and_independence"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_006",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Ethics and independence",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "When a threat to independence is identified, the auditor should first",
+    "choices": [
+      {
+        "key": "A",
+        "text": "ignore it if immaterial"
+      },
+      {
+        "key": "B",
+        "text": "evaluate whether safeguards can reduce the threat to an acceptable level"
+      },
+      {
+        "key": "C",
+        "text": "issue a qualified opinion"
+      },
+      {
+        "key": "D",
+        "text": "withdraw from every engagement"
+      }
+    ],
+    "answer": "B",
+    "explanation": "The conceptual approach is to identify threats, evaluate significance, and apply safeguards when possible.",
+    "tags": [
+      "ethics",
+      "safeguards",
+      "ethics_and_independence"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_007",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Ethics and independence",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "Which of the following best answers the question below?\nIndependence in fact and appearance are both important in an audit engagement.",
+    "choices": [
+      {
+        "key": "A",
+        "text": "Only independence in fact matters"
+      },
+      {
+        "key": "B",
+        "text": "Only independence in appearance matters"
+      },
+      {
+        "key": "C",
+        "text": "Both independence in fact and appearance matter"
+      },
+      {
+        "key": "D",
+        "text": "Neither matters if disclosure is made"
+      }
+    ],
+    "answer": "C",
+    "explanation": "Audit credibility depends on the auditor being independent both actually and from the perspective of users.",
+    "tags": [
+      "ethics",
+      "independence",
+      "ethics_and_independence"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_008",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Ethics and independence",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "A CPAQuest candidate is studying ethics and independence. When a threat to independence is identified, the auditor should first",
+    "choices": [
+      {
+        "key": "A",
+        "text": "ignore it if immaterial"
+      },
+      {
+        "key": "B",
+        "text": "evaluate whether safeguards can reduce the threat to an acceptable level"
+      },
+      {
+        "key": "C",
+        "text": "issue a qualified opinion"
+      },
+      {
+        "key": "D",
+        "text": "withdraw from every engagement"
+      }
+    ],
+    "answer": "B",
+    "explanation": "The conceptual approach is to identify threats, evaluate significance, and apply safeguards when possible.",
+    "tags": [
+      "ethics",
+      "safeguards",
+      "ethics_and_independence"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_009",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Ethics and independence",
+    "type": "TBS",
+    "difficulty": "hard",
+    "question": "Task-Based Simulation:\nA client scenario involves ethics and independence. Using the facts provided, determine the most appropriate conclusion.\nKey issue: Independence in fact and appearance are both important in an audit engagement.",
+    "choices": [
+      {
+        "key": "A",
+        "text": "Only independence in fact matters"
+      },
+      {
+        "key": "B",
+        "text": "Only independence in appearance matters"
+      },
+      {
+        "key": "C",
+        "text": "Both independence in fact and appearance matter"
+      },
+      {
+        "key": "D",
+        "text": "Neither matters if disclosure is made"
+      }
+    ],
+    "answer": "C",
+    "explanation": "Audit credibility depends on the auditor being independent both actually and from the perspective of users.",
+    "tags": [
+      "ethics",
+      "independence",
+      "ethics_and_independence"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_010",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Professional skepticism and judgment",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "Professional skepticism means the auditor should",
+    "choices": [
+      {
+        "key": "A",
+        "text": "assume management is dishonest"
+      },
+      {
+        "key": "B",
+        "text": "accept documents at face value"
+      },
+      {
+        "key": "C",
+        "text": "maintain a questioning mind and critically assess evidence"
+      },
+      {
+        "key": "D",
+        "text": "avoid using judgment"
+      }
+    ],
+    "answer": "C",
+    "explanation": "Professional skepticism is a questioning mindset and critical assessment of evidence, not automatic distrust.",
+    "tags": [
+      "skepticism",
+      "professional_skepticism_and_judgment"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_011",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Professional skepticism and judgment",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "Auditor judgment shortcuts are risky because they may",
+    "choices": [
+      {
+        "key": "A",
+        "text": "improve reliability of weak evidence"
+      },
+      {
+        "key": "B",
+        "text": "reduce bias automatically"
+      },
+      {
+        "key": "C",
+        "text": "cause important contradictory evidence to be overlooked"
+      },
+      {
+        "key": "D",
+        "text": "eliminate sampling risk"
+      }
+    ],
+    "answer": "C",
+    "explanation": "Bias and shortcuts can cause the auditor to miss contrary evidence.",
+    "tags": [
+      "judgment",
+      "bias",
+      "professional_skepticism_and_judgment"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_012",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Professional skepticism and judgment",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "Professional skepticism means the auditor should",
+    "choices": [
+      {
+        "key": "A",
+        "text": "assume management is dishonest"
+      },
+      {
+        "key": "B",
+        "text": "accept documents at face value"
+      },
+      {
+        "key": "C",
+        "text": "maintain a questioning mind and critically assess evidence"
+      },
+      {
+        "key": "D",
+        "text": "avoid using judgment"
+      }
+    ],
+    "answer": "C",
+    "explanation": "Professional skepticism is a questioning mindset and critical assessment of evidence, not automatic distrust.",
+    "tags": [
+      "skepticism",
+      "professional_skepticism_and_judgment"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_013",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Professional skepticism and judgment",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "Auditor judgment shortcuts are risky because they may",
+    "choices": [
+      {
+        "key": "A",
+        "text": "improve reliability of weak evidence"
+      },
+      {
+        "key": "B",
+        "text": "reduce bias automatically"
+      },
+      {
+        "key": "C",
+        "text": "cause important contradictory evidence to be overlooked"
+      },
+      {
+        "key": "D",
+        "text": "eliminate sampling risk"
+      }
+    ],
+    "answer": "C",
+    "explanation": "Bias and shortcuts can cause the auditor to miss contrary evidence.",
+    "tags": [
+      "judgment",
+      "bias",
+      "professional_skepticism_and_judgment"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_014",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Professional skepticism and judgment",
+    "type": "TBS",
+    "difficulty": "easy",
+    "question": "Task-Based Simulation:\nA client scenario involves professional skepticism and judgment. Using the facts provided, determine the most appropriate conclusion.\nKey issue: Professional skepticism means the auditor should",
+    "choices": [
+      {
+        "key": "A",
+        "text": "assume management is dishonest"
+      },
+      {
+        "key": "B",
+        "text": "accept documents at face value"
+      },
+      {
+        "key": "C",
+        "text": "maintain a questioning mind and critically assess evidence"
+      },
+      {
+        "key": "D",
+        "text": "avoid using judgment"
+      }
+    ],
+    "answer": "C",
+    "explanation": "Professional skepticism is a questioning mindset and critical assessment of evidence, not automatic distrust.",
+    "tags": [
+      "skepticism",
+      "professional_skepticism_and_judgment"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_015",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Professional skepticism and judgment",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "A CPAQuest candidate is studying professional skepticism and judgment. Auditor judgment shortcuts are risky because they may",
+    "choices": [
+      {
+        "key": "A",
+        "text": "improve reliability of weak evidence"
+      },
+      {
+        "key": "B",
+        "text": "reduce bias automatically"
+      },
+      {
+        "key": "C",
+        "text": "cause important contradictory evidence to be overlooked"
+      },
+      {
+        "key": "D",
+        "text": "eliminate sampling risk"
+      }
+    ],
+    "answer": "C",
+    "explanation": "Bias and shortcuts can cause the auditor to miss contrary evidence.",
+    "tags": [
+      "judgment",
+      "bias",
+      "professional_skepticism_and_judgment"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_016",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Professional skepticism and judgment",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "Professional skepticism means the auditor should",
+    "choices": [
+      {
+        "key": "A",
+        "text": "assume management is dishonest"
+      },
+      {
+        "key": "B",
+        "text": "accept documents at face value"
+      },
+      {
+        "key": "C",
+        "text": "maintain a questioning mind and critically assess evidence"
+      },
+      {
+        "key": "D",
+        "text": "avoid using judgment"
+      }
+    ],
+    "answer": "C",
+    "explanation": "Professional skepticism is a questioning mindset and critical assessment of evidence, not automatic distrust.",
+    "tags": [
+      "skepticism",
+      "professional_skepticism_and_judgment"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_017",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Professional skepticism and judgment",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "Auditor judgment shortcuts are risky because they may",
+    "choices": [
+      {
+        "key": "A",
+        "text": "improve reliability of weak evidence"
+      },
+      {
+        "key": "B",
+        "text": "reduce bias automatically"
+      },
+      {
+        "key": "C",
+        "text": "cause important contradictory evidence to be overlooked"
+      },
+      {
+        "key": "D",
+        "text": "eliminate sampling risk"
+      }
+    ],
+    "answer": "C",
+    "explanation": "Bias and shortcuts can cause the auditor to miss contrary evidence.",
+    "tags": [
+      "judgment",
+      "bias",
+      "professional_skepticism_and_judgment"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_018",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Professional skepticism and judgment",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "Professional skepticism means the auditor should",
+    "choices": [
+      {
+        "key": "A",
+        "text": "assume management is dishonest"
+      },
+      {
+        "key": "B",
+        "text": "accept documents at face value"
+      },
+      {
+        "key": "C",
+        "text": "maintain a questioning mind and critically assess evidence"
+      },
+      {
+        "key": "D",
+        "text": "avoid using judgment"
+      }
+    ],
+    "answer": "C",
+    "explanation": "Professional skepticism is a questioning mindset and critical assessment of evidence, not automatic distrust.",
+    "tags": [
+      "skepticism",
+      "professional_skepticism_and_judgment"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_019",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Engagement acceptance and terms",
+    "type": "TBS",
+    "difficulty": "medium",
+    "question": "Task-Based Simulation:\nA client scenario involves engagement acceptance and terms. Using the facts provided, determine the most appropriate conclusion.\nKey issue: Before accepting an engagement, the auditor should confirm that",
+    "choices": [
+      {
+        "key": "A",
+        "text": "management accepts responsibility for the financial statements"
+      },
+      {
+        "key": "B",
+        "text": "the audit opinion will be unmodified"
+      },
+      {
+        "key": "C",
+        "text": "all controls are effective"
+      },
+      {
+        "key": "D",
+        "text": "fraud risk is zero"
+      }
+    ],
+    "answer": "A",
+    "explanation": "Acceptance requires management\u2019s acknowledgment of its responsibilities.",
+    "tags": [
+      "engagement",
+      "acceptance",
+      "engagement_acceptance_and_terms"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_020",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Engagement acceptance and terms",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "The engagement letter primarily documents",
+    "choices": [
+      {
+        "key": "A",
+        "text": "the final audit adjustments"
+      },
+      {
+        "key": "B",
+        "text": "the terms and understanding of the engagement"
+      },
+      {
+        "key": "C",
+        "text": "management representation letter content"
+      },
+      {
+        "key": "D",
+        "text": "sampling results"
+      }
+    ],
+    "answer": "B",
+    "explanation": "The engagement letter establishes the understanding between the parties.",
+    "tags": [
+      "engagement letter",
+      "engagement_acceptance_and_terms"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_021",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Engagement acceptance and terms",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "Which of the following best answers the question below?\nBefore accepting an engagement, the auditor should confirm that",
+    "choices": [
+      {
+        "key": "A",
+        "text": "management accepts responsibility for the financial statements"
+      },
+      {
+        "key": "B",
+        "text": "the audit opinion will be unmodified"
+      },
+      {
+        "key": "C",
+        "text": "all controls are effective"
+      },
+      {
+        "key": "D",
+        "text": "fraud risk is zero"
+      }
+    ],
+    "answer": "A",
+    "explanation": "Acceptance requires management\u2019s acknowledgment of its responsibilities.",
+    "tags": [
+      "engagement",
+      "acceptance",
+      "engagement_acceptance_and_terms"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_022",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Engagement acceptance and terms",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "A CPAQuest candidate is studying engagement acceptance and terms. The engagement letter primarily documents",
+    "choices": [
+      {
+        "key": "A",
+        "text": "the final audit adjustments"
+      },
+      {
+        "key": "B",
+        "text": "the terms and understanding of the engagement"
+      },
+      {
+        "key": "C",
+        "text": "management representation letter content"
+      },
+      {
+        "key": "D",
+        "text": "sampling results"
+      }
+    ],
+    "answer": "B",
+    "explanation": "The engagement letter establishes the understanding between the parties.",
+    "tags": [
+      "engagement letter",
+      "engagement_acceptance_and_terms"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_023",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Engagement acceptance and terms",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "Before accepting an engagement, the auditor should confirm that",
+    "choices": [
+      {
+        "key": "A",
+        "text": "management accepts responsibility for the financial statements"
+      },
+      {
+        "key": "B",
+        "text": "the audit opinion will be unmodified"
+      },
+      {
+        "key": "C",
+        "text": "all controls are effective"
+      },
+      {
+        "key": "D",
+        "text": "fraud risk is zero"
+      }
+    ],
+    "answer": "A",
+    "explanation": "Acceptance requires management\u2019s acknowledgment of its responsibilities.",
+    "tags": [
+      "engagement",
+      "acceptance",
+      "engagement_acceptance_and_terms"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_024",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Engagement acceptance and terms",
+    "type": "TBS",
+    "difficulty": "hard",
+    "question": "Task-Based Simulation:\nA client scenario involves engagement acceptance and terms. Using the facts provided, determine the most appropriate conclusion.\nKey issue: The engagement letter primarily documents",
+    "choices": [
+      {
+        "key": "A",
+        "text": "the final audit adjustments"
+      },
+      {
+        "key": "B",
+        "text": "the terms and understanding of the engagement"
+      },
+      {
+        "key": "C",
+        "text": "management representation letter content"
+      },
+      {
+        "key": "D",
+        "text": "sampling results"
+      }
+    ],
+    "answer": "B",
+    "explanation": "The engagement letter establishes the understanding between the parties.",
+    "tags": [
+      "engagement letter",
+      "engagement_acceptance_and_terms"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_025",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Engagement acceptance and terms",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "Before accepting an engagement, the auditor should confirm that",
+    "choices": [
+      {
+        "key": "A",
+        "text": "management accepts responsibility for the financial statements"
+      },
+      {
+        "key": "B",
+        "text": "the audit opinion will be unmodified"
+      },
+      {
+        "key": "C",
+        "text": "all controls are effective"
+      },
+      {
+        "key": "D",
+        "text": "fraud risk is zero"
+      }
+    ],
+    "answer": "A",
+    "explanation": "Acceptance requires management\u2019s acknowledgment of its responsibilities.",
+    "tags": [
+      "engagement",
+      "acceptance",
+      "engagement_acceptance_and_terms"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_026",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Engagement acceptance and terms",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "The engagement letter primarily documents",
+    "choices": [
+      {
+        "key": "A",
+        "text": "the final audit adjustments"
+      },
+      {
+        "key": "B",
+        "text": "the terms and understanding of the engagement"
+      },
+      {
+        "key": "C",
+        "text": "management representation letter content"
+      },
+      {
+        "key": "D",
+        "text": "sampling results"
+      }
+    ],
+    "answer": "B",
+    "explanation": "The engagement letter establishes the understanding between the parties.",
+    "tags": [
+      "engagement letter",
+      "engagement_acceptance_and_terms"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_027",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Engagement acceptance and terms",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "Before accepting an engagement, the auditor should confirm that",
+    "choices": [
+      {
+        "key": "A",
+        "text": "management accepts responsibility for the financial statements"
+      },
+      {
+        "key": "B",
+        "text": "the audit opinion will be unmodified"
+      },
+      {
+        "key": "C",
+        "text": "all controls are effective"
+      },
+      {
+        "key": "D",
+        "text": "fraud risk is zero"
+      }
+    ],
+    "answer": "A",
+    "explanation": "Acceptance requires management\u2019s acknowledgment of its responsibilities.",
+    "tags": [
+      "engagement",
+      "acceptance",
+      "engagement_acceptance_and_terms"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_028",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Documentation and communication",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "Which of the following best answers the question below?\nAudit documentation should be sufficient to allow an experienced auditor with no prior connection to understand",
+    "choices": [
+      {
+        "key": "A",
+        "text": "only final conclusions"
+      },
+      {
+        "key": "B",
+        "text": "only the financial statements"
+      },
+      {
+        "key": "C",
+        "text": "procedures performed, evidence obtained, and conclusions reached"
+      },
+      {
+        "key": "D",
+        "text": "only material misstatements"
+      }
+    ],
+    "answer": "C",
+    "explanation": "Documentation should stand on its own for an experienced reviewer.",
+    "tags": [
+      "documentation",
+      "documentation_and_communication"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_029",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Documentation and communication",
+    "type": "TBS",
+    "difficulty": "easy",
+    "question": "Task-Based Simulation:\nA client scenario involves documentation and communication. Using the facts provided, determine the most appropriate conclusion.\nKey issue: Significant internal control deficiencies ordinarily should be communicated to",
+    "choices": [
+      {
+        "key": "A",
+        "text": "only lower-level staff"
+      },
+      {
+        "key": "B",
+        "text": "management and those charged with governance as appropriate"
+      },
+      {
+        "key": "C",
+        "text": "customers"
+      },
+      {
+        "key": "D",
+        "text": "tax authorities"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Internal control matters are communicated to management and governance parties based on standards.",
+    "tags": [
+      "communication",
+      "internal control",
+      "documentation_and_communication"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_030",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Documentation and communication",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "Audit documentation should be sufficient to allow an experienced auditor with no prior connection to understand",
+    "choices": [
+      {
+        "key": "A",
+        "text": "only final conclusions"
+      },
+      {
+        "key": "B",
+        "text": "only the financial statements"
+      },
+      {
+        "key": "C",
+        "text": "procedures performed, evidence obtained, and conclusions reached"
+      },
+      {
+        "key": "D",
+        "text": "only material misstatements"
+      }
+    ],
+    "answer": "C",
+    "explanation": "Documentation should stand on its own for an experienced reviewer.",
+    "tags": [
+      "documentation",
+      "documentation_and_communication"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_031",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Documentation and communication",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "Significant internal control deficiencies ordinarily should be communicated to",
+    "choices": [
+      {
+        "key": "A",
+        "text": "only lower-level staff"
+      },
+      {
+        "key": "B",
+        "text": "management and those charged with governance as appropriate"
+      },
+      {
+        "key": "C",
+        "text": "customers"
+      },
+      {
+        "key": "D",
+        "text": "tax authorities"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Internal control matters are communicated to management and governance parties based on standards.",
+    "tags": [
+      "communication",
+      "internal control",
+      "documentation_and_communication"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_032",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Documentation and communication",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "Audit documentation should be sufficient to allow an experienced auditor with no prior connection to understand",
+    "choices": [
+      {
+        "key": "A",
+        "text": "only final conclusions"
+      },
+      {
+        "key": "B",
+        "text": "only the financial statements"
+      },
+      {
+        "key": "C",
+        "text": "procedures performed, evidence obtained, and conclusions reached"
+      },
+      {
+        "key": "D",
+        "text": "only material misstatements"
+      }
+    ],
+    "answer": "C",
+    "explanation": "Documentation should stand on its own for an experienced reviewer.",
+    "tags": [
+      "documentation",
+      "documentation_and_communication"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_033",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Documentation and communication",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "Significant internal control deficiencies ordinarily should be communicated to",
+    "choices": [
+      {
+        "key": "A",
+        "text": "only lower-level staff"
+      },
+      {
+        "key": "B",
+        "text": "management and those charged with governance as appropriate"
+      },
+      {
+        "key": "C",
+        "text": "customers"
+      },
+      {
+        "key": "D",
+        "text": "tax authorities"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Internal control matters are communicated to management and governance parties based on standards.",
+    "tags": [
+      "communication",
+      "internal control",
+      "documentation_and_communication"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_034",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Documentation and communication",
+    "type": "TBS",
+    "difficulty": "medium",
+    "question": "Task-Based Simulation:\nA client scenario involves documentation and communication. Using the facts provided, determine the most appropriate conclusion.\nKey issue: Audit documentation should be sufficient to allow an experienced auditor with no prior connection to understand",
+    "choices": [
+      {
+        "key": "A",
+        "text": "only final conclusions"
+      },
+      {
+        "key": "B",
+        "text": "only the financial statements"
+      },
+      {
+        "key": "C",
+        "text": "procedures performed, evidence obtained, and conclusions reached"
+      },
+      {
+        "key": "D",
+        "text": "only material misstatements"
+      }
+    ],
+    "answer": "C",
+    "explanation": "Documentation should stand on its own for an experienced reviewer.",
+    "tags": [
+      "documentation",
+      "documentation_and_communication"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_035",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Documentation and communication",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "Which of the following best answers the question below?\nSignificant internal control deficiencies ordinarily should be communicated to",
+    "choices": [
+      {
+        "key": "A",
+        "text": "only lower-level staff"
+      },
+      {
+        "key": "B",
+        "text": "management and those charged with governance as appropriate"
+      },
+      {
+        "key": "C",
+        "text": "customers"
+      },
+      {
+        "key": "D",
+        "text": "tax authorities"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Internal control matters are communicated to management and governance parties based on standards.",
+    "tags": [
+      "communication",
+      "internal control",
+      "documentation_and_communication"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_036",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Documentation and communication",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "A CPAQuest candidate is studying documentation and communication. Audit documentation should be sufficient to allow an experienced auditor with no prior connection to understand",
+    "choices": [
+      {
+        "key": "A",
+        "text": "only final conclusions"
+      },
+      {
+        "key": "B",
+        "text": "only the financial statements"
+      },
+      {
+        "key": "C",
+        "text": "procedures performed, evidence obtained, and conclusions reached"
+      },
+      {
+        "key": "D",
+        "text": "only material misstatements"
+      }
+    ],
+    "answer": "C",
+    "explanation": "Documentation should stand on its own for an experienced reviewer.",
+    "tags": [
+      "documentation",
+      "documentation_and_communication"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_037",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Planning and engagement strategy",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "The overall engagement strategy helps the auditor",
+    "choices": [
+      {
+        "key": "A",
+        "text": "replace the detailed engagement plan entirely"
+      },
+      {
+        "key": "B",
+        "text": "set the scope, timing, and direction of the audit"
+      },
+      {
+        "key": "C",
+        "text": "guarantee no misstatements exist"
+      },
+      {
+        "key": "D",
+        "text": "avoid risk assessment"
+      }
+    ],
+    "answer": "B",
+    "explanation": "The strategy frames the audit\u2019s scope, timing, and direction.",
+    "tags": [
+      "planning",
+      "planning_and_engagement_strategy"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_038",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Planning and engagement strategy",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "A detailed engagement plan is most useful for",
+    "choices": [
+      {
+        "key": "A",
+        "text": "documenting firm billing rates"
+      },
+      {
+        "key": "B",
+        "text": "assigning procedures to significant areas"
+      },
+      {
+        "key": "C",
+        "text": "setting management compensation"
+      },
+      {
+        "key": "D",
+        "text": "valuing the client"
+      }
+    ],
+    "answer": "B",
+    "explanation": "The engagement plan links assessed risks to procedures in significant areas.",
+    "tags": [
+      "planning",
+      "engagement plan",
+      "planning_and_engagement_strategy"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_039",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Planning and engagement strategy",
+    "type": "TBS",
+    "difficulty": "hard",
+    "question": "Task-Based Simulation:\nA client scenario involves planning and engagement strategy. Using the facts provided, determine the most appropriate conclusion.\nKey issue: The overall engagement strategy helps the auditor",
+    "choices": [
+      {
+        "key": "A",
+        "text": "replace the detailed engagement plan entirely"
+      },
+      {
+        "key": "B",
+        "text": "set the scope, timing, and direction of the audit"
+      },
+      {
+        "key": "C",
+        "text": "guarantee no misstatements exist"
+      },
+      {
+        "key": "D",
+        "text": "avoid risk assessment"
+      }
+    ],
+    "answer": "B",
+    "explanation": "The strategy frames the audit\u2019s scope, timing, and direction.",
+    "tags": [
+      "planning",
+      "planning_and_engagement_strategy"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_040",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Planning and engagement strategy",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "A detailed engagement plan is most useful for",
+    "choices": [
+      {
+        "key": "A",
+        "text": "documenting firm billing rates"
+      },
+      {
+        "key": "B",
+        "text": "assigning procedures to significant areas"
+      },
+      {
+        "key": "C",
+        "text": "setting management compensation"
+      },
+      {
+        "key": "D",
+        "text": "valuing the client"
+      }
+    ],
+    "answer": "B",
+    "explanation": "The engagement plan links assessed risks to procedures in significant areas.",
+    "tags": [
+      "planning",
+      "engagement plan",
+      "planning_and_engagement_strategy"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_041",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Planning and engagement strategy",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "The overall engagement strategy helps the auditor",
+    "choices": [
+      {
+        "key": "A",
+        "text": "replace the detailed engagement plan entirely"
+      },
+      {
+        "key": "B",
+        "text": "set the scope, timing, and direction of the audit"
+      },
+      {
+        "key": "C",
+        "text": "guarantee no misstatements exist"
+      },
+      {
+        "key": "D",
+        "text": "avoid risk assessment"
+      }
+    ],
+    "answer": "B",
+    "explanation": "The strategy frames the audit\u2019s scope, timing, and direction.",
+    "tags": [
+      "planning",
+      "planning_and_engagement_strategy"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_042",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Planning and engagement strategy",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "Which of the following best answers the question below?\nA detailed engagement plan is most useful for",
+    "choices": [
+      {
+        "key": "A",
+        "text": "documenting firm billing rates"
+      },
+      {
+        "key": "B",
+        "text": "assigning procedures to significant areas"
+      },
+      {
+        "key": "C",
+        "text": "setting management compensation"
+      },
+      {
+        "key": "D",
+        "text": "valuing the client"
+      }
+    ],
+    "answer": "B",
+    "explanation": "The engagement plan links assessed risks to procedures in significant areas.",
+    "tags": [
+      "planning",
+      "engagement plan",
+      "planning_and_engagement_strategy"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_043",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Planning and engagement strategy",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "A CPAQuest candidate is studying planning and engagement strategy. The overall engagement strategy helps the auditor",
+    "choices": [
+      {
+        "key": "A",
+        "text": "replace the detailed engagement plan entirely"
+      },
+      {
+        "key": "B",
+        "text": "set the scope, timing, and direction of the audit"
+      },
+      {
+        "key": "C",
+        "text": "guarantee no misstatements exist"
+      },
+      {
+        "key": "D",
+        "text": "avoid risk assessment"
+      }
+    ],
+    "answer": "B",
+    "explanation": "The strategy frames the audit\u2019s scope, timing, and direction.",
+    "tags": [
+      "planning",
+      "planning_and_engagement_strategy"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_044",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Planning and engagement strategy",
+    "type": "TBS",
+    "difficulty": "easy",
+    "question": "Task-Based Simulation:\nA client scenario involves planning and engagement strategy. Using the facts provided, determine the most appropriate conclusion.\nKey issue: A detailed engagement plan is most useful for",
+    "choices": [
+      {
+        "key": "A",
+        "text": "documenting firm billing rates"
+      },
+      {
+        "key": "B",
+        "text": "assigning procedures to significant areas"
+      },
+      {
+        "key": "C",
+        "text": "setting management compensation"
+      },
+      {
+        "key": "D",
+        "text": "valuing the client"
+      }
+    ],
+    "answer": "B",
+    "explanation": "The engagement plan links assessed risks to procedures in significant areas.",
+    "tags": [
+      "planning",
+      "engagement plan",
+      "planning_and_engagement_strategy"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_045",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Understanding the entity and environment",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "Understanding the entity and its environment helps the auditor primarily by",
+    "choices": [
+      {
+        "key": "A",
+        "text": "eliminating control risk"
+      },
+      {
+        "key": "B",
+        "text": "identifying risks of material misstatement"
+      },
+      {
+        "key": "C",
+        "text": "setting tax policy"
+      },
+      {
+        "key": "D",
+        "text": "reducing the need for evidence"
+      }
+    ],
+    "answer": "B",
+    "explanation": "The understanding supports identifying and assessing risks of material misstatement.",
+    "tags": [
+      "risk assessment",
+      "understanding_the_entity_and_environment"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_046",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Understanding the entity and environment",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "An adverse industry trend would most directly affect",
+    "choices": [
+      {
+        "key": "A",
+        "text": "inherent risk assessment"
+      },
+      {
+        "key": "B",
+        "text": "the form of the representation letter only"
+      },
+      {
+        "key": "C",
+        "text": "sampling units"
+      },
+      {
+        "key": "D",
+        "text": "the auditor\u2019s independence"
+      }
+    ],
+    "answer": "A",
+    "explanation": "External factors such as industry trends can increase inherent risk.",
+    "tags": [
+      "environment",
+      "inherent risk",
+      "understanding_the_entity_and_environment"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_047",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Understanding the entity and environment",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "Understanding the entity and its environment helps the auditor primarily by",
+    "choices": [
+      {
+        "key": "A",
+        "text": "eliminating control risk"
+      },
+      {
+        "key": "B",
+        "text": "identifying risks of material misstatement"
+      },
+      {
+        "key": "C",
+        "text": "setting tax policy"
+      },
+      {
+        "key": "D",
+        "text": "reducing the need for evidence"
+      }
+    ],
+    "answer": "B",
+    "explanation": "The understanding supports identifying and assessing risks of material misstatement.",
+    "tags": [
+      "risk assessment",
+      "understanding_the_entity_and_environment"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_048",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Understanding the entity and environment",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "An adverse industry trend would most directly affect",
+    "choices": [
+      {
+        "key": "A",
+        "text": "inherent risk assessment"
+      },
+      {
+        "key": "B",
+        "text": "the form of the representation letter only"
+      },
+      {
+        "key": "C",
+        "text": "sampling units"
+      },
+      {
+        "key": "D",
+        "text": "the auditor\u2019s independence"
+      }
+    ],
+    "answer": "A",
+    "explanation": "External factors such as industry trends can increase inherent risk.",
+    "tags": [
+      "environment",
+      "inherent risk",
+      "understanding_the_entity_and_environment"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_049",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Understanding the entity and environment",
+    "type": "TBS",
+    "difficulty": "hard",
+    "question": "Task-Based Simulation:\nA client scenario involves understanding the entity and environment. Using the facts provided, determine the most appropriate conclusion.\nKey issue: Understanding the entity and its environment helps the auditor primarily by",
+    "choices": [
+      {
+        "key": "A",
+        "text": "eliminating control risk"
+      },
+      {
+        "key": "B",
+        "text": "identifying risks of material misstatement"
+      },
+      {
+        "key": "C",
+        "text": "setting tax policy"
+      },
+      {
+        "key": "D",
+        "text": "reducing the need for evidence"
+      }
+    ],
+    "answer": "B",
+    "explanation": "The understanding supports identifying and assessing risks of material misstatement.",
+    "tags": [
+      "risk assessment",
+      "understanding_the_entity_and_environment"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_050",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Understanding the entity and environment",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "A CPAQuest candidate is studying understanding the entity and environment. An adverse industry trend would most directly affect",
+    "choices": [
+      {
+        "key": "A",
+        "text": "inherent risk assessment"
+      },
+      {
+        "key": "B",
+        "text": "the form of the representation letter only"
+      },
+      {
+        "key": "C",
+        "text": "sampling units"
+      },
+      {
+        "key": "D",
+        "text": "the auditor\u2019s independence"
+      }
+    ],
+    "answer": "A",
+    "explanation": "External factors such as industry trends can increase inherent risk.",
+    "tags": [
+      "environment",
+      "inherent risk",
+      "understanding_the_entity_and_environment"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_051",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Understanding the entity and environment",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "Understanding the entity and its environment helps the auditor primarily by",
+    "choices": [
+      {
+        "key": "A",
+        "text": "eliminating control risk"
+      },
+      {
+        "key": "B",
+        "text": "identifying risks of material misstatement"
+      },
+      {
+        "key": "C",
+        "text": "setting tax policy"
+      },
+      {
+        "key": "D",
+        "text": "reducing the need for evidence"
+      }
+    ],
+    "answer": "B",
+    "explanation": "The understanding supports identifying and assessing risks of material misstatement.",
+    "tags": [
+      "risk assessment",
+      "understanding_the_entity_and_environment"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_052",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Understanding the entity and environment",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "An adverse industry trend would most directly affect",
+    "choices": [
+      {
+        "key": "A",
+        "text": "inherent risk assessment"
+      },
+      {
+        "key": "B",
+        "text": "the form of the representation letter only"
+      },
+      {
+        "key": "C",
+        "text": "sampling units"
+      },
+      {
+        "key": "D",
+        "text": "the auditor\u2019s independence"
+      }
+    ],
+    "answer": "A",
+    "explanation": "External factors such as industry trends can increase inherent risk.",
+    "tags": [
+      "environment",
+      "inherent risk",
+      "understanding_the_entity_and_environment"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_053",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Internal control and IT systems",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "A walkthrough is performed primarily to",
+    "choices": [
+      {
+        "key": "A",
+        "text": "estimate audit fees"
+      },
+      {
+        "key": "B",
+        "text": "confirm understanding of transaction flow and related controls"
+      },
+      {
+        "key": "C",
+        "text": "prepare the tax return"
+      },
+      {
+        "key": "D",
+        "text": "test all operating effectiveness"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Walkthroughs trace transactions to confirm understanding of process flow and controls.",
+    "tags": [
+      "walkthrough",
+      "controls",
+      "internal_control_and_it_systems"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_054",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Internal control and IT systems",
+    "type": "TBS",
+    "difficulty": "medium",
+    "question": "Task-Based Simulation:\nA client scenario involves internal control and it systems. Using the facts provided, determine the most appropriate conclusion.\nKey issue: IT general controls are most closely associated with",
+    "choices": [
+      {
+        "key": "A",
+        "text": "inventory observation counts"
+      },
+      {
+        "key": "B",
+        "text": "program change, access, and operations controls"
+      },
+      {
+        "key": "C",
+        "text": "management representation letters"
+      },
+      {
+        "key": "D",
+        "text": "going-concern disclosures"
+      }
+    ],
+    "answer": "B",
+    "explanation": "IT general controls include access, change management, and IT operations.",
+    "tags": [
+      "ITGC",
+      "internal_control_and_it_systems"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_055",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Internal control and IT systems",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "A walkthrough is performed primarily to",
+    "choices": [
+      {
+        "key": "A",
+        "text": "estimate audit fees"
+      },
+      {
+        "key": "B",
+        "text": "confirm understanding of transaction flow and related controls"
+      },
+      {
+        "key": "C",
+        "text": "prepare the tax return"
+      },
+      {
+        "key": "D",
+        "text": "test all operating effectiveness"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Walkthroughs trace transactions to confirm understanding of process flow and controls.",
+    "tags": [
+      "walkthrough",
+      "controls",
+      "internal_control_and_it_systems"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_056",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Internal control and IT systems",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "Which of the following best answers the question below?\nIT general controls are most closely associated with",
+    "choices": [
+      {
+        "key": "A",
+        "text": "inventory observation counts"
+      },
+      {
+        "key": "B",
+        "text": "program change, access, and operations controls"
+      },
+      {
+        "key": "C",
+        "text": "management representation letters"
+      },
+      {
+        "key": "D",
+        "text": "going-concern disclosures"
+      }
+    ],
+    "answer": "B",
+    "explanation": "IT general controls include access, change management, and IT operations.",
+    "tags": [
+      "ITGC",
+      "internal_control_and_it_systems"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_057",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Internal control and IT systems",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "A CPAQuest candidate is studying internal control and it systems. A walkthrough is performed primarily to",
+    "choices": [
+      {
+        "key": "A",
+        "text": "estimate audit fees"
+      },
+      {
+        "key": "B",
+        "text": "confirm understanding of transaction flow and related controls"
+      },
+      {
+        "key": "C",
+        "text": "prepare the tax return"
+      },
+      {
+        "key": "D",
+        "text": "test all operating effectiveness"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Walkthroughs trace transactions to confirm understanding of process flow and controls.",
+    "tags": [
+      "walkthrough",
+      "controls",
+      "internal_control_and_it_systems"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_058",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Internal control and IT systems",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "IT general controls are most closely associated with",
+    "choices": [
+      {
+        "key": "A",
+        "text": "inventory observation counts"
+      },
+      {
+        "key": "B",
+        "text": "program change, access, and operations controls"
+      },
+      {
+        "key": "C",
+        "text": "management representation letters"
+      },
+      {
+        "key": "D",
+        "text": "going-concern disclosures"
+      }
+    ],
+    "answer": "B",
+    "explanation": "IT general controls include access, change management, and IT operations.",
+    "tags": [
+      "ITGC",
+      "internal_control_and_it_systems"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_059",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Internal control and IT systems",
+    "type": "TBS",
+    "difficulty": "hard",
+    "question": "Task-Based Simulation:\nA client scenario involves internal control and it systems. Using the facts provided, determine the most appropriate conclusion.\nKey issue: A walkthrough is performed primarily to",
+    "choices": [
+      {
+        "key": "A",
+        "text": "estimate audit fees"
+      },
+      {
+        "key": "B",
+        "text": "confirm understanding of transaction flow and related controls"
+      },
+      {
+        "key": "C",
+        "text": "prepare the tax return"
+      },
+      {
+        "key": "D",
+        "text": "test all operating effectiveness"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Walkthroughs trace transactions to confirm understanding of process flow and controls.",
+    "tags": [
+      "walkthrough",
+      "controls",
+      "internal_control_and_it_systems"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_060",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Internal control and IT systems",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "IT general controls are most closely associated with",
+    "choices": [
+      {
+        "key": "A",
+        "text": "inventory observation counts"
+      },
+      {
+        "key": "B",
+        "text": "program change, access, and operations controls"
+      },
+      {
+        "key": "C",
+        "text": "management representation letters"
+      },
+      {
+        "key": "D",
+        "text": "going-concern disclosures"
+      }
+    ],
+    "answer": "B",
+    "explanation": "IT general controls include access, change management, and IT operations.",
+    "tags": [
+      "ITGC",
+      "internal_control_and_it_systems"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_061",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Materiality and risk assessment",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "Performance materiality is set primarily to",
+    "choices": [
+      {
+        "key": "A",
+        "text": "increase sampling risk"
+      },
+      {
+        "key": "B",
+        "text": "reduce the probability that aggregate misstatements exceed overall materiality"
+      },
+      {
+        "key": "C",
+        "text": "replace overall materiality"
+      },
+      {
+        "key": "D",
+        "text": "measure fraud incentives"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Performance materiality is lower than overall materiality to reduce the chance undetected misstatements aggregate to a material amount.",
+    "tags": [
+      "materiality",
+      "materiality_and_risk_assessment"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_062",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Materiality and risk assessment",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "Risk of material misstatement exists at the",
+    "choices": [
+      {
+        "key": "A",
+        "text": "opinion level only"
+      },
+      {
+        "key": "B",
+        "text": "financial statement and relevant assertion levels"
+      },
+      {
+        "key": "C",
+        "text": "documentation level only"
+      },
+      {
+        "key": "D",
+        "text": "partner compensation level"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Standards assess risk at both the financial statement and assertion levels.",
+    "tags": [
+      "RMM",
+      "materiality_and_risk_assessment"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_063",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Materiality and risk assessment",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "Which of the following best answers the question below?\nPerformance materiality is set primarily to",
+    "choices": [
+      {
+        "key": "A",
+        "text": "increase sampling risk"
+      },
+      {
+        "key": "B",
+        "text": "reduce the probability that aggregate misstatements exceed overall materiality"
+      },
+      {
+        "key": "C",
+        "text": "replace overall materiality"
+      },
+      {
+        "key": "D",
+        "text": "measure fraud incentives"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Performance materiality is lower than overall materiality to reduce the chance undetected misstatements aggregate to a material amount.",
+    "tags": [
+      "materiality",
+      "materiality_and_risk_assessment"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_064",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Materiality and risk assessment",
+    "type": "TBS",
+    "difficulty": "medium",
+    "question": "Task-Based Simulation:\nA client scenario involves materiality and risk assessment. Using the facts provided, determine the most appropriate conclusion.\nKey issue: Risk of material misstatement exists at the",
+    "choices": [
+      {
+        "key": "A",
+        "text": "opinion level only"
+      },
+      {
+        "key": "B",
+        "text": "financial statement and relevant assertion levels"
+      },
+      {
+        "key": "C",
+        "text": "documentation level only"
+      },
+      {
+        "key": "D",
+        "text": "partner compensation level"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Standards assess risk at both the financial statement and assertion levels.",
+    "tags": [
+      "RMM",
+      "materiality_and_risk_assessment"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_065",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Materiality and risk assessment",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "Performance materiality is set primarily to",
+    "choices": [
+      {
+        "key": "A",
+        "text": "increase sampling risk"
+      },
+      {
+        "key": "B",
+        "text": "reduce the probability that aggregate misstatements exceed overall materiality"
+      },
+      {
+        "key": "C",
+        "text": "replace overall materiality"
+      },
+      {
+        "key": "D",
+        "text": "measure fraud incentives"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Performance materiality is lower than overall materiality to reduce the chance undetected misstatements aggregate to a material amount.",
+    "tags": [
+      "materiality",
+      "materiality_and_risk_assessment"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_066",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Materiality and risk assessment",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "Risk of material misstatement exists at the",
+    "choices": [
+      {
+        "key": "A",
+        "text": "opinion level only"
+      },
+      {
+        "key": "B",
+        "text": "financial statement and relevant assertion levels"
+      },
+      {
+        "key": "C",
+        "text": "documentation level only"
+      },
+      {
+        "key": "D",
+        "text": "partner compensation level"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Standards assess risk at both the financial statement and assertion levels.",
+    "tags": [
+      "RMM",
+      "materiality_and_risk_assessment"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_067",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Materiality and risk assessment",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "Performance materiality is set primarily to",
+    "choices": [
+      {
+        "key": "A",
+        "text": "increase sampling risk"
+      },
+      {
+        "key": "B",
+        "text": "reduce the probability that aggregate misstatements exceed overall materiality"
+      },
+      {
+        "key": "C",
+        "text": "replace overall materiality"
+      },
+      {
+        "key": "D",
+        "text": "measure fraud incentives"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Performance materiality is lower than overall materiality to reduce the chance undetected misstatements aggregate to a material amount.",
+    "tags": [
+      "materiality",
+      "materiality_and_risk_assessment"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_068",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Materiality and risk assessment",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "Risk of material misstatement exists at the",
+    "choices": [
+      {
+        "key": "A",
+        "text": "opinion level only"
+      },
+      {
+        "key": "B",
+        "text": "financial statement and relevant assertion levels"
+      },
+      {
+        "key": "C",
+        "text": "documentation level only"
+      },
+      {
+        "key": "D",
+        "text": "partner compensation level"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Standards assess risk at both the financial statement and assertion levels.",
+    "tags": [
+      "RMM",
+      "materiality_and_risk_assessment"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_069",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Responses to assessed risks",
+    "type": "TBS",
+    "difficulty": "easy",
+    "question": "Task-Based Simulation:\nA client scenario involves responses to assessed risks. Using the facts provided, determine the most appropriate conclusion.\nKey issue: If assessed risk increases for an assertion, the auditor generally should",
+    "choices": [
+      {
+        "key": "A",
+        "text": "decrease testing"
+      },
+      {
+        "key": "B",
+        "text": "perform more persuasive or targeted procedures"
+      },
+      {
+        "key": "C",
+        "text": "skip substantive work"
+      },
+      {
+        "key": "D",
+        "text": "issue a disclaimer automatically"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Higher risk requires stronger responses in nature, timing, or extent.",
+    "tags": [
+      "audit response",
+      "responses_to_assessed_risks"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_070",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Responses to assessed risks",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "Which of the following best answers the question below?\nUsing the work of a specialist generally requires the auditor to",
+    "choices": [
+      {
+        "key": "A",
+        "text": "delegate responsibility for the opinion"
+      },
+      {
+        "key": "B",
+        "text": "evaluate the specialist\u2019s competence and objectivity"
+      },
+      {
+        "key": "C",
+        "text": "stop testing related accounts"
+      },
+      {
+        "key": "D",
+        "text": "avoid documentation"
+      }
+    ],
+    "answer": "B",
+    "explanation": "The auditor retains responsibility and must evaluate specialists used.",
+    "tags": [
+      "specialist",
+      "responses_to_assessed_risks"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_071",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Responses to assessed risks",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "A CPAQuest candidate is studying responses to assessed risks. If assessed risk increases for an assertion, the auditor generally should",
+    "choices": [
+      {
+        "key": "A",
+        "text": "decrease testing"
+      },
+      {
+        "key": "B",
+        "text": "perform more persuasive or targeted procedures"
+      },
+      {
+        "key": "C",
+        "text": "skip substantive work"
+      },
+      {
+        "key": "D",
+        "text": "issue a disclaimer automatically"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Higher risk requires stronger responses in nature, timing, or extent.",
+    "tags": [
+      "audit response",
+      "responses_to_assessed_risks"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_072",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Responses to assessed risks",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "Using the work of a specialist generally requires the auditor to",
+    "choices": [
+      {
+        "key": "A",
+        "text": "delegate responsibility for the opinion"
+      },
+      {
+        "key": "B",
+        "text": "evaluate the specialist\u2019s competence and objectivity"
+      },
+      {
+        "key": "C",
+        "text": "stop testing related accounts"
+      },
+      {
+        "key": "D",
+        "text": "avoid documentation"
+      }
+    ],
+    "answer": "B",
+    "explanation": "The auditor retains responsibility and must evaluate specialists used.",
+    "tags": [
+      "specialist",
+      "responses_to_assessed_risks"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_073",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Responses to assessed risks",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "If assessed risk increases for an assertion, the auditor generally should",
+    "choices": [
+      {
+        "key": "A",
+        "text": "decrease testing"
+      },
+      {
+        "key": "B",
+        "text": "perform more persuasive or targeted procedures"
+      },
+      {
+        "key": "C",
+        "text": "skip substantive work"
+      },
+      {
+        "key": "D",
+        "text": "issue a disclaimer automatically"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Higher risk requires stronger responses in nature, timing, or extent.",
+    "tags": [
+      "audit response",
+      "responses_to_assessed_risks"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_074",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Responses to assessed risks",
+    "type": "TBS",
+    "difficulty": "medium",
+    "question": "Task-Based Simulation:\nA client scenario involves responses to assessed risks. Using the facts provided, determine the most appropriate conclusion.\nKey issue: Using the work of a specialist generally requires the auditor to",
+    "choices": [
+      {
+        "key": "A",
+        "text": "delegate responsibility for the opinion"
+      },
+      {
+        "key": "B",
+        "text": "evaluate the specialist\u2019s competence and objectivity"
+      },
+      {
+        "key": "C",
+        "text": "stop testing related accounts"
+      },
+      {
+        "key": "D",
+        "text": "avoid documentation"
+      }
+    ],
+    "answer": "B",
+    "explanation": "The auditor retains responsibility and must evaluate specialists used.",
+    "tags": [
+      "specialist",
+      "responses_to_assessed_risks"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_075",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Responses to assessed risks",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "If assessed risk increases for an assertion, the auditor generally should",
+    "choices": [
+      {
+        "key": "A",
+        "text": "decrease testing"
+      },
+      {
+        "key": "B",
+        "text": "perform more persuasive or targeted procedures"
+      },
+      {
+        "key": "C",
+        "text": "skip substantive work"
+      },
+      {
+        "key": "D",
+        "text": "issue a disclaimer automatically"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Higher risk requires stronger responses in nature, timing, or extent.",
+    "tags": [
+      "audit response",
+      "responses_to_assessed_risks"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_076",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Responses to assessed risks",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "Using the work of a specialist generally requires the auditor to",
+    "choices": [
+      {
+        "key": "A",
+        "text": "delegate responsibility for the opinion"
+      },
+      {
+        "key": "B",
+        "text": "evaluate the specialist\u2019s competence and objectivity"
+      },
+      {
+        "key": "C",
+        "text": "stop testing related accounts"
+      },
+      {
+        "key": "D",
+        "text": "avoid documentation"
+      }
+    ],
+    "answer": "B",
+    "explanation": "The auditor retains responsibility and must evaluate specialists used.",
+    "tags": [
+      "specialist",
+      "responses_to_assessed_risks"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_077",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Audit evidence and sampling",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "Which of the following best answers the question below?\nExternally generated evidence obtained directly by the auditor is generally",
+    "choices": [
+      {
+        "key": "A",
+        "text": "less reliable than oral inquiry"
+      },
+      {
+        "key": "B",
+        "text": "more reliable than internally generated evidence"
+      },
+      {
+        "key": "C",
+        "text": "irrelevant"
+      },
+      {
+        "key": "D",
+        "text": "only useful in compilations"
+      }
+    ],
+    "answer": "B",
+    "explanation": "External evidence obtained directly usually has higher reliability.",
+    "tags": [
+      "evidence",
+      "audit_evidence_and_sampling"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_078",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Audit evidence and sampling",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "A CPAQuest candidate is studying audit evidence and sampling. Sampling risk refers to the risk that",
+    "choices": [
+      {
+        "key": "A",
+        "text": "a wrong conclusion is reached because only a sample was tested"
+      },
+      {
+        "key": "B",
+        "text": "the auditor is not independent"
+      },
+      {
+        "key": "C",
+        "text": "the client records are inaccessible"
+      },
+      {
+        "key": "D",
+        "text": "management overrides all controls"
+      }
+    ],
+    "answer": "A",
+    "explanation": "Sampling risk arises because a sample may not represent the population.",
+    "tags": [
+      "sampling",
+      "audit_evidence_and_sampling"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_079",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Audit evidence and sampling",
+    "type": "TBS",
+    "difficulty": "easy",
+    "question": "Task-Based Simulation:\nA client scenario involves audit evidence and sampling. Using the facts provided, determine the most appropriate conclusion.\nKey issue: Externally generated evidence obtained directly by the auditor is generally",
+    "choices": [
+      {
+        "key": "A",
+        "text": "less reliable than oral inquiry"
+      },
+      {
+        "key": "B",
+        "text": "more reliable than internally generated evidence"
+      },
+      {
+        "key": "C",
+        "text": "irrelevant"
+      },
+      {
+        "key": "D",
+        "text": "only useful in compilations"
+      }
+    ],
+    "answer": "B",
+    "explanation": "External evidence obtained directly usually has higher reliability.",
+    "tags": [
+      "evidence",
+      "audit_evidence_and_sampling"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_080",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Audit evidence and sampling",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "Sampling risk refers to the risk that",
+    "choices": [
+      {
+        "key": "A",
+        "text": "a wrong conclusion is reached because only a sample was tested"
+      },
+      {
+        "key": "B",
+        "text": "the auditor is not independent"
+      },
+      {
+        "key": "C",
+        "text": "the client records are inaccessible"
+      },
+      {
+        "key": "D",
+        "text": "management overrides all controls"
+      }
+    ],
+    "answer": "A",
+    "explanation": "Sampling risk arises because a sample may not represent the population.",
+    "tags": [
+      "sampling",
+      "audit_evidence_and_sampling"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_081",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Audit evidence and sampling",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "Externally generated evidence obtained directly by the auditor is generally",
+    "choices": [
+      {
+        "key": "A",
+        "text": "less reliable than oral inquiry"
+      },
+      {
+        "key": "B",
+        "text": "more reliable than internally generated evidence"
+      },
+      {
+        "key": "C",
+        "text": "irrelevant"
+      },
+      {
+        "key": "D",
+        "text": "only useful in compilations"
+      }
+    ],
+    "answer": "B",
+    "explanation": "External evidence obtained directly usually has higher reliability.",
+    "tags": [
+      "evidence",
+      "audit_evidence_and_sampling"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_082",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Audit evidence and sampling",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "Sampling risk refers to the risk that",
+    "choices": [
+      {
+        "key": "A",
+        "text": "a wrong conclusion is reached because only a sample was tested"
+      },
+      {
+        "key": "B",
+        "text": "the auditor is not independent"
+      },
+      {
+        "key": "C",
+        "text": "the client records are inaccessible"
+      },
+      {
+        "key": "D",
+        "text": "management overrides all controls"
+      }
+    ],
+    "answer": "A",
+    "explanation": "Sampling risk arises because a sample may not represent the population.",
+    "tags": [
+      "sampling",
+      "audit_evidence_and_sampling"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_083",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Audit evidence and sampling",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "Externally generated evidence obtained directly by the auditor is generally",
+    "choices": [
+      {
+        "key": "A",
+        "text": "less reliable than oral inquiry"
+      },
+      {
+        "key": "B",
+        "text": "more reliable than internally generated evidence"
+      },
+      {
+        "key": "C",
+        "text": "irrelevant"
+      },
+      {
+        "key": "D",
+        "text": "only useful in compilations"
+      }
+    ],
+    "answer": "B",
+    "explanation": "External evidence obtained directly usually has higher reliability.",
+    "tags": [
+      "evidence",
+      "audit_evidence_and_sampling"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_084",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Audit evidence and sampling",
+    "type": "TBS",
+    "difficulty": "medium",
+    "question": "Task-Based Simulation:\nA client scenario involves audit evidence and sampling. Using the facts provided, determine the most appropriate conclusion.\nKey issue: Sampling risk refers to the risk that",
+    "choices": [
+      {
+        "key": "A",
+        "text": "a wrong conclusion is reached because only a sample was tested"
+      },
+      {
+        "key": "B",
+        "text": "the auditor is not independent"
+      },
+      {
+        "key": "C",
+        "text": "the client records are inaccessible"
+      },
+      {
+        "key": "D",
+        "text": "management overrides all controls"
+      }
+    ],
+    "answer": "A",
+    "explanation": "Sampling risk arises because a sample may not represent the population.",
+    "tags": [
+      "sampling",
+      "audit_evidence_and_sampling"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_085",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Special procedures and estimates",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "A CPAQuest candidate is studying special procedures and estimates. A significant accounting estimate usually requires the auditor to focus on",
+    "choices": [
+      {
+        "key": "A",
+        "text": "mailing confirmations only"
+      },
+      {
+        "key": "B",
+        "text": "methods, assumptions, and data used by management"
+      },
+      {
+        "key": "C",
+        "text": "only prior-year balances"
+      },
+      {
+        "key": "D",
+        "text": "tax basis measurement"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Estimates are tested by evaluating methods, assumptions, and data.",
+    "tags": [
+      "estimates",
+      "special_procedures_and_estimates"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_086",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Special procedures and estimates",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "If substantial doubt about going concern exists, the auditor should",
+    "choices": [
+      {
+        "key": "A",
+        "text": "ignore management\u2019s plans"
+      },
+      {
+        "key": "B",
+        "text": "evaluate management\u2019s plans and related disclosures"
+      },
+      {
+        "key": "C",
+        "text": "withdraw immediately in all cases"
+      },
+      {
+        "key": "D",
+        "text": "recast the statements to tax basis"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Going-concern evaluation includes management\u2019s plans and adequate disclosure.",
+    "tags": [
+      "going concern",
+      "special_procedures_and_estimates"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_087",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Special procedures and estimates",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "A significant accounting estimate usually requires the auditor to focus on",
+    "choices": [
+      {
+        "key": "A",
+        "text": "mailing confirmations only"
+      },
+      {
+        "key": "B",
+        "text": "methods, assumptions, and data used by management"
+      },
+      {
+        "key": "C",
+        "text": "only prior-year balances"
+      },
+      {
+        "key": "D",
+        "text": "tax basis measurement"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Estimates are tested by evaluating methods, assumptions, and data.",
+    "tags": [
+      "estimates",
+      "special_procedures_and_estimates"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_088",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Special procedures and estimates",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "If substantial doubt about going concern exists, the auditor should",
+    "choices": [
+      {
+        "key": "A",
+        "text": "ignore management\u2019s plans"
+      },
+      {
+        "key": "B",
+        "text": "evaluate management\u2019s plans and related disclosures"
+      },
+      {
+        "key": "C",
+        "text": "withdraw immediately in all cases"
+      },
+      {
+        "key": "D",
+        "text": "recast the statements to tax basis"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Going-concern evaluation includes management\u2019s plans and adequate disclosure.",
+    "tags": [
+      "going concern",
+      "special_procedures_and_estimates"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_089",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Special procedures and estimates",
+    "type": "TBS",
+    "difficulty": "easy",
+    "question": "Task-Based Simulation:\nA client scenario involves special procedures and estimates. Using the facts provided, determine the most appropriate conclusion.\nKey issue: A significant accounting estimate usually requires the auditor to focus on",
+    "choices": [
+      {
+        "key": "A",
+        "text": "mailing confirmations only"
+      },
+      {
+        "key": "B",
+        "text": "methods, assumptions, and data used by management"
+      },
+      {
+        "key": "C",
+        "text": "only prior-year balances"
+      },
+      {
+        "key": "D",
+        "text": "tax basis measurement"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Estimates are tested by evaluating methods, assumptions, and data.",
+    "tags": [
+      "estimates",
+      "special_procedures_and_estimates"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_090",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Special procedures and estimates",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "If substantial doubt about going concern exists, the auditor should",
+    "choices": [
+      {
+        "key": "A",
+        "text": "ignore management\u2019s plans"
+      },
+      {
+        "key": "B",
+        "text": "evaluate management\u2019s plans and related disclosures"
+      },
+      {
+        "key": "C",
+        "text": "withdraw immediately in all cases"
+      },
+      {
+        "key": "D",
+        "text": "recast the statements to tax basis"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Going-concern evaluation includes management\u2019s plans and adequate disclosure.",
+    "tags": [
+      "going concern",
+      "special_procedures_and_estimates"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_091",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Special procedures and estimates",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "Which of the following best answers the question below?\nA significant accounting estimate usually requires the auditor to focus on",
+    "choices": [
+      {
+        "key": "A",
+        "text": "mailing confirmations only"
+      },
+      {
+        "key": "B",
+        "text": "methods, assumptions, and data used by management"
+      },
+      {
+        "key": "C",
+        "text": "only prior-year balances"
+      },
+      {
+        "key": "D",
+        "text": "tax basis measurement"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Estimates are tested by evaluating methods, assumptions, and data.",
+    "tags": [
+      "estimates",
+      "special_procedures_and_estimates"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_092",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Special procedures and estimates",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "A CPAQuest candidate is studying special procedures and estimates. If substantial doubt about going concern exists, the auditor should",
+    "choices": [
+      {
+        "key": "A",
+        "text": "ignore management\u2019s plans"
+      },
+      {
+        "key": "B",
+        "text": "evaluate management\u2019s plans and related disclosures"
+      },
+      {
+        "key": "C",
+        "text": "withdraw immediately in all cases"
+      },
+      {
+        "key": "D",
+        "text": "recast the statements to tax basis"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Going-concern evaluation includes management\u2019s plans and adequate disclosure.",
+    "tags": [
+      "going concern",
+      "special_procedures_and_estimates"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_093",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Conclusions and reporting",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "An unmodified opinion is appropriate when the financial statements are",
+    "choices": [
+      {
+        "key": "A",
+        "text": "free from material misstatement and sufficient evidence was obtained"
+      },
+      {
+        "key": "B",
+        "text": "profitable"
+      },
+      {
+        "key": "C",
+        "text": "prepared for internal use only"
+      },
+      {
+        "key": "D",
+        "text": "accompanied by a representation letter"
+      }
+    ],
+    "answer": "A",
+    "explanation": "An unmodified opinion requires sufficient appropriate evidence and no material misstatement.",
+    "tags": [
+      "reporting",
+      "conclusions_and_reporting"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_094",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Conclusions and reporting",
+    "type": "TBS",
+    "difficulty": "hard",
+    "question": "Task-Based Simulation:\nA client scenario involves conclusions and reporting. Using the facts provided, determine the most appropriate conclusion.\nKey issue: An emphasis-of-matter paragraph is used to",
+    "choices": [
+      {
+        "key": "A",
+        "text": "modify the opinion for a scope limitation"
+      },
+      {
+        "key": "B",
+        "text": "draw attention to a properly presented matter fundamental to users\u2019 understanding"
+      },
+      {
+        "key": "C",
+        "text": "replace all note disclosures"
+      },
+      {
+        "key": "D",
+        "text": "communicate audit fees"
+      }
+    ],
+    "answer": "B",
+    "explanation": "It highlights an important disclosed matter without modifying the opinion.",
+    "tags": [
+      "emphasis-of-matter",
+      "conclusions_and_reporting"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_095",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Conclusions and reporting",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "An unmodified opinion is appropriate when the financial statements are",
+    "choices": [
+      {
+        "key": "A",
+        "text": "free from material misstatement and sufficient evidence was obtained"
+      },
+      {
+        "key": "B",
+        "text": "profitable"
+      },
+      {
+        "key": "C",
+        "text": "prepared for internal use only"
+      },
+      {
+        "key": "D",
+        "text": "accompanied by a representation letter"
+      }
+    ],
+    "answer": "A",
+    "explanation": "An unmodified opinion requires sufficient appropriate evidence and no material misstatement.",
+    "tags": [
+      "reporting",
+      "conclusions_and_reporting"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_096",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Conclusions and reporting",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "An emphasis-of-matter paragraph is used to",
+    "choices": [
+      {
+        "key": "A",
+        "text": "modify the opinion for a scope limitation"
+      },
+      {
+        "key": "B",
+        "text": "draw attention to a properly presented matter fundamental to users\u2019 understanding"
+      },
+      {
+        "key": "C",
+        "text": "replace all note disclosures"
+      },
+      {
+        "key": "D",
+        "text": "communicate audit fees"
+      }
+    ],
+    "answer": "B",
+    "explanation": "It highlights an important disclosed matter without modifying the opinion.",
+    "tags": [
+      "emphasis-of-matter",
+      "conclusions_and_reporting"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_097",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Conclusions and reporting",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "An unmodified opinion is appropriate when the financial statements are",
+    "choices": [
+      {
+        "key": "A",
+        "text": "free from material misstatement and sufficient evidence was obtained"
+      },
+      {
+        "key": "B",
+        "text": "profitable"
+      },
+      {
+        "key": "C",
+        "text": "prepared for internal use only"
+      },
+      {
+        "key": "D",
+        "text": "accompanied by a representation letter"
+      }
+    ],
+    "answer": "A",
+    "explanation": "An unmodified opinion requires sufficient appropriate evidence and no material misstatement.",
+    "tags": [
+      "reporting",
+      "conclusions_and_reporting"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_098",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Conclusions and reporting",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "Which of the following best answers the question below?\nAn emphasis-of-matter paragraph is used to",
+    "choices": [
+      {
+        "key": "A",
+        "text": "modify the opinion for a scope limitation"
+      },
+      {
+        "key": "B",
+        "text": "draw attention to a properly presented matter fundamental to users\u2019 understanding"
+      },
+      {
+        "key": "C",
+        "text": "replace all note disclosures"
+      },
+      {
+        "key": "D",
+        "text": "communicate audit fees"
+      }
+    ],
+    "answer": "B",
+    "explanation": "It highlights an important disclosed matter without modifying the opinion.",
+    "tags": [
+      "emphasis-of-matter",
+      "conclusions_and_reporting"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_099",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Conclusions and reporting",
+    "type": "TBS",
+    "difficulty": "easy",
+    "question": "Task-Based Simulation:\nA client scenario involves conclusions and reporting. Using the facts provided, determine the most appropriate conclusion.\nKey issue: An unmodified opinion is appropriate when the financial statements are",
+    "choices": [
+      {
+        "key": "A",
+        "text": "free from material misstatement and sufficient evidence was obtained"
+      },
+      {
+        "key": "B",
+        "text": "profitable"
+      },
+      {
+        "key": "C",
+        "text": "prepared for internal use only"
+      },
+      {
+        "key": "D",
+        "text": "accompanied by a representation letter"
+      }
+    ],
+    "answer": "A",
+    "explanation": "An unmodified opinion requires sufficient appropriate evidence and no material misstatement.",
+    "tags": [
+      "reporting",
+      "conclusions_and_reporting"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "AUD_100",
+    "section": "AUD",
+    "section_name": "Auditing and Attestation",
+    "topic": "Conclusions and reporting",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "An emphasis-of-matter paragraph is used to",
+    "choices": [
+      {
+        "key": "A",
+        "text": "modify the opinion for a scope limitation"
+      },
+      {
+        "key": "B",
+        "text": "draw attention to a properly presented matter fundamental to users\u2019 understanding"
+      },
+      {
+        "key": "C",
+        "text": "replace all note disclosures"
+      },
+      {
+        "key": "D",
+        "text": "communicate audit fees"
+      }
+    ],
+    "answer": "B",
+    "explanation": "It highlights an important disclosed matter without modifying the opinion.",
+    "tags": [
+      "emphasis-of-matter",
+      "conclusions_and_reporting"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  }
+]

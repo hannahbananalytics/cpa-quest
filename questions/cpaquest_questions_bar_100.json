@@ -1,0 +1,3402 @@
+[
+  {
+    "id": "BAR_001",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Financial statement analysis",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "A CPAQuest candidate is studying financial statement analysis. A comparison of current results to budget is most useful for identifying",
+    "choices": [
+      {
+        "key": "A",
+        "text": "legal form of entity"
+      },
+      {
+        "key": "B",
+        "text": "variances and performance drivers"
+      },
+      {
+        "key": "C",
+        "text": "audit independence threats"
+      },
+      {
+        "key": "D",
+        "text": "tax filing status"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Budget-versus-actual analysis is used to identify variances and underlying drivers.",
+    "tags": [
+      "analysis",
+      "financial_statement_analysis"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_002",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Financial statement analysis",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "A declining current ratio may suggest",
+    "choices": [
+      {
+        "key": "A",
+        "text": "improved short-term liquidity"
+      },
+      {
+        "key": "B",
+        "text": "potentially weaker short-term liquidity"
+      },
+      {
+        "key": "C",
+        "text": "higher gross margin automatically"
+      },
+      {
+        "key": "D",
+        "text": "lower leverage by default"
+      }
+    ],
+    "answer": "B",
+    "explanation": "The current ratio is a liquidity measure; a decline may indicate reduced liquidity.",
+    "tags": [
+      "ratios",
+      "financial_statement_analysis"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_003",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Financial statement analysis",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "A comparison of current results to budget is most useful for identifying",
+    "choices": [
+      {
+        "key": "A",
+        "text": "legal form of entity"
+      },
+      {
+        "key": "B",
+        "text": "variances and performance drivers"
+      },
+      {
+        "key": "C",
+        "text": "audit independence threats"
+      },
+      {
+        "key": "D",
+        "text": "tax filing status"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Budget-versus-actual analysis is used to identify variances and underlying drivers.",
+    "tags": [
+      "analysis",
+      "financial_statement_analysis"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_004",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Financial statement analysis",
+    "type": "TBS",
+    "difficulty": "medium",
+    "question": "Task-Based Simulation:\nA client scenario involves financial statement analysis. Using the facts provided, determine the most appropriate conclusion.\nKey issue: A declining current ratio may suggest",
+    "choices": [
+      {
+        "key": "A",
+        "text": "improved short-term liquidity"
+      },
+      {
+        "key": "B",
+        "text": "potentially weaker short-term liquidity"
+      },
+      {
+        "key": "C",
+        "text": "higher gross margin automatically"
+      },
+      {
+        "key": "D",
+        "text": "lower leverage by default"
+      }
+    ],
+    "answer": "B",
+    "explanation": "The current ratio is a liquidity measure; a decline may indicate reduced liquidity.",
+    "tags": [
+      "ratios",
+      "financial_statement_analysis"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_005",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Financial statement analysis",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "A comparison of current results to budget is most useful for identifying",
+    "choices": [
+      {
+        "key": "A",
+        "text": "legal form of entity"
+      },
+      {
+        "key": "B",
+        "text": "variances and performance drivers"
+      },
+      {
+        "key": "C",
+        "text": "audit independence threats"
+      },
+      {
+        "key": "D",
+        "text": "tax filing status"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Budget-versus-actual analysis is used to identify variances and underlying drivers.",
+    "tags": [
+      "analysis",
+      "financial_statement_analysis"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_006",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Financial statement analysis",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "A declining current ratio may suggest",
+    "choices": [
+      {
+        "key": "A",
+        "text": "improved short-term liquidity"
+      },
+      {
+        "key": "B",
+        "text": "potentially weaker short-term liquidity"
+      },
+      {
+        "key": "C",
+        "text": "higher gross margin automatically"
+      },
+      {
+        "key": "D",
+        "text": "lower leverage by default"
+      }
+    ],
+    "answer": "B",
+    "explanation": "The current ratio is a liquidity measure; a decline may indicate reduced liquidity.",
+    "tags": [
+      "ratios",
+      "financial_statement_analysis"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_007",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Financial statement analysis",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "Which of the following best answers the question below?\nA comparison of current results to budget is most useful for identifying",
+    "choices": [
+      {
+        "key": "A",
+        "text": "legal form of entity"
+      },
+      {
+        "key": "B",
+        "text": "variances and performance drivers"
+      },
+      {
+        "key": "C",
+        "text": "audit independence threats"
+      },
+      {
+        "key": "D",
+        "text": "tax filing status"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Budget-versus-actual analysis is used to identify variances and underlying drivers.",
+    "tags": [
+      "analysis",
+      "financial_statement_analysis"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_008",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Nonfinancial and non-GAAP measures",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "A CPAQuest candidate is studying nonfinancial and non-gaap measures. A balanced scorecard includes",
+    "choices": [
+      {
+        "key": "A",
+        "text": "only GAAP net income"
+      },
+      {
+        "key": "B",
+        "text": "financial and nonfinancial measures tied to strategy"
+      },
+      {
+        "key": "C",
+        "text": "only cash-flow measures"
+      },
+      {
+        "key": "D",
+        "text": "only market share"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Balanced scorecards combine financial and operational measures.",
+    "tags": [
+      "balanced scorecard",
+      "nonfinancial_and_non-gaap_measures"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_009",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Nonfinancial and non-GAAP measures",
+    "type": "TBS",
+    "difficulty": "medium",
+    "question": "Task-Based Simulation:\nA client scenario involves nonfinancial and non-gaap measures. Using the facts provided, determine the most appropriate conclusion.\nKey issue: EBITDA is considered a non-GAAP measure because it",
+    "choices": [
+      {
+        "key": "A",
+        "text": "is defined by the tax code"
+      },
+      {
+        "key": "B",
+        "text": "is not itself a GAAP line item"
+      },
+      {
+        "key": "C",
+        "text": "must equal cash flow"
+      },
+      {
+        "key": "D",
+        "text": "is required only for governments"
+      }
+    ],
+    "answer": "B",
+    "explanation": "EBITDA is commonly used but is not a GAAP-defined subtotal.",
+    "tags": [
+      "EBITDA",
+      "nonfinancial_and_non-gaap_measures"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_010",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Nonfinancial and non-GAAP measures",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "A balanced scorecard includes",
+    "choices": [
+      {
+        "key": "A",
+        "text": "only GAAP net income"
+      },
+      {
+        "key": "B",
+        "text": "financial and nonfinancial measures tied to strategy"
+      },
+      {
+        "key": "C",
+        "text": "only cash-flow measures"
+      },
+      {
+        "key": "D",
+        "text": "only market share"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Balanced scorecards combine financial and operational measures.",
+    "tags": [
+      "balanced scorecard",
+      "nonfinancial_and_non-gaap_measures"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_011",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Nonfinancial and non-GAAP measures",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "EBITDA is considered a non-GAAP measure because it",
+    "choices": [
+      {
+        "key": "A",
+        "text": "is defined by the tax code"
+      },
+      {
+        "key": "B",
+        "text": "is not itself a GAAP line item"
+      },
+      {
+        "key": "C",
+        "text": "must equal cash flow"
+      },
+      {
+        "key": "D",
+        "text": "is required only for governments"
+      }
+    ],
+    "answer": "B",
+    "explanation": "EBITDA is commonly used but is not a GAAP-defined subtotal.",
+    "tags": [
+      "EBITDA",
+      "nonfinancial_and_non-gaap_measures"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_012",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Nonfinancial and non-GAAP measures",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "A balanced scorecard includes",
+    "choices": [
+      {
+        "key": "A",
+        "text": "only GAAP net income"
+      },
+      {
+        "key": "B",
+        "text": "financial and nonfinancial measures tied to strategy"
+      },
+      {
+        "key": "C",
+        "text": "only cash-flow measures"
+      },
+      {
+        "key": "D",
+        "text": "only market share"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Balanced scorecards combine financial and operational measures.",
+    "tags": [
+      "balanced scorecard",
+      "nonfinancial_and_non-gaap_measures"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_013",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Nonfinancial and non-GAAP measures",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "EBITDA is considered a non-GAAP measure because it",
+    "choices": [
+      {
+        "key": "A",
+        "text": "is defined by the tax code"
+      },
+      {
+        "key": "B",
+        "text": "is not itself a GAAP line item"
+      },
+      {
+        "key": "C",
+        "text": "must equal cash flow"
+      },
+      {
+        "key": "D",
+        "text": "is required only for governments"
+      }
+    ],
+    "answer": "B",
+    "explanation": "EBITDA is commonly used but is not a GAAP-defined subtotal.",
+    "tags": [
+      "EBITDA",
+      "nonfinancial_and_non-gaap_measures"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_014",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Nonfinancial and non-GAAP measures",
+    "type": "TBS",
+    "difficulty": "hard",
+    "question": "Task-Based Simulation:\nA client scenario involves nonfinancial and non-gaap measures. Using the facts provided, determine the most appropriate conclusion.\nKey issue: A balanced scorecard includes",
+    "choices": [
+      {
+        "key": "A",
+        "text": "only GAAP net income"
+      },
+      {
+        "key": "B",
+        "text": "financial and nonfinancial measures tied to strategy"
+      },
+      {
+        "key": "C",
+        "text": "only cash-flow measures"
+      },
+      {
+        "key": "D",
+        "text": "only market share"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Balanced scorecards combine financial and operational measures.",
+    "tags": [
+      "balanced scorecard",
+      "nonfinancial_and_non-gaap_measures"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_015",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Cost behavior and costing methods",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "A CPAQuest candidate is studying cost behavior and costing methods. A variable cost generally changes",
+    "choices": [
+      {
+        "key": "A",
+        "text": "in total with activity"
+      },
+      {
+        "key": "B",
+        "text": "per unit with no relation to activity"
+      },
+      {
+        "key": "C",
+        "text": "only after year-end"
+      },
+      {
+        "key": "D",
+        "text": "only in government funds"
+      }
+    ],
+    "answer": "A",
+    "explanation": "Total variable cost changes with activity, while variable cost per unit is often constant.",
+    "tags": [
+      "cost behavior",
+      "cost_behavior_and_costing_methods"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_016",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Cost behavior and costing methods",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "Activity-based costing is most useful when overhead costs are",
+    "choices": [
+      {
+        "key": "A",
+        "text": "immaterial and uniform"
+      },
+      {
+        "key": "B",
+        "text": "significant and driven by multiple activities"
+      },
+      {
+        "key": "C",
+        "text": "treated as direct labor"
+      },
+      {
+        "key": "D",
+        "text": "fixed by contract only"
+      }
+    ],
+    "answer": "B",
+    "explanation": "ABC better traces overhead when activities drive costs differently.",
+    "tags": [
+      "ABC",
+      "cost_behavior_and_costing_methods"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_017",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Cost behavior and costing methods",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "A variable cost generally changes",
+    "choices": [
+      {
+        "key": "A",
+        "text": "in total with activity"
+      },
+      {
+        "key": "B",
+        "text": "per unit with no relation to activity"
+      },
+      {
+        "key": "C",
+        "text": "only after year-end"
+      },
+      {
+        "key": "D",
+        "text": "only in government funds"
+      }
+    ],
+    "answer": "A",
+    "explanation": "Total variable cost changes with activity, while variable cost per unit is often constant.",
+    "tags": [
+      "cost behavior",
+      "cost_behavior_and_costing_methods"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_018",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Cost behavior and costing methods",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "Activity-based costing is most useful when overhead costs are",
+    "choices": [
+      {
+        "key": "A",
+        "text": "immaterial and uniform"
+      },
+      {
+        "key": "B",
+        "text": "significant and driven by multiple activities"
+      },
+      {
+        "key": "C",
+        "text": "treated as direct labor"
+      },
+      {
+        "key": "D",
+        "text": "fixed by contract only"
+      }
+    ],
+    "answer": "B",
+    "explanation": "ABC better traces overhead when activities drive costs differently.",
+    "tags": [
+      "ABC",
+      "cost_behavior_and_costing_methods"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_019",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Cost behavior and costing methods",
+    "type": "TBS",
+    "difficulty": "hard",
+    "question": "Task-Based Simulation:\nA client scenario involves cost behavior and costing methods. Using the facts provided, determine the most appropriate conclusion.\nKey issue: A variable cost generally changes",
+    "choices": [
+      {
+        "key": "A",
+        "text": "in total with activity"
+      },
+      {
+        "key": "B",
+        "text": "per unit with no relation to activity"
+      },
+      {
+        "key": "C",
+        "text": "only after year-end"
+      },
+      {
+        "key": "D",
+        "text": "only in government funds"
+      }
+    ],
+    "answer": "A",
+    "explanation": "Total variable cost changes with activity, while variable cost per unit is often constant.",
+    "tags": [
+      "cost behavior",
+      "cost_behavior_and_costing_methods"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_020",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Cost behavior and costing methods",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "Activity-based costing is most useful when overhead costs are",
+    "choices": [
+      {
+        "key": "A",
+        "text": "immaterial and uniform"
+      },
+      {
+        "key": "B",
+        "text": "significant and driven by multiple activities"
+      },
+      {
+        "key": "C",
+        "text": "treated as direct labor"
+      },
+      {
+        "key": "D",
+        "text": "fixed by contract only"
+      }
+    ],
+    "answer": "B",
+    "explanation": "ABC better traces overhead when activities drive costs differently.",
+    "tags": [
+      "ABC",
+      "cost_behavior_and_costing_methods"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_021",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Cost behavior and costing methods",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "Which of the following best answers the question below?\nA variable cost generally changes",
+    "choices": [
+      {
+        "key": "A",
+        "text": "in total with activity"
+      },
+      {
+        "key": "B",
+        "text": "per unit with no relation to activity"
+      },
+      {
+        "key": "C",
+        "text": "only after year-end"
+      },
+      {
+        "key": "D",
+        "text": "only in government funds"
+      }
+    ],
+    "answer": "A",
+    "explanation": "Total variable cost changes with activity, while variable cost per unit is often constant.",
+    "tags": [
+      "cost behavior",
+      "cost_behavior_and_costing_methods"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_022",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Variance analysis",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "A CPAQuest candidate is studying variance analysis. A favorable materials price variance means",
+    "choices": [
+      {
+        "key": "A",
+        "text": "actual price exceeded standard"
+      },
+      {
+        "key": "B",
+        "text": "actual price was less than standard for actual quantity"
+      },
+      {
+        "key": "C",
+        "text": "usage was inefficient"
+      },
+      {
+        "key": "D",
+        "text": "sales volume exceeded plan"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Price variance is favorable when actual price is below standard.",
+    "tags": [
+      "variance",
+      "variance_analysis"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_023",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Variance analysis",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "Sales mix analysis helps explain changes caused by",
+    "choices": [
+      {
+        "key": "A",
+        "text": "interest rate movements"
+      },
+      {
+        "key": "B",
+        "text": "the proportion of products sold"
+      },
+      {
+        "key": "C",
+        "text": "only fixed overhead"
+      },
+      {
+        "key": "D",
+        "text": "tax apportionment"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Sales mix isolates the effect of changes in the product composition sold.",
+    "tags": [
+      "sales mix",
+      "variance_analysis"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_024",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Variance analysis",
+    "type": "TBS",
+    "difficulty": "hard",
+    "question": "Task-Based Simulation:\nA client scenario involves variance analysis. Using the facts provided, determine the most appropriate conclusion.\nKey issue: A favorable materials price variance means",
+    "choices": [
+      {
+        "key": "A",
+        "text": "actual price exceeded standard"
+      },
+      {
+        "key": "B",
+        "text": "actual price was less than standard for actual quantity"
+      },
+      {
+        "key": "C",
+        "text": "usage was inefficient"
+      },
+      {
+        "key": "D",
+        "text": "sales volume exceeded plan"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Price variance is favorable when actual price is below standard.",
+    "tags": [
+      "variance",
+      "variance_analysis"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_025",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Variance analysis",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "Sales mix analysis helps explain changes caused by",
+    "choices": [
+      {
+        "key": "A",
+        "text": "interest rate movements"
+      },
+      {
+        "key": "B",
+        "text": "the proportion of products sold"
+      },
+      {
+        "key": "C",
+        "text": "only fixed overhead"
+      },
+      {
+        "key": "D",
+        "text": "tax apportionment"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Sales mix isolates the effect of changes in the product composition sold.",
+    "tags": [
+      "sales mix",
+      "variance_analysis"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_026",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Variance analysis",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "A favorable materials price variance means",
+    "choices": [
+      {
+        "key": "A",
+        "text": "actual price exceeded standard"
+      },
+      {
+        "key": "B",
+        "text": "actual price was less than standard for actual quantity"
+      },
+      {
+        "key": "C",
+        "text": "usage was inefficient"
+      },
+      {
+        "key": "D",
+        "text": "sales volume exceeded plan"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Price variance is favorable when actual price is below standard.",
+    "tags": [
+      "variance",
+      "variance_analysis"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_027",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Variance analysis",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "Sales mix analysis helps explain changes caused by",
+    "choices": [
+      {
+        "key": "A",
+        "text": "interest rate movements"
+      },
+      {
+        "key": "B",
+        "text": "the proportion of products sold"
+      },
+      {
+        "key": "C",
+        "text": "only fixed overhead"
+      },
+      {
+        "key": "D",
+        "text": "tax apportionment"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Sales mix isolates the effect of changes in the product composition sold.",
+    "tags": [
+      "sales mix",
+      "variance_analysis"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_028",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Variance analysis",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "Which of the following best answers the question below?\nA favorable materials price variance means",
+    "choices": [
+      {
+        "key": "A",
+        "text": "actual price exceeded standard"
+      },
+      {
+        "key": "B",
+        "text": "actual price was less than standard for actual quantity"
+      },
+      {
+        "key": "C",
+        "text": "usage was inefficient"
+      },
+      {
+        "key": "D",
+        "text": "sales volume exceeded plan"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Price variance is favorable when actual price is below standard.",
+    "tags": [
+      "variance",
+      "variance_analysis"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_029",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Budgeting and forecasting",
+    "type": "TBS",
+    "difficulty": "hard",
+    "question": "Task-Based Simulation:\nA client scenario involves budgeting and forecasting. Using the facts provided, determine the most appropriate conclusion.\nKey issue: A flexible budget differs from a static budget because it",
+    "choices": [
+      {
+        "key": "A",
+        "text": "uses actual activity levels"
+      },
+      {
+        "key": "B",
+        "text": "ignores variable costs"
+      },
+      {
+        "key": "C",
+        "text": "can only be prepared quarterly"
+      },
+      {
+        "key": "D",
+        "text": "is used only in audits"
+      }
+    ],
+    "answer": "A",
+    "explanation": "Flexible budgets adjust expected costs/revenues for actual activity.",
+    "tags": [
+      "budgeting",
+      "budgeting_and_forecasting"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_030",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Budgeting and forecasting",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "Sensitivity analysis is most helpful for",
+    "choices": [
+      {
+        "key": "A",
+        "text": "determining exact outcomes with certainty"
+      },
+      {
+        "key": "B",
+        "text": "evaluating how results change when assumptions change"
+      },
+      {
+        "key": "C",
+        "text": "recording journal entries"
+      },
+      {
+        "key": "D",
+        "text": "classifying leases"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Sensitivity analysis tests alternative assumptions.",
+    "tags": [
+      "forecasting",
+      "budgeting_and_forecasting"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_031",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Budgeting and forecasting",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "A flexible budget differs from a static budget because it",
+    "choices": [
+      {
+        "key": "A",
+        "text": "uses actual activity levels"
+      },
+      {
+        "key": "B",
+        "text": "ignores variable costs"
+      },
+      {
+        "key": "C",
+        "text": "can only be prepared quarterly"
+      },
+      {
+        "key": "D",
+        "text": "is used only in audits"
+      }
+    ],
+    "answer": "A",
+    "explanation": "Flexible budgets adjust expected costs/revenues for actual activity.",
+    "tags": [
+      "budgeting",
+      "budgeting_and_forecasting"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_032",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Budgeting and forecasting",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "Sensitivity analysis is most helpful for",
+    "choices": [
+      {
+        "key": "A",
+        "text": "determining exact outcomes with certainty"
+      },
+      {
+        "key": "B",
+        "text": "evaluating how results change when assumptions change"
+      },
+      {
+        "key": "C",
+        "text": "recording journal entries"
+      },
+      {
+        "key": "D",
+        "text": "classifying leases"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Sensitivity analysis tests alternative assumptions.",
+    "tags": [
+      "forecasting",
+      "budgeting_and_forecasting"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_033",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Budgeting and forecasting",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "A flexible budget differs from a static budget because it",
+    "choices": [
+      {
+        "key": "A",
+        "text": "uses actual activity levels"
+      },
+      {
+        "key": "B",
+        "text": "ignores variable costs"
+      },
+      {
+        "key": "C",
+        "text": "can only be prepared quarterly"
+      },
+      {
+        "key": "D",
+        "text": "is used only in audits"
+      }
+    ],
+    "answer": "A",
+    "explanation": "Flexible budgets adjust expected costs/revenues for actual activity.",
+    "tags": [
+      "budgeting",
+      "budgeting_and_forecasting"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_034",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Budgeting and forecasting",
+    "type": "TBS",
+    "difficulty": "easy",
+    "question": "Task-Based Simulation:\nA client scenario involves budgeting and forecasting. Using the facts provided, determine the most appropriate conclusion.\nKey issue: Sensitivity analysis is most helpful for",
+    "choices": [
+      {
+        "key": "A",
+        "text": "determining exact outcomes with certainty"
+      },
+      {
+        "key": "B",
+        "text": "evaluating how results change when assumptions change"
+      },
+      {
+        "key": "C",
+        "text": "recording journal entries"
+      },
+      {
+        "key": "D",
+        "text": "classifying leases"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Sensitivity analysis tests alternative assumptions.",
+    "tags": [
+      "forecasting",
+      "budgeting_and_forecasting"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_035",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Budgeting and forecasting",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "Which of the following best answers the question below?\nA flexible budget differs from a static budget because it",
+    "choices": [
+      {
+        "key": "A",
+        "text": "uses actual activity levels"
+      },
+      {
+        "key": "B",
+        "text": "ignores variable costs"
+      },
+      {
+        "key": "C",
+        "text": "can only be prepared quarterly"
+      },
+      {
+        "key": "D",
+        "text": "is used only in audits"
+      }
+    ],
+    "answer": "A",
+    "explanation": "Flexible budgets adjust expected costs/revenues for actual activity.",
+    "tags": [
+      "budgeting",
+      "budgeting_and_forecasting"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_036",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Capital structure",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "A CPAQuest candidate is studying capital structure. Increasing debt financing generally increases",
+    "choices": [
+      {
+        "key": "A",
+        "text": "financial leverage"
+      },
+      {
+        "key": "B",
+        "text": "book value of inventory"
+      },
+      {
+        "key": "C",
+        "text": "OCI reclassification"
+      },
+      {
+        "key": "D",
+        "text": "tax basis of assets"
+      }
+    ],
+    "answer": "A",
+    "explanation": "More debt increases leverage.",
+    "tags": [
+      "capital structure",
+      "capital_structure"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_037",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Capital structure",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "Cost of capital is important because it",
+    "choices": [
+      {
+        "key": "A",
+        "text": "is the legal minimum wage"
+      },
+      {
+        "key": "B",
+        "text": "serves as a benchmark for investment decisions"
+      },
+      {
+        "key": "C",
+        "text": "replaces the income statement"
+      },
+      {
+        "key": "D",
+        "text": "determines audit evidence sufficiency"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Projects should generally exceed the cost of capital to add value.",
+    "tags": [
+      "WACC",
+      "capital_structure"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_038",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Capital structure",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "Increasing debt financing generally increases",
+    "choices": [
+      {
+        "key": "A",
+        "text": "financial leverage"
+      },
+      {
+        "key": "B",
+        "text": "book value of inventory"
+      },
+      {
+        "key": "C",
+        "text": "OCI reclassification"
+      },
+      {
+        "key": "D",
+        "text": "tax basis of assets"
+      }
+    ],
+    "answer": "A",
+    "explanation": "More debt increases leverage.",
+    "tags": [
+      "capital structure",
+      "capital_structure"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_039",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Capital structure",
+    "type": "TBS",
+    "difficulty": "easy",
+    "question": "Task-Based Simulation:\nA client scenario involves capital structure. Using the facts provided, determine the most appropriate conclusion.\nKey issue: Cost of capital is important because it",
+    "choices": [
+      {
+        "key": "A",
+        "text": "is the legal minimum wage"
+      },
+      {
+        "key": "B",
+        "text": "serves as a benchmark for investment decisions"
+      },
+      {
+        "key": "C",
+        "text": "replaces the income statement"
+      },
+      {
+        "key": "D",
+        "text": "determines audit evidence sufficiency"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Projects should generally exceed the cost of capital to add value.",
+    "tags": [
+      "WACC",
+      "capital_structure"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_040",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Capital structure",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "Increasing debt financing generally increases",
+    "choices": [
+      {
+        "key": "A",
+        "text": "financial leverage"
+      },
+      {
+        "key": "B",
+        "text": "book value of inventory"
+      },
+      {
+        "key": "C",
+        "text": "OCI reclassification"
+      },
+      {
+        "key": "D",
+        "text": "tax basis of assets"
+      }
+    ],
+    "answer": "A",
+    "explanation": "More debt increases leverage.",
+    "tags": [
+      "capital structure",
+      "capital_structure"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_041",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Capital structure",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "Cost of capital is important because it",
+    "choices": [
+      {
+        "key": "A",
+        "text": "is the legal minimum wage"
+      },
+      {
+        "key": "B",
+        "text": "serves as a benchmark for investment decisions"
+      },
+      {
+        "key": "C",
+        "text": "replaces the income statement"
+      },
+      {
+        "key": "D",
+        "text": "determines audit evidence sufficiency"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Projects should generally exceed the cost of capital to add value.",
+    "tags": [
+      "WACC",
+      "capital_structure"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_042",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Capital structure",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "Which of the following best answers the question below?\nIncreasing debt financing generally increases",
+    "choices": [
+      {
+        "key": "A",
+        "text": "financial leverage"
+      },
+      {
+        "key": "B",
+        "text": "book value of inventory"
+      },
+      {
+        "key": "C",
+        "text": "OCI reclassification"
+      },
+      {
+        "key": "D",
+        "text": "tax basis of assets"
+      }
+    ],
+    "answer": "A",
+    "explanation": "More debt increases leverage.",
+    "tags": [
+      "capital structure",
+      "capital_structure"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_043",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Investment decision models",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "A CPAQuest candidate is studying investment decision models. Net present value focuses on",
+    "choices": [
+      {
+        "key": "A",
+        "text": "accounting income only"
+      },
+      {
+        "key": "B",
+        "text": "present value of expected cash flows minus investment"
+      },
+      {
+        "key": "C",
+        "text": "market share rankings"
+      },
+      {
+        "key": "D",
+        "text": "only qualitative factors"
+      }
+    ],
+    "answer": "B",
+    "explanation": "NPV compares discounted inflows to outflows.",
+    "tags": [
+      "NPV",
+      "investment_decision_models"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_044",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Investment decision models",
+    "type": "TBS",
+    "difficulty": "easy",
+    "question": "Task-Based Simulation:\nA client scenario involves investment decision models. Using the facts provided, determine the most appropriate conclusion.\nKey issue: A project with a positive NPV generally",
+    "choices": [
+      {
+        "key": "A",
+        "text": "destroys value"
+      },
+      {
+        "key": "B",
+        "text": "adds value under the assumptions used"
+      },
+      {
+        "key": "C",
+        "text": "should always be rejected"
+      },
+      {
+        "key": "D",
+        "text": "has no risk"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Positive NPV suggests value creation.",
+    "tags": [
+      "capital budgeting",
+      "investment_decision_models"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_045",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Investment decision models",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "Net present value focuses on",
+    "choices": [
+      {
+        "key": "A",
+        "text": "accounting income only"
+      },
+      {
+        "key": "B",
+        "text": "present value of expected cash flows minus investment"
+      },
+      {
+        "key": "C",
+        "text": "market share rankings"
+      },
+      {
+        "key": "D",
+        "text": "only qualitative factors"
+      }
+    ],
+    "answer": "B",
+    "explanation": "NPV compares discounted inflows to outflows.",
+    "tags": [
+      "NPV",
+      "investment_decision_models"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_046",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Investment decision models",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "A project with a positive NPV generally",
+    "choices": [
+      {
+        "key": "A",
+        "text": "destroys value"
+      },
+      {
+        "key": "B",
+        "text": "adds value under the assumptions used"
+      },
+      {
+        "key": "C",
+        "text": "should always be rejected"
+      },
+      {
+        "key": "D",
+        "text": "has no risk"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Positive NPV suggests value creation.",
+    "tags": [
+      "capital budgeting",
+      "investment_decision_models"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_047",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Investment decision models",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "Net present value focuses on",
+    "choices": [
+      {
+        "key": "A",
+        "text": "accounting income only"
+      },
+      {
+        "key": "B",
+        "text": "present value of expected cash flows minus investment"
+      },
+      {
+        "key": "C",
+        "text": "market share rankings"
+      },
+      {
+        "key": "D",
+        "text": "only qualitative factors"
+      }
+    ],
+    "answer": "B",
+    "explanation": "NPV compares discounted inflows to outflows.",
+    "tags": [
+      "NPV",
+      "investment_decision_models"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_048",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Investment decision models",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "A project with a positive NPV generally",
+    "choices": [
+      {
+        "key": "A",
+        "text": "destroys value"
+      },
+      {
+        "key": "B",
+        "text": "adds value under the assumptions used"
+      },
+      {
+        "key": "C",
+        "text": "should always be rejected"
+      },
+      {
+        "key": "D",
+        "text": "has no risk"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Positive NPV suggests value creation.",
+    "tags": [
+      "capital budgeting",
+      "investment_decision_models"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_049",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Investment decision models",
+    "type": "TBS",
+    "difficulty": "medium",
+    "question": "Task-Based Simulation:\nA client scenario involves investment decision models. Using the facts provided, determine the most appropriate conclusion.\nKey issue: Net present value focuses on",
+    "choices": [
+      {
+        "key": "A",
+        "text": "accounting income only"
+      },
+      {
+        "key": "B",
+        "text": "present value of expected cash flows minus investment"
+      },
+      {
+        "key": "C",
+        "text": "market share rankings"
+      },
+      {
+        "key": "D",
+        "text": "only qualitative factors"
+      }
+    ],
+    "answer": "B",
+    "explanation": "NPV compares discounted inflows to outflows.",
+    "tags": [
+      "NPV",
+      "investment_decision_models"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_050",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Risk management and COSO ERM",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "A CPAQuest candidate is studying risk management and coso erm. COSO ERM is primarily designed to help organizations",
+    "choices": [
+      {
+        "key": "A",
+        "text": "eliminate all risk"
+      },
+      {
+        "key": "B",
+        "text": "identify, assess, and respond to risk in pursuit of strategy"
+      },
+      {
+        "key": "C",
+        "text": "prepare tax returns"
+      },
+      {
+        "key": "D",
+        "text": "choose inventory methods"
+      }
+    ],
+    "answer": "B",
+    "explanation": "ERM aligns risk management with strategy and performance.",
+    "tags": [
+      "ERM",
+      "risk_management_and_coso_erm"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_051",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Risk management and COSO ERM",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "A SWOT analysis is useful because it summarizes",
+    "choices": [
+      {
+        "key": "A",
+        "text": "tax elections"
+      },
+      {
+        "key": "B",
+        "text": "strengths, weaknesses, opportunities, and threats"
+      },
+      {
+        "key": "C",
+        "text": "only external threats"
+      },
+      {
+        "key": "D",
+        "text": "only cost variances"
+      }
+    ],
+    "answer": "B",
+    "explanation": "SWOT organizes internal and external strategic factors.",
+    "tags": [
+      "SWOT",
+      "risk_management_and_coso_erm"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_052",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Risk management and COSO ERM",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "COSO ERM is primarily designed to help organizations",
+    "choices": [
+      {
+        "key": "A",
+        "text": "eliminate all risk"
+      },
+      {
+        "key": "B",
+        "text": "identify, assess, and respond to risk in pursuit of strategy"
+      },
+      {
+        "key": "C",
+        "text": "prepare tax returns"
+      },
+      {
+        "key": "D",
+        "text": "choose inventory methods"
+      }
+    ],
+    "answer": "B",
+    "explanation": "ERM aligns risk management with strategy and performance.",
+    "tags": [
+      "ERM",
+      "risk_management_and_coso_erm"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_053",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Risk management and COSO ERM",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "A SWOT analysis is useful because it summarizes",
+    "choices": [
+      {
+        "key": "A",
+        "text": "tax elections"
+      },
+      {
+        "key": "B",
+        "text": "strengths, weaknesses, opportunities, and threats"
+      },
+      {
+        "key": "C",
+        "text": "only external threats"
+      },
+      {
+        "key": "D",
+        "text": "only cost variances"
+      }
+    ],
+    "answer": "B",
+    "explanation": "SWOT organizes internal and external strategic factors.",
+    "tags": [
+      "SWOT",
+      "risk_management_and_coso_erm"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_054",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Risk management and COSO ERM",
+    "type": "TBS",
+    "difficulty": "medium",
+    "question": "Task-Based Simulation:\nA client scenario involves risk management and coso erm. Using the facts provided, determine the most appropriate conclusion.\nKey issue: COSO ERM is primarily designed to help organizations",
+    "choices": [
+      {
+        "key": "A",
+        "text": "eliminate all risk"
+      },
+      {
+        "key": "B",
+        "text": "identify, assess, and respond to risk in pursuit of strategy"
+      },
+      {
+        "key": "C",
+        "text": "prepare tax returns"
+      },
+      {
+        "key": "D",
+        "text": "choose inventory methods"
+      }
+    ],
+    "answer": "B",
+    "explanation": "ERM aligns risk management with strategy and performance.",
+    "tags": [
+      "ERM",
+      "risk_management_and_coso_erm"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_055",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Risk management and COSO ERM",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "A SWOT analysis is useful because it summarizes",
+    "choices": [
+      {
+        "key": "A",
+        "text": "tax elections"
+      },
+      {
+        "key": "B",
+        "text": "strengths, weaknesses, opportunities, and threats"
+      },
+      {
+        "key": "C",
+        "text": "only external threats"
+      },
+      {
+        "key": "D",
+        "text": "only cost variances"
+      }
+    ],
+    "answer": "B",
+    "explanation": "SWOT organizes internal and external strategic factors.",
+    "tags": [
+      "SWOT",
+      "risk_management_and_coso_erm"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_056",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Risk management and COSO ERM",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "Which of the following best answers the question below?\nCOSO ERM is primarily designed to help organizations",
+    "choices": [
+      {
+        "key": "A",
+        "text": "eliminate all risk"
+      },
+      {
+        "key": "B",
+        "text": "identify, assess, and respond to risk in pursuit of strategy"
+      },
+      {
+        "key": "C",
+        "text": "prepare tax returns"
+      },
+      {
+        "key": "D",
+        "text": "choose inventory methods"
+      }
+    ],
+    "answer": "B",
+    "explanation": "ERM aligns risk management with strategy and performance.",
+    "tags": [
+      "ERM",
+      "risk_management_and_coso_erm"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_057",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Economic and market influences",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "A CPAQuest candidate is studying economic and market influences. If demand is highly elastic, a price increase will likely",
+    "choices": [
+      {
+        "key": "A",
+        "text": "leave quantity unchanged"
+      },
+      {
+        "key": "B",
+        "text": "reduce quantity demanded meaningfully"
+      },
+      {
+        "key": "C",
+        "text": "always increase revenue"
+      },
+      {
+        "key": "D",
+        "text": "lower fixed costs"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Elastic demand means customers are responsive to price changes.",
+    "tags": [
+      "elasticity",
+      "economic_and_market_influences"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_058",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Economic and market influences",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "Inflation can distort historical-cost analysis because",
+    "choices": [
+      {
+        "key": "A",
+        "text": "it eliminates depreciation"
+      },
+      {
+        "key": "B",
+        "text": "nominal amounts may not reflect current purchasing power"
+      },
+      {
+        "key": "C",
+        "text": "it removes all risk"
+      },
+      {
+        "key": "D",
+        "text": "it converts debt to equity"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Inflation affects comparability and real economic interpretation.",
+    "tags": [
+      "inflation",
+      "economic_and_market_influences"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_059",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Economic and market influences",
+    "type": "TBS",
+    "difficulty": "medium",
+    "question": "Task-Based Simulation:\nA client scenario involves economic and market influences. Using the facts provided, determine the most appropriate conclusion.\nKey issue: If demand is highly elastic, a price increase will likely",
+    "choices": [
+      {
+        "key": "A",
+        "text": "leave quantity unchanged"
+      },
+      {
+        "key": "B",
+        "text": "reduce quantity demanded meaningfully"
+      },
+      {
+        "key": "C",
+        "text": "always increase revenue"
+      },
+      {
+        "key": "D",
+        "text": "lower fixed costs"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Elastic demand means customers are responsive to price changes.",
+    "tags": [
+      "elasticity",
+      "economic_and_market_influences"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_060",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Economic and market influences",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "Inflation can distort historical-cost analysis because",
+    "choices": [
+      {
+        "key": "A",
+        "text": "it eliminates depreciation"
+      },
+      {
+        "key": "B",
+        "text": "nominal amounts may not reflect current purchasing power"
+      },
+      {
+        "key": "C",
+        "text": "it removes all risk"
+      },
+      {
+        "key": "D",
+        "text": "it converts debt to equity"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Inflation affects comparability and real economic interpretation.",
+    "tags": [
+      "inflation",
+      "economic_and_market_influences"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_061",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Economic and market influences",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "If demand is highly elastic, a price increase will likely",
+    "choices": [
+      {
+        "key": "A",
+        "text": "leave quantity unchanged"
+      },
+      {
+        "key": "B",
+        "text": "reduce quantity demanded meaningfully"
+      },
+      {
+        "key": "C",
+        "text": "always increase revenue"
+      },
+      {
+        "key": "D",
+        "text": "lower fixed costs"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Elastic demand means customers are responsive to price changes.",
+    "tags": [
+      "elasticity",
+      "economic_and_market_influences"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_062",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Economic and market influences",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "Inflation can distort historical-cost analysis because",
+    "choices": [
+      {
+        "key": "A",
+        "text": "it eliminates depreciation"
+      },
+      {
+        "key": "B",
+        "text": "nominal amounts may not reflect current purchasing power"
+      },
+      {
+        "key": "C",
+        "text": "it removes all risk"
+      },
+      {
+        "key": "D",
+        "text": "it converts debt to equity"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Inflation affects comparability and real economic interpretation.",
+    "tags": [
+      "inflation",
+      "economic_and_market_influences"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_063",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Economic and market influences",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "Which of the following best answers the question below?\nIf demand is highly elastic, a price increase will likely",
+    "choices": [
+      {
+        "key": "A",
+        "text": "leave quantity unchanged"
+      },
+      {
+        "key": "B",
+        "text": "reduce quantity demanded meaningfully"
+      },
+      {
+        "key": "C",
+        "text": "always increase revenue"
+      },
+      {
+        "key": "D",
+        "text": "lower fixed costs"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Elastic demand means customers are responsive to price changes.",
+    "tags": [
+      "elasticity",
+      "economic_and_market_influences"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_064",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Technical accounting topics",
+    "type": "TBS",
+    "difficulty": "medium",
+    "question": "Task-Based Simulation:\nA client scenario involves technical accounting topics. Using the facts provided, determine the most appropriate conclusion.\nKey issue: Goodwill is generally tested for",
+    "choices": [
+      {
+        "key": "A",
+        "text": "annual impairment or when triggering events occur"
+      },
+      {
+        "key": "B",
+        "text": "monthly amortization only"
+      },
+      {
+        "key": "C",
+        "text": "revenue recognition"
+      },
+      {
+        "key": "D",
+        "text": "inventory obsolescence"
+      }
+    ],
+    "answer": "A",
+    "explanation": "Goodwill is not amortized under GAAP for public entities; it is tested for impairment.",
+    "tags": [
+      "goodwill",
+      "technical_accounting_topics"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_065",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Technical accounting topics",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "Research costs are generally",
+    "choices": [
+      {
+        "key": "A",
+        "text": "capitalized as inventory"
+      },
+      {
+        "key": "B",
+        "text": "expensed as incurred under GAAP"
+      },
+      {
+        "key": "C",
+        "text": "recorded in OCI"
+      },
+      {
+        "key": "D",
+        "text": "deferred until revenue is recognized"
+      }
+    ],
+    "answer": "B",
+    "explanation": "R&D research costs are typically expensed as incurred.",
+    "tags": [
+      "R&D",
+      "technical_accounting_topics"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_066",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Technical accounting topics",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "Goodwill is generally tested for",
+    "choices": [
+      {
+        "key": "A",
+        "text": "annual impairment or when triggering events occur"
+      },
+      {
+        "key": "B",
+        "text": "monthly amortization only"
+      },
+      {
+        "key": "C",
+        "text": "revenue recognition"
+      },
+      {
+        "key": "D",
+        "text": "inventory obsolescence"
+      }
+    ],
+    "answer": "A",
+    "explanation": "Goodwill is not amortized under GAAP for public entities; it is tested for impairment.",
+    "tags": [
+      "goodwill",
+      "technical_accounting_topics"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_067",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Technical accounting topics",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "Research costs are generally",
+    "choices": [
+      {
+        "key": "A",
+        "text": "capitalized as inventory"
+      },
+      {
+        "key": "B",
+        "text": "expensed as incurred under GAAP"
+      },
+      {
+        "key": "C",
+        "text": "recorded in OCI"
+      },
+      {
+        "key": "D",
+        "text": "deferred until revenue is recognized"
+      }
+    ],
+    "answer": "B",
+    "explanation": "R&D research costs are typically expensed as incurred.",
+    "tags": [
+      "R&D",
+      "technical_accounting_topics"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_068",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Technical accounting topics",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "Goodwill is generally tested for",
+    "choices": [
+      {
+        "key": "A",
+        "text": "annual impairment or when triggering events occur"
+      },
+      {
+        "key": "B",
+        "text": "monthly amortization only"
+      },
+      {
+        "key": "C",
+        "text": "revenue recognition"
+      },
+      {
+        "key": "D",
+        "text": "inventory obsolescence"
+      }
+    ],
+    "answer": "A",
+    "explanation": "Goodwill is not amortized under GAAP for public entities; it is tested for impairment.",
+    "tags": [
+      "goodwill",
+      "technical_accounting_topics"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_069",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Technical accounting topics",
+    "type": "TBS",
+    "difficulty": "hard",
+    "question": "Task-Based Simulation:\nA client scenario involves technical accounting topics. Using the facts provided, determine the most appropriate conclusion.\nKey issue: Research costs are generally",
+    "choices": [
+      {
+        "key": "A",
+        "text": "capitalized as inventory"
+      },
+      {
+        "key": "B",
+        "text": "expensed as incurred under GAAP"
+      },
+      {
+        "key": "C",
+        "text": "recorded in OCI"
+      },
+      {
+        "key": "D",
+        "text": "deferred until revenue is recognized"
+      }
+    ],
+    "answer": "B",
+    "explanation": "R&D research costs are typically expensed as incurred.",
+    "tags": [
+      "R&D",
+      "technical_accounting_topics"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_070",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Technical accounting topics",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "Which of the following best answers the question below?\nGoodwill is generally tested for",
+    "choices": [
+      {
+        "key": "A",
+        "text": "annual impairment or when triggering events occur"
+      },
+      {
+        "key": "B",
+        "text": "monthly amortization only"
+      },
+      {
+        "key": "C",
+        "text": "revenue recognition"
+      },
+      {
+        "key": "D",
+        "text": "inventory obsolescence"
+      }
+    ],
+    "answer": "A",
+    "explanation": "Goodwill is not amortized under GAAP for public entities; it is tested for impairment.",
+    "tags": [
+      "goodwill",
+      "technical_accounting_topics"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_071",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Revenue and software",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "A CPAQuest candidate is studying revenue and software. Internally developed software for internal use is generally capitalized",
+    "choices": [
+      {
+        "key": "A",
+        "text": "during the preliminary project stage"
+      },
+      {
+        "key": "B",
+        "text": "after the application development stage begins, for qualifying costs"
+      },
+      {
+        "key": "C",
+        "text": "after disposal"
+      },
+      {
+        "key": "D",
+        "text": "never"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Certain qualifying costs are capitalized after the preliminary stage.",
+    "tags": [
+      "software",
+      "revenue_and_software"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_072",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Revenue and software",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "A contract modification in revenue recognition may require the entity to",
+    "choices": [
+      {
+        "key": "A",
+        "text": "ignore remaining performance obligations"
+      },
+      {
+        "key": "B",
+        "text": "reassess allocation and timing under the revenue model"
+      },
+      {
+        "key": "C",
+        "text": "record all revenue immediately"
+      },
+      {
+        "key": "D",
+        "text": "treat it as a lease"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Contract modifications are analyzed under ASC 606 rules.",
+    "tags": [
+      "revenue",
+      "revenue_and_software"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_073",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Revenue and software",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "Internally developed software for internal use is generally capitalized",
+    "choices": [
+      {
+        "key": "A",
+        "text": "during the preliminary project stage"
+      },
+      {
+        "key": "B",
+        "text": "after the application development stage begins, for qualifying costs"
+      },
+      {
+        "key": "C",
+        "text": "after disposal"
+      },
+      {
+        "key": "D",
+        "text": "never"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Certain qualifying costs are capitalized after the preliminary stage.",
+    "tags": [
+      "software",
+      "revenue_and_software"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_074",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Revenue and software",
+    "type": "TBS",
+    "difficulty": "hard",
+    "question": "Task-Based Simulation:\nA client scenario involves revenue and software. Using the facts provided, determine the most appropriate conclusion.\nKey issue: A contract modification in revenue recognition may require the entity to",
+    "choices": [
+      {
+        "key": "A",
+        "text": "ignore remaining performance obligations"
+      },
+      {
+        "key": "B",
+        "text": "reassess allocation and timing under the revenue model"
+      },
+      {
+        "key": "C",
+        "text": "record all revenue immediately"
+      },
+      {
+        "key": "D",
+        "text": "treat it as a lease"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Contract modifications are analyzed under ASC 606 rules.",
+    "tags": [
+      "revenue",
+      "revenue_and_software"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_075",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Revenue and software",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "Internally developed software for internal use is generally capitalized",
+    "choices": [
+      {
+        "key": "A",
+        "text": "during the preliminary project stage"
+      },
+      {
+        "key": "B",
+        "text": "after the application development stage begins, for qualifying costs"
+      },
+      {
+        "key": "C",
+        "text": "after disposal"
+      },
+      {
+        "key": "D",
+        "text": "never"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Certain qualifying costs are capitalized after the preliminary stage.",
+    "tags": [
+      "software",
+      "revenue_and_software"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_076",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Revenue and software",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "A contract modification in revenue recognition may require the entity to",
+    "choices": [
+      {
+        "key": "A",
+        "text": "ignore remaining performance obligations"
+      },
+      {
+        "key": "B",
+        "text": "reassess allocation and timing under the revenue model"
+      },
+      {
+        "key": "C",
+        "text": "record all revenue immediately"
+      },
+      {
+        "key": "D",
+        "text": "treat it as a lease"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Contract modifications are analyzed under ASC 606 rules.",
+    "tags": [
+      "revenue",
+      "revenue_and_software"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_077",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Business combinations and consolidations",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "Which of the following best answers the question below?\nIn a business combination, identifiable assets acquired are generally measured at",
+    "choices": [
+      {
+        "key": "A",
+        "text": "historical cost of the acquiree"
+      },
+      {
+        "key": "B",
+        "text": "fair value at acquisition date"
+      },
+      {
+        "key": "C",
+        "text": "book value only"
+      },
+      {
+        "key": "D",
+        "text": "tax basis only"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Acquisition accounting generally uses fair value at acquisition date.",
+    "tags": [
+      "business combinations",
+      "business_combinations_and_consolidations"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_078",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Business combinations and consolidations",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "A CPAQuest candidate is studying business combinations and consolidations. A variable interest entity consolidation model focuses on identifying the",
+    "choices": [
+      {
+        "key": "A",
+        "text": "entity with the highest tax basis"
+      },
+      {
+        "key": "B",
+        "text": "primary beneficiary"
+      },
+      {
+        "key": "C",
+        "text": "largest inventory balance"
+      },
+      {
+        "key": "D",
+        "text": "strongest cash ratio"
+      }
+    ],
+    "answer": "B",
+    "explanation": "The primary beneficiary consolidates a VIE.",
+    "tags": [
+      "VIE",
+      "business_combinations_and_consolidations"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_079",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Business combinations and consolidations",
+    "type": "TBS",
+    "difficulty": "easy",
+    "question": "Task-Based Simulation:\nA client scenario involves business combinations and consolidations. Using the facts provided, determine the most appropriate conclusion.\nKey issue: In a business combination, identifiable assets acquired are generally measured at",
+    "choices": [
+      {
+        "key": "A",
+        "text": "historical cost of the acquiree"
+      },
+      {
+        "key": "B",
+        "text": "fair value at acquisition date"
+      },
+      {
+        "key": "C",
+        "text": "book value only"
+      },
+      {
+        "key": "D",
+        "text": "tax basis only"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Acquisition accounting generally uses fair value at acquisition date.",
+    "tags": [
+      "business combinations",
+      "business_combinations_and_consolidations"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_080",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Business combinations and consolidations",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "A variable interest entity consolidation model focuses on identifying the",
+    "choices": [
+      {
+        "key": "A",
+        "text": "entity with the highest tax basis"
+      },
+      {
+        "key": "B",
+        "text": "primary beneficiary"
+      },
+      {
+        "key": "C",
+        "text": "largest inventory balance"
+      },
+      {
+        "key": "D",
+        "text": "strongest cash ratio"
+      }
+    ],
+    "answer": "B",
+    "explanation": "The primary beneficiary consolidates a VIE.",
+    "tags": [
+      "VIE",
+      "business_combinations_and_consolidations"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_081",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Business combinations and consolidations",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "In a business combination, identifiable assets acquired are generally measured at",
+    "choices": [
+      {
+        "key": "A",
+        "text": "historical cost of the acquiree"
+      },
+      {
+        "key": "B",
+        "text": "fair value at acquisition date"
+      },
+      {
+        "key": "C",
+        "text": "book value only"
+      },
+      {
+        "key": "D",
+        "text": "tax basis only"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Acquisition accounting generally uses fair value at acquisition date.",
+    "tags": [
+      "business combinations",
+      "business_combinations_and_consolidations"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_082",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Business combinations and consolidations",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "A variable interest entity consolidation model focuses on identifying the",
+    "choices": [
+      {
+        "key": "A",
+        "text": "entity with the highest tax basis"
+      },
+      {
+        "key": "B",
+        "text": "primary beneficiary"
+      },
+      {
+        "key": "C",
+        "text": "largest inventory balance"
+      },
+      {
+        "key": "D",
+        "text": "strongest cash ratio"
+      }
+    ],
+    "answer": "B",
+    "explanation": "The primary beneficiary consolidates a VIE.",
+    "tags": [
+      "VIE",
+      "business_combinations_and_consolidations"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_083",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Derivatives and leases",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "A derivative generally has a value that",
+    "choices": [
+      {
+        "key": "A",
+        "text": "is fixed and unrelated to underlying items"
+      },
+      {
+        "key": "B",
+        "text": "changes based on an underlying variable and requires little or no initial investment"
+      },
+      {
+        "key": "C",
+        "text": "must be tangible property"
+      },
+      {
+        "key": "D",
+        "text": "is always a hedge"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Derivatives derive value from an underlying and often require little initial investment.",
+    "tags": [
+      "derivatives",
+      "derivatives_and_leases"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_084",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Derivatives and leases",
+    "type": "TBS",
+    "difficulty": "medium",
+    "question": "Task-Based Simulation:\nA client scenario involves derivatives and leases. Using the facts provided, determine the most appropriate conclusion.\nKey issue: A lessor\u2019s lease classification depends mainly on whether",
+    "choices": [
+      {
+        "key": "A",
+        "text": "the lessee is profitable"
+      },
+      {
+        "key": "B",
+        "text": "control-related criteria indicate sales-type/direct financing versus operating treatment"
+      },
+      {
+        "key": "C",
+        "text": "cash is collected upfront"
+      },
+      {
+        "key": "D",
+        "text": "the asset is inventory"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Lessor classification depends on lease criteria under GAAP.",
+    "tags": [
+      "lessor",
+      "derivatives_and_leases"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_085",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Derivatives and leases",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "A CPAQuest candidate is studying derivatives and leases. A derivative generally has a value that",
+    "choices": [
+      {
+        "key": "A",
+        "text": "is fixed and unrelated to underlying items"
+      },
+      {
+        "key": "B",
+        "text": "changes based on an underlying variable and requires little or no initial investment"
+      },
+      {
+        "key": "C",
+        "text": "must be tangible property"
+      },
+      {
+        "key": "D",
+        "text": "is always a hedge"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Derivatives derive value from an underlying and often require little initial investment.",
+    "tags": [
+      "derivatives",
+      "derivatives_and_leases"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_086",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Derivatives and leases",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "A lessor\u2019s lease classification depends mainly on whether",
+    "choices": [
+      {
+        "key": "A",
+        "text": "the lessee is profitable"
+      },
+      {
+        "key": "B",
+        "text": "control-related criteria indicate sales-type/direct financing versus operating treatment"
+      },
+      {
+        "key": "C",
+        "text": "cash is collected upfront"
+      },
+      {
+        "key": "D",
+        "text": "the asset is inventory"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Lessor classification depends on lease criteria under GAAP.",
+    "tags": [
+      "lessor",
+      "derivatives_and_leases"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_087",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Derivatives and leases",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "A derivative generally has a value that",
+    "choices": [
+      {
+        "key": "A",
+        "text": "is fixed and unrelated to underlying items"
+      },
+      {
+        "key": "B",
+        "text": "changes based on an underlying variable and requires little or no initial investment"
+      },
+      {
+        "key": "C",
+        "text": "must be tangible property"
+      },
+      {
+        "key": "D",
+        "text": "is always a hedge"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Derivatives derive value from an underlying and often require little initial investment.",
+    "tags": [
+      "derivatives",
+      "derivatives_and_leases"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_088",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Derivatives and leases",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "A lessor\u2019s lease classification depends mainly on whether",
+    "choices": [
+      {
+        "key": "A",
+        "text": "the lessee is profitable"
+      },
+      {
+        "key": "B",
+        "text": "control-related criteria indicate sales-type/direct financing versus operating treatment"
+      },
+      {
+        "key": "C",
+        "text": "cash is collected upfront"
+      },
+      {
+        "key": "D",
+        "text": "the asset is inventory"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Lessor classification depends on lease criteria under GAAP.",
+    "tags": [
+      "lessor",
+      "derivatives_and_leases"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_089",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Public company reporting and EBP statements",
+    "type": "TBS",
+    "difficulty": "hard",
+    "question": "Task-Based Simulation:\nA client scenario involves public company reporting and ebp statements. Using the facts provided, determine the most appropriate conclusion.\nKey issue: XBRL is primarily used to",
+    "choices": [
+      {
+        "key": "A",
+        "text": "calculate tax liability"
+      },
+      {
+        "key": "B",
+        "text": "tag business reporting data electronically"
+      },
+      {
+        "key": "C",
+        "text": "replace financial statements"
+      },
+      {
+        "key": "D",
+        "text": "prepare confirmations"
+      }
+    ],
+    "answer": "B",
+    "explanation": "XBRL standardizes electronic tagging of financial reporting data.",
+    "tags": [
+      "XBRL",
+      "public_company_reporting_and_ebp_statements"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_090",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Public company reporting and EBP statements",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "A defined contribution plan statement of net assets available for benefits focuses on",
+    "choices": [
+      {
+        "key": "A",
+        "text": "corporate retained earnings"
+      },
+      {
+        "key": "B",
+        "text": "plan assets and related liabilities"
+      },
+      {
+        "key": "C",
+        "text": "entity-wide tax basis"
+      },
+      {
+        "key": "D",
+        "text": "OCI components"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Employee benefit plan statements report plan net assets available for benefits.",
+    "tags": [
+      "EBP",
+      "public_company_reporting_and_ebp_statements"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_091",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Public company reporting and EBP statements",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "Which of the following best answers the question below?\nXBRL is primarily used to",
+    "choices": [
+      {
+        "key": "A",
+        "text": "calculate tax liability"
+      },
+      {
+        "key": "B",
+        "text": "tag business reporting data electronically"
+      },
+      {
+        "key": "C",
+        "text": "replace financial statements"
+      },
+      {
+        "key": "D",
+        "text": "prepare confirmations"
+      }
+    ],
+    "answer": "B",
+    "explanation": "XBRL standardizes electronic tagging of financial reporting data.",
+    "tags": [
+      "XBRL",
+      "public_company_reporting_and_ebp_statements"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_092",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Public company reporting and EBP statements",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "A CPAQuest candidate is studying public company reporting and ebp statements. A defined contribution plan statement of net assets available for benefits focuses on",
+    "choices": [
+      {
+        "key": "A",
+        "text": "corporate retained earnings"
+      },
+      {
+        "key": "B",
+        "text": "plan assets and related liabilities"
+      },
+      {
+        "key": "C",
+        "text": "entity-wide tax basis"
+      },
+      {
+        "key": "D",
+        "text": "OCI components"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Employee benefit plan statements report plan net assets available for benefits.",
+    "tags": [
+      "EBP",
+      "public_company_reporting_and_ebp_statements"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_093",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Public company reporting and EBP statements",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "XBRL is primarily used to",
+    "choices": [
+      {
+        "key": "A",
+        "text": "calculate tax liability"
+      },
+      {
+        "key": "B",
+        "text": "tag business reporting data electronically"
+      },
+      {
+        "key": "C",
+        "text": "replace financial statements"
+      },
+      {
+        "key": "D",
+        "text": "prepare confirmations"
+      }
+    ],
+    "answer": "B",
+    "explanation": "XBRL standardizes electronic tagging of financial reporting data.",
+    "tags": [
+      "XBRL",
+      "public_company_reporting_and_ebp_statements"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_094",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "Public company reporting and EBP statements",
+    "type": "TBS",
+    "difficulty": "easy",
+    "question": "Task-Based Simulation:\nA client scenario involves public company reporting and ebp statements. Using the facts provided, determine the most appropriate conclusion.\nKey issue: A defined contribution plan statement of net assets available for benefits focuses on",
+    "choices": [
+      {
+        "key": "A",
+        "text": "corporate retained earnings"
+      },
+      {
+        "key": "B",
+        "text": "plan assets and related liabilities"
+      },
+      {
+        "key": "C",
+        "text": "entity-wide tax basis"
+      },
+      {
+        "key": "D",
+        "text": "OCI components"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Employee benefit plan statements report plan net assets available for benefits.",
+    "tags": [
+      "EBP",
+      "public_company_reporting_and_ebp_statements"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_095",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "State and local government reporting",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "Governmental fund statements emphasize",
+    "choices": [
+      {
+        "key": "A",
+        "text": "profitability by segment"
+      },
+      {
+        "key": "B",
+        "text": "current financial resources and fund balances"
+      },
+      {
+        "key": "C",
+        "text": "EPS and SEC filings"
+      },
+      {
+        "key": "D",
+        "text": "equity method investments"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Governmental funds focus on current financial resources.",
+    "tags": [
+      "governmental",
+      "state_and_local_government_reporting"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_096",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "State and local government reporting",
+    "type": "MCQ",
+    "difficulty": "medium",
+    "question": "A reconciliation from governmental funds to government-wide statements is needed mainly because of",
+    "choices": [
+      {
+        "key": "A",
+        "text": "different color formatting"
+      },
+      {
+        "key": "B",
+        "text": "differences in measurement focus and basis of accounting"
+      },
+      {
+        "key": "C",
+        "text": "tax law requirements"
+      },
+      {
+        "key": "D",
+        "text": "inventory methods"
+      }
+    ],
+    "answer": "B",
+    "explanation": "The two reporting models use different measurement focuses and bases.",
+    "tags": [
+      "reconciliation",
+      "state_and_local_government_reporting"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_097",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "State and local government reporting",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "Governmental fund statements emphasize",
+    "choices": [
+      {
+        "key": "A",
+        "text": "profitability by segment"
+      },
+      {
+        "key": "B",
+        "text": "current financial resources and fund balances"
+      },
+      {
+        "key": "C",
+        "text": "EPS and SEC filings"
+      },
+      {
+        "key": "D",
+        "text": "equity method investments"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Governmental funds focus on current financial resources.",
+    "tags": [
+      "governmental",
+      "state_and_local_government_reporting"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_098",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "State and local government reporting",
+    "type": "MCQ",
+    "difficulty": "hard",
+    "question": "Which of the following best answers the question below?\nA reconciliation from governmental funds to government-wide statements is needed mainly because of",
+    "choices": [
+      {
+        "key": "A",
+        "text": "different color formatting"
+      },
+      {
+        "key": "B",
+        "text": "differences in measurement focus and basis of accounting"
+      },
+      {
+        "key": "C",
+        "text": "tax law requirements"
+      },
+      {
+        "key": "D",
+        "text": "inventory methods"
+      }
+    ],
+    "answer": "B",
+    "explanation": "The two reporting models use different measurement focuses and bases.",
+    "tags": [
+      "reconciliation",
+      "state_and_local_government_reporting"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_099",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "State and local government reporting",
+    "type": "TBS",
+    "difficulty": "medium",
+    "question": "Task-Based Simulation:\nA client scenario involves state and local government reporting. Using the facts provided, determine the most appropriate conclusion.\nKey issue: Governmental fund statements emphasize",
+    "choices": [
+      {
+        "key": "A",
+        "text": "profitability by segment"
+      },
+      {
+        "key": "B",
+        "text": "current financial resources and fund balances"
+      },
+      {
+        "key": "C",
+        "text": "EPS and SEC filings"
+      },
+      {
+        "key": "D",
+        "text": "equity method investments"
+      }
+    ],
+    "answer": "B",
+    "explanation": "Governmental funds focus on current financial resources.",
+    "tags": [
+      "governmental",
+      "state_and_local_government_reporting"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  },
+  {
+    "id": "BAR_100",
+    "section": "BAR",
+    "section_name": "Business Analysis and Reporting",
+    "topic": "State and local government reporting",
+    "type": "MCQ",
+    "difficulty": "easy",
+    "question": "A reconciliation from governmental funds to government-wide statements is needed mainly because of",
+    "choices": [
+      {
+        "key": "A",
+        "text": "different color formatting"
+      },
+      {
+        "key": "B",
+        "text": "differences in measurement focus and basis of accounting"
+      },
+      {
+        "key": "C",
+        "text": "tax law requirements"
+      },
+      {
+        "key": "D",
+        "text": "inventory methods"
+      }
+    ],
+    "answer": "B",
+    "explanation": "The two reporting models use different measurement focuses and bases.",
+    "tags": [
+      "reconciliation",
+      "state_and_local_government_reporting"
+    ],
+    "source": "original_cpaquest_blueprint_aligned"
+  }
+]

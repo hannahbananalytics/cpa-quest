@@ -36,6 +36,7 @@
 18. [Data Persistence](#18-data-persistence)
 19. [Settings & Reset](#19-settings--reset)
 20. [Dead Code & Known Issues](#20-dead-code--known-issues)
+21. [Question Bank](#21-question-bank)
 
 ---
 
@@ -745,3 +746,69 @@ On mount, `loadState()` reads and parses this key. If absent or unparseable, `de
 | Title choice | CharacterCreator.jsx | Purely cosmetic, no gameplay effect. |
 | Stale saves | localStorage | Saves from before this refactor may contain `mcqFreq` in state or old `'MCQ Practice'` topic strings. These fields are harmless but the topic label in old saves will show "MCQ Practice" instead of "MCQ / TBS Practice". Reset clears this. |
 | Regular attack UI | Dashboard.jsx | `attack(false)` logic exists but is never triggered via UI. Combat only happens automatically via `attack(true)` on quest complete. |
+
+---
+
+## 21. Question Bank
+
+A set of pre-authored MCQ question files lives in the `questions/` directory. These are **not yet wired into any game logic** — they exist as a content asset for future integration.
+
+### Files
+
+| File | Section | Questions |
+|------|---------|-----------|
+| `cpaquest_questions_far_100.json` | FAR | 100 |
+| `cpaquest_questions_aud_100.json` | AUD | 100 |
+| `cpaquest_questions_reg_100.json` | REG | 100 |
+| `cpaquest_questions_bar_100.json` | BAR | 100 |
+| `cpaquest_questions_isc_100.json` | ISC | 100 |
+| `cpaquest_questions_tcp_100.json` | TCP | 100 |
+
+**Total: 600 questions across all 6 exam sections.**
+
+### Question Schema
+
+Each file is a JSON array. Every question object has these fields:
+
+```json
+{
+  "id": "FAR_001",
+  "section": "FAR",
+  "section_name": "Financial Accounting and Reporting",
+  "topic": "General-purpose financial statements",
+  "type": "MCQ",
+  "difficulty": "medium",
+  "question": "...",
+  "choices": [
+    { "key": "A", "text": "..." },
+    { "key": "B", "text": "..." },
+    { "key": "C", "text": "..." },
+    { "key": "D", "text": "..." }
+  ],
+  "answer": "B",
+  "explanation": "...",
+  "tags": ["financial statements", "balance sheet"],
+  "source": "original_cpaquest_blueprint_aligned"
+}
+```
+
+### Coverage
+
+Questions are distributed across all topics in each section, with a balanced difficulty split (~33% easy / 34% medium / 33% hard per file). Topic counts per file vary slightly because some sections have more blueprint topics than others.
+
+| Section | Unique topics covered |
+|---------|-----------------------|
+| FAR | 16 |
+| AUD | 12 |
+| REG | 16 |
+| BAR | 15 |
+| ISC | 14 |
+| TCP | 14 |
+
+### Intended Future Use
+
+The question bank is designed to power the **MCQ / TBS Practice** quest encounters. Planned integration points:
+- Surface a random question (filtered by the current topic block) when a practice quest is active
+- Use `difficulty` to scale encounter difficulty as the player progresses
+- Use `explanation` to provide post-answer feedback in the battle dialog
+- Track correct/incorrect answers to feed into the `mastery` system (currently unimplemented — see §20)
