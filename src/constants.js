@@ -182,7 +182,7 @@ export const BADGES = [
   { id: 'boss1', icon: '👑', name: 'BOSS SLAYER',  desc: 'Defeated the final boss' },
   { id: 'half',  icon: '🎯', name: 'HALFWAY',      desc: '50% readiness' },
   { id: 'ready', icon: '🏆', name: 'BOARD READY',  desc: '80% readiness' },
-  { id: 'gold1', icon: '🌟', name: 'GOLD MASTERY', desc: 'Gold on any topic' },
+  { id: 'gold1', icon: '🌟', name: 'GOLD MASTERY', desc: 'Complete all quests in any topic' },
   { id: 'hrs10', icon: '📚', name: 'SCHOLAR',      desc: '10+ hours logged' },
 ]
 

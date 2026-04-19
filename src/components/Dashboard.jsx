@@ -416,6 +416,18 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
       const QUEST_HEAL = 8
       const newHp = Math.min(p.hero.maxHp, p.hero.hp + QUEST_HEAL)
 
+      // Topic mastery: completing all content quests for a topic marks it gold (tier 3).
+      // gold1 badge fires on the first topic mastered.
+      let newMastery = p.mastery
+      if (questType === 'content') {
+        const topicName = p.schedule[idx].topic
+        const topicIdx = SECTIONS[p.sect].topics.findIndex(t => t.n === topicName)
+        if (topicIdx >= 0 && (p.mastery[topicIdx] ?? 0) < 3) {
+          const allDone = newSchedule.every(q => q.topic !== topicName || q.type !== 'content' || q.done)
+          if (allDone) newMastery = { ...p.mastery, [topicIdx]: 3 }
+        }
+      }
+
       const earned = [...p.earned]
       if (!earned.includes('log1')) earned.push('log1')
       if (sessions >= 5 && !earned.includes('log5')) earned.push('log5')
@@ -424,11 +436,13 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
       if (hrs >= 10 && !earned.includes('hrs10')) earned.push('hrs10')
       if (readiness >= 50 && !earned.includes('half')) earned.push('half')
       if (readiness >= 80 && !earned.includes('ready')) earned.push('ready')
+      if (Object.values(newMastery).some(t => t >= 3) && !earned.includes('gold1')) earned.push('gold1')
 
       return {
         ...p,
         schedule: newSchedule, sessions, hrs, streak, bestStreak, readiness,
         activity: newActivity,
+        mastery: newMastery,
         hero: { ...p.hero, xp: newXp, level: newLv, hp: newHp },
         earned,
       }

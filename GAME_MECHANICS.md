@@ -711,24 +711,36 @@ The tracker uses `state.startDate` (set when the plan is created) and `state.eda
 
 ## 13. Badges
 
-Badges are earned once and stored as IDs in `state.earned`. They never un-earn.
+Badges are earned once and stored as IDs in `state.earned`. They never un-earn. All badges are visible in the Badges tab whether earned or not — unearned badges are visually dimmed via the `bcard` CSS class (no `on` modifier).
 
-| ID | Icon | Name | Trigger |
-|----|------|------|---------|
-| `start` | 🚀 | JOURNEY | Section confirmed (onSectionComplete) |
-| `log1` | ✏️ | FIRST STEP | First quest completed or first mob killed on complete |
-| `s3` | 🔥 | ON FIRE | streak >= 3 |
-| `s7` | ⚡ | WEEK WARRIOR | streak >= 7 |
-| `log5` | 🏃 | MOMENTUM | sessions >= 5 |
-| `mob10` | ⚔️ | MOB HUNTER | kills >= 10 |
-| `mini1` | 👺 | MINI-BOSS | First mini-boss killed |
-| `boss1` | 👑 | BOSS SLAYER | Boss HP reaches 0 during the Full Review phase |
-| `half` | 🎯 | HALFWAY | readiness >= 50 |
-| `ready` | 🏆 | BOARD READY | readiness >= 80 |
-| `gold1` | 🌟 | GOLD MASTERY | mastery tier 3 on any topic — **currently unearnable** |
-| `hrs10` | 📚 | SCHOLAR | hrs >= 10 |
+| ID | Icon | Name | UI Description | Trigger | Where checked |
+|----|------|------|----------------|---------|---------------|
+| `start` | 🚀 | JOURNEY | Created first plan | `onSectionComplete` in App.jsx | App.jsx |
+| `log1` | ✏️ | FIRST STEP | Logged first session | First call to `completeQuest` | `completeQuest` |
+| `s3` | 🔥 | ON FIRE | 3-day streak | `streak >= 3` | `completeQuest` |
+| `s7` | ⚡ | WEEK WARRIOR | 7-day streak | `streak >= 7` | `completeQuest` |
+| `log5` | 🏃 | MOMENTUM | 5 sessions logged | `sessions >= 5` | `completeQuest` |
+| `mob10` | ⚔️ | MOB HUNTER | Slay 10 mobs | `kills >= 10` | `attack()` kill branch |
+| `mini1` | 👺 | MINI-BOSS | Defeated a mini-boss | `mobState.isMiniBoss === true` on kill | `attack()` kill branch |
+| `boss1` | 👑 | BOSS SLAYER | Defeated the final boss | `mobState.isBoss === true` on kill | `attack()` kill branch |
+| `half` | 🎯 | HALFWAY | 50% readiness | `readiness >= 50` | `completeQuest` |
+| `ready` | 🏆 | BOARD READY | 80% readiness | `readiness >= 80` | `completeQuest` |
+| `gold1` | 🌟 | GOLD MASTERY | Complete all quests in any topic | All content quests for a topic done → `mastery[topicIdx] = 3` → badge fires | `completeQuest` |
+| `hrs10` | 📚 | SCHOLAR | 10+ hours logged | `hrs >= 10` (hrs = sessions × dhrs) | `completeQuest` |
 
-Checks for `s3`, `s7`, `log5`, `hrs10`, `half`, `ready` run on every `completeQuest`. Checks for `mob10`, `mini1`, `boss1` run on mob/boss death in `attack()`.
+### Badge trigger flow
+
+**`completeQuest` checks** (run on every quest tick): `log1`, `log5`, `s3`, `s7`, `hrs10`, `half`, `ready`, `gold1`.
+
+**`attack()` kill-branch checks** (run when a mob's HP reaches 0): `mob10`, `mini1`, `boss1`.
+
+**`onSectionComplete` check** (run once when the study plan is created): `start`.
+
+### Topic mastery and `gold1`
+
+When a content quest is completed, `completeQuest` checks whether every content quest in that topic is now done. If so, it sets `mastery[topicIdx] = 3` (gold tier) in state and awards `gold1` if not already earned. Only content quests count — practice and review quests do not contribute to topic mastery.
+
+The `mastery` object (`{ [topicIdx]: tier }`) is persisted to localStorage and will power the Skills tab (currently hidden, component retained) when re-enabled.
 
 ---
 
@@ -740,7 +752,9 @@ The `SkillTree` component exists and renders all topics with a 4-pip mastery bar
 mastery[topicIdx] = tier (0–4)
 ```
 
-**The mastery object is initialized as `{}` and is never updated anywhere in the codebase.** Every topic always displays tier 0. The `gold1` badge (tier 3 on any topic) is therefore unearnable. This system is the intended integration point for the question bank (see §21).
+The mastery object is updated in `completeQuest`: when all content quests for a topic are done, `mastery[topicIdx]` is set to `3` (gold tier). Topics not yet fully completed remain at `0`. The `gold1` badge fires when the first topic reaches tier 3 (see §13).
+
+The Skills tab is currently hidden from the UI but the component code is retained. When re-enabled, topics will show their real mastery tier. This system is the intended integration point for the question bank (see §21).
 
 ---
 
@@ -858,7 +872,7 @@ On mount, `loadState()` reads and parses this key. If absent or unparseable, `de
 
 | Item | Location | Issue |
 |------|----------|-------|
-| `mastery` state | App.jsx, Dashboard.jsx | Field exists, SkillTree renders it, but nothing ever writes to it. All topics permanently show tier 0. `gold1` badge unreachable. Skills tab is hidden from UI but component code is retained. |
+| Skills tab hidden | Dashboard.jsx | `SkillTree` component exists and mastery is now written to state, but the tab is not in the tab-bar array. Re-enable by adding `['skills', 'SKILLS']` back to the tab list. |
 | `xpMult` | App.jsx defaultState | Always `1`, never read or applied. |
 | Weapon `desc` text | constants.js | Weapon flavor text mentions stat bonuses but these are display-only. The actual bonuses (ATK, crit) are hardcoded in `WEAPON_ATK` / `WEAPON_CRIT` in Dashboard.jsx and apply only to mini-boss flurry hits. |
 | Title choice | CharacterCreator.jsx | Purely cosmetic, no gameplay effect. |
