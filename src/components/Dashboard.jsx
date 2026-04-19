@@ -5,7 +5,10 @@ import {
   computeLevel, xpPct, xpToNext,
 } from '../constants.js'
 
-function todayKey() { return new Date().toISOString().slice(0, 10) }
+function localDateKey(d = new Date()) {
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`
+}
+function todayKey() { return localDateKey() }
 function addDays(date, n) { const d = new Date(date); d.setDate(d.getDate() + n); return d }
 async function wait(ms) { return new Promise(r => setTimeout(r, ms)) }
 
@@ -127,7 +130,7 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
       const newSchedule = p.schedule.map((s, i) => i === idx ? { ...s, done: true } : s)
       const sessions = p.sessions + 1
       const hrs = p.hrs + p.dhrs
-      const yk = addDays(new Date(), -1).toISOString().slice(0, 10)
+      const yk = localDateKey(addDays(new Date(), -1))
       const streak = (p.activity[yk] === 'done' || sessions === 1) ? p.streak + 1 : 1
       const bestStreak = Math.max(streak, p.bestStreak)
       const readiness = Math.min(100, p.readiness + Math.round(80 / Math.max(p.schedule.length, 30)))
@@ -350,11 +353,10 @@ function StatBox({ ic, lbl, val }) {
 function QuestList({ schedule, onComplete, sect }) {
   const tk = todayKey()
   const sectData = SECTIONS[sect]
-  const visible = schedule.slice(0, 14)
   return (
     <div>
-      <div className="section-label">QUEST LOG — NEXT 14 DAYS</div>
-      {visible.map((q, idx) => {
+      <div className="section-label">QUEST LOG</div>
+      {schedule.map((q, idx) => {
         const isToday = q.date.slice(0, 10) === tk
         const topic = sectData.topics.find(t => t.n === q.topic)
         const icon = q.type === 'practice' ? '🎯' : q.type === 'review' ? '📖' : (topic?.mob || '⚔️')
