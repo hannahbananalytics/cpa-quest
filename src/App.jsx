@@ -27,8 +27,10 @@ function defaultState() {
     bossHp: 1000,
     bossMaxHp: 1000,
     mobState: null,
+    mobBank: {},
     startDate: null,
     xpMult: 1,
+    focusIdx: null,
   }
 }
 

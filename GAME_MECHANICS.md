@@ -82,13 +82,22 @@ maxHp: 100
 | ID | Name | Real Effect |
 |----|------|-------------|
 | `grinder` | The Grinder | Quest-complete XP × 1.2 |
-| `strategist` | The Strategist | Boss damage × 1.5 (stacks on crit multiplier) |
+| `strategist` | The Strategist | Mini-boss damage × 2 (weak-topic bonus) · Boss damage × 1.5 (stacks on crit multiplier) |
 | `clutch` | The Clutch | Crit chance 25% (others: 10%) |
-| `scholar` | The Scholar | Practice-quest heal × 1.5 (25 → 38 HP) |
+| `scholar` | The Scholar | Mini-boss kill heal × 1.5 (30 → 45 HP) |
 
-### Weapons — all cosmetic
+### Weapons
 
-The `desc` field shows flavor text ("+5 ATK", etc.) but **no weapon stat is read anywhere in the game logic**. All 6 weapons are purely visual.
+Weapons contribute flat ATK and crit-chance bonuses on **mini-boss** flurry hits. The listed `desc` text is flavor — the actual numbers applied in code are below. Weapons have no effect on content mob or boss damage.
+
+| ID | Flat ATK on mini-boss | Crit-chance bonus |
+|----|-----------------------|-------------------|
+| `pencil` | +5 | — |
+| `calc` | +3 | — |
+| `scroll` | 0 | +15% |
+| `laptop` | +2 | +2% |
+| `coffee` | +1 | — |
+| `highlight` | +6 | — |
 
 ### Titles — all cosmetic
 
@@ -239,52 +248,74 @@ Runs in this order:
 5. `readiness += round(80 / max(schedule.length, 30))`, capped at 100
 6. `xpGain = 80 + (streak × 10)` — if Grinder class, `xpGain × 1.2`
 7. `hero.xp += xpGain`, level recalculated via `computeLevel(xp)`
-8. Heal applied based on quest type:
-   - **content**: `hero.hp += 8`
-   - **practice**: `hero.hp += 25` (Scholar: `+38`)
-   - **review**: no heal
-   (capped at `maxHp`)
-9. `activity[todayKey()] = 'done'`
-10. Badge checks run (see §13)
-11. Increments `pendingAttacks`; triggers `attack()` after 350ms if idle. Subsequent completions queue via the same ref and chain at the end of each attack.
+8. `activity[todayKey()] = 'done'`
+9. Badge checks run (see §13)
+10. Queues combat beats in `pendingAttacks` and triggers `attack()` after 350ms if idle. Subsequent completions queue via the same ref and chain at the end of each attack.
+    - **content / review**: queues **1** attack
+    - **practice**: queues a **3–5 hit flurry** (random)
+
+Heals are not applied on quest completion — they are applied on mob defeat (see §6).
 
 ### MCQ / TBS Practice Quests
 
 One **MCQ / TBS Practice** quest is inserted automatically after every topic block. There is no user-configurable frequency — the number of practice quests always equals the number of topics in the section (12–22 depending on section).
 
-These quests spawn a **mini-boss** encounter (see §7) — a one-shot checkpoint fight that also heals the hero by 25 HP (38 for Scholar).
+These quests spawn a **mini-boss** encounter (see §7) — a tanky 240-HP checkpoint fought via a 3–5 hit flurry with random, class/weapon-scaled damage. Defeating the mini-boss heals the hero by 30 HP (45 for Scholar).
 
 ---
 
 ## 6. Combat System
 
-Combat is **topic-persistent**. Each content topic has **one** mob instance that persists in `mobState` across every content quest in that topic; each content quest lands one hit. The mob only despawns on death or when the schedule advances past its topic. Mini-bosses (practice quests) remain one-shot checkpoints. The boss persists across the Full Review phase.
+Combat is **topic-persistent**. Each content topic has **one** mob instance that persists in `mobState` across every content quest in that topic; each content quest lands one hit. The mob only despawns on death or when the schedule advances past its topic. Mini-bosses (practice quests) are short flurry fights. The boss persists across the Full Review phase.
 
 All animations are handled by the `BattleArena` component (`BattleArena.jsx`). Combat runs automatically — there is no manual attack button.
 
 ### Attack (`attack()`)
 
-One call = one back-and-forth beat. Called automatically after each `completeQuest` for any quest type. No `isComplete` parameter — every attack is a quest-triggered hit.
+One call = one back-and-forth beat. Called automatically after each `completeQuest`. A practice quest queues a **3–5 hit flurry**; content and review quests queue 1 hit.
 
 **Damage per hit:**
 
 ```
 PER_HIT = 50   // flat damage vs. content mobs
 
-crit = random() < (clutch: 0.25, others: 0.10)
+// Weapon tables (applied to mini-boss rolls only)
+WEAPON_ATK  = { pencil: 5, calc: 3, scroll: 0, laptop: 2, coffee: 1, highlight: 6 }
+WEAPON_CRIT = { scroll: 0.15, laptop: 0.02 }
+
+baseCrit = clutch ? 0.25 : 0.10
+crit = random() < (baseCrit + WEAPON_CRIT[hero.weaponId])
 
 if currentMob.isBoss:
   dmg = crit ? ceil(dmgPerReview × 1.5) : dmgPerReview
   if strategist: dmg = ceil(dmg × 1.5)
 else if currentMob.isMiniBoss:
-  dmg = currentMob.mobHp          // one-shot the mini-boss
+  roll = 35 + random(0..35)         // 35–70 base
+  roll += WEAPON_ATK[hero.weaponId]
+  if strategist: roll = round(roll × 2)    // weak-topic bonus
+  if crit: roll = ceil(roll × 1.5)
+  dmg = roll
 else:
-  dmg = PER_HIT                   // content mob: flat; crit does not boost damage
+  dmg = PER_HIT                     // content mob: flat; crit does not boost damage
 
-dmg = min(dmg, mobHp)             // never overkill
+dmg = min(dmg, mobHp)               // never overkill
 ```
 
 Because content mob HP = `topicQuestCount × 50` (§7), exactly `topicQuestCount` content hits kill the topic mob — the final content quest of a topic is always the killing blow.
+
+### Heal on Mob Defeat
+
+Heals are triggered when a mob dies, not on quest completion:
+
+- Content mob killed: `hero.hp += 12`
+- Mini-boss killed: `hero.hp += 30` (Scholar: `+45`)
+- Boss killed: no heal (the run is over)
+
+Capped at `hero.maxHp`.
+
+### Mini-boss Flurry Drain
+
+When the mini-boss dies, any remaining queued flurry hits in `pendingAttacks` are cleared so they don't spill onto the next mob.
 
 ### Weapon Throw
 
@@ -292,28 +323,23 @@ A separate `attacksUntilThrow` ref resets to `1 + floor(random × 4)` (1–4 att
 
 ### Mob Counter-attack
 
-**Always fires when the mob survives a hit** (hero HP now matters):
+Fires when the mob survives a hit (hero HP matters):
 
 ```
-if mob is content:   foeDmg = 5 + random(0–6)   // 5–11
-if mob is boss:      foeDmg = 14 + random(0–11) // 14–25
+if mob is content:    foeDmg = 5 + random(0–6)    // 5–11  (always)
+if mob is mini-boss:  foeDmg = 8 + random(0–9)    // 8–17  (50% chance per survived hit)
+if mob is boss:       foeDmg = 14 + random(0–11)  // 14–25 (always)
 
 hero.hp = max(0, hero.hp - foeDmg)
 ```
 
-No counter on the killing blow. Mini-bosses never counter (always one-shot).
+No counter on the killing blow. Mini-bosses only counter ~50% of the time so a flurry doesn't grind the hero.
 
 ### Attack Queue (Rapid Completions)
 
-`pendingAttacks` is a ref counter:
+See §7 (**Attack Queue**) for the full queue model. Summary: `pendingQueue` is an ordered ref array of quest indices. `completeQuest` pushes 1 entry for content/review and 3–5 for practice. `attack()` peeks the head, swaps mobs (with bank save) if the head's encounter doesn't match the live mob, otherwise lands the hit and shifts. Kill prunes all remaining entries for the dead mob. Mini-bosses auto-extend the queue with another entry for themselves until they die. Chain delay is `300 ms` on survival, `950 ms` on a kill.
 
-- Incremented by `completeQuest` for every quest type (content, practice, review).
-- Decremented at the end of `attack()` (whether mob survives or dies).
-- At the end of `attack()`, if `pendingAttacks > 0`, schedules the next attack:
-  - `300ms` delay if the current mob survived (immediate follow-up hit).
-  - `950ms` delay if the mob died (gives time for faint + 600ms respawn).
-
-Rapidly checking 5 quests in the same topic → 5 sequential attacks draining the mob by 50 each, killing it on the 5th.
+Rapidly checking 5 quests in the same topic → queue becomes `[i0,i1,i2,i3,i4]`, each one dealing 50 flat, mob dies on the 5th hit.
 
 ### Kill Rewards
 
@@ -353,7 +379,7 @@ Each mob carries a `topicKey` to identify what it represents:
 | `topicKey` | Meaning |
 |------------|---------|
 | topic name (e.g. `'Revenue Recognition'`) | Persistent content-topic mob |
-| `'PRACTICE:<idx>'` | One-shot mini-boss checkpoint after a topic block |
+| `'PRACTICE:<idx>'` | Mini-boss checkpoint after a topic block (3–5 hit flurry) |
 | `'REVIEW'` | Persistent final boss during the Full Review phase |
 
 ### Active Quest Drives Spawning
@@ -365,7 +391,54 @@ activeQuest = schedule[activeIdx]
 inReviewPhase = activeQuest?.type === 'review'
 ```
 
-When `mobState` is null, `currentMob` is derived from `activeQuest`. When `mobState` is non-null, it is returned unchanged (even at 0 HP during faint) so the death animation can finish without a sprite swap.
+When `mobState` is null, `currentMob` is derived from `combatQuest` (see below). When `mobState` is non-null, it is returned unchanged (even at 0 HP during faint) so the death animation can finish without a sprite swap.
+
+### Focus-driven Combat (`combatQuest` vs `activeQuest`)
+
+The user can tick quests in any order, so combat and progress need two separate pointers:
+
+| Pointer | Source | Drives |
+|---------|--------|--------|
+| `activeIdx` / `activeQuest` | `schedule.findIndex(q => !q.done)` | Progress UI: quest-log CURRENT marker, world-map hero position, pace tracker |
+| `combatIdx` / `combatQuest` | `state.focusIdx` (last-clicked quest) with fallback to `activeIdx` | The mob in front of the hero: `currentMob` derivation, `inReviewPhase`, boss-reveal overlay trigger, `expectedMobKey` |
+
+`state.focusIdx` is updated by `completeQuest(idx)` on every tick, so the fight follows whichever quest the user just clicked. After a mob is killed, the kill branch auto-advances `focusIdx` to `schedule.findIndex(q => !q.done)` so the next mob spawns for the next real to-do (otherwise `currentMob` would keep deriving the just-killed mob).
+
+### Attack Queue (`pendingQueue`)
+
+`pendingQueue` is a **ref array of quest indices**, not a counter. Each entry represents one pending combat beat aimed at that quest's encounter. Clicks append:
+
+- `content` / `review` → push `[idx]` once (1 beat).
+- `practice` → push the idx 3–5 times (the flurry).
+
+`attack()` processes the queue head-first:
+
+1. Peek `pendingQueue[0]`. Resolve its encounter via `questMobKey(schedule[idx], idx)`:
+   - `review` → `'REVIEW'`
+   - `practice` → `'PRACTICE:' + idx`
+   - `content` → `schedule[idx].topic`
+2. If `mobState` is null or `mobState.topicKey !== nextKey`, the queue head targets a different encounter than what's in the arena. `attack()` initiates a **swap** via a single `setState`:
+   - If a live mob is being replaced, its current HP is stashed in `mobBank[topicKey]` so the fight can be resumed later at the same HP.
+   - `mobState` is nulled and `focusIdx` is set to the queue head's idx.
+   - `attack()` returns. The 600 ms respawn effect brings in the correct mob, and the post-spawn effect re-calls `attack()` once it commits.
+3. Otherwise the head matches the live mob. `attack()` executes the beat, shifts the head off the queue, and either:
+   - **Kill**: prune all remaining entries for this now-dead `topicKey` from the queue, clear the bank entry, and set `focusIdx` to the new queue head (if any) or the next undone quest.
+   - **Mini-boss survived**: if the queue head is no longer aimed at this mini-boss, `unshift` another entry for it so the fight keeps swinging until the mob dies (content and boss fights are quest-gated and do not auto-chain).
+4. If `pendingQueue.length > 0`, schedule the next beat (`300 ms` after survival, `950 ms` after a kill).
+
+Because the queue preserves click order, a fight that is mid-chain for Topic A finishes its queued hits before a later Topic C click swaps mobs. Rapid cross-topic clicks no longer collapse onto whichever mob happens to commit first — Topic A takes its Topic-A-aimed hits, then the swap saves its HP to the bank, then Topic C spawns and takes its Topic-C-aimed hits.
+
+### Mob HP Bank (Resume-on-Return)
+
+`state.mobBank` is a `{ [topicKey]: mobHp }` map that remembers how much HP a swapped-out mob had when the user walked away from the fight. The flow:
+
+- **On swap** (`completeQuest` when `mobSwap && p.mobState.mobHp > 0`): the outgoing mob's HP is stashed at `mobBank[topicKey]` before `mobState` is nulled.
+- **On spawn** (the `currentMob` useMemo when deriving content or practice mobs): if `mobBank[topicKey]` is a number, the spawning mob uses that HP instead of `mobMaxHp`. Otherwise it spawns at full HP.
+- **On kill** (the `attack()` kill branch): the killed mob's `topicKey` is removed from `mobBank` so the entry can't accidentally rehydrate a dead mob.
+
+The boss (`topicKey === 'REVIEW'`) intentionally uses `state.bossHp` / `state.bossMaxHp` instead of the bank — it already has authoritative persistent HP. This means clicking between review quests and earlier topics leaves `bossHp` untouched.
+
+Concrete example: user ticks a Topic A content quest (mob drops to 100/150), skips to a Topic C content quest. Topic A's 100 HP is stashed in `mobBank['Topic A']` on the swap. Topic C spawns fresh. Later, the user ticks another Topic A content quest — the mob respawns from the bank at 100 HP and the next hit drops it to 50.
 
 ### Content Mob (Persistent per Topic)
 
@@ -403,11 +476,11 @@ mob:
   level      = hero.level + 2
   isBoss     = false
   isMiniBoss = true
-  mobMaxHp   = 180
-  mobHp      = 180
+  mobMaxHp   = 240
+  mobHp      = 240
 ```
 
-Mini-bosses are **one-shot** — the attack deals `currentMob.mobHp` damage and skips the counter.
+Mini-bosses are **flurry fights**: the owning practice quest queues 3–5 hits that chain through `pendingAttacks`. Per-hit damage rolls 35–70, adjusted by weapon ATK and ×2 for Strategist (weak-topic bonus), ×1.5 on crit. Counter-attacks fire ~50% of the time when the mini-boss survives a hit. Defeating the mini-boss heals the hero by 30 HP (Scholar: 45).
 
 ### Final Boss (Review Phase, Persistent)
 
@@ -540,7 +613,7 @@ Run complete. Well done.
 | Quest complete (Grinder) | (80 + streak × 10) × 1.2 |
 | Content mob kill (final hit of topic) | 100 |
 | Content mob kill on crit | 150 |
-| Mini-boss kill (one-shot) | 150 |
+| Mini-boss kill (flurry) | 150 |
 | Mini-boss kill on crit | 225 |
 | Boss mob kill (review phase) | 250 |
 | Boss mob kill on crit | 375 |
