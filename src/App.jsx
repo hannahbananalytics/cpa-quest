@@ -13,7 +13,6 @@ function defaultState() {
     sect: 'FAR',
     edate: null,
     dhrs: 3,
-    bpct: 0,
     plan: false,
     schedule: [],
     activity: {},
@@ -38,7 +37,7 @@ function loadState() {
 }
 function saveState(s) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)) } catch {} }
 
-function buildSchedule(sect, edate, dhrs, bpct) {
+function buildSchedule(sect, edate, dhrs) {
   const sectInfo = SECTIONS[sect]
   const topics = sectInfo.topics
   const ed = new Date(edate)
@@ -91,7 +90,6 @@ function buildSchedule(sect, edate, dhrs, bpct) {
   return {
     schedule,
     bossMaxHp: Math.max(600, dl * 20),
-    initialReadiness: Math.min(35, Math.round(bpct * 0.35)),
     recommendedDays,
   }
 }
@@ -131,13 +129,13 @@ export default function App() {
     }))
   }
 
-  function onSectionComplete({ sect, edate, dhrs, bpct }) {
-    const { schedule, bossMaxHp, initialReadiness } = buildSchedule(sect, edate, dhrs, bpct)
+  function onSectionComplete({ sect, edate, dhrs }) {
+    const { schedule, bossMaxHp } = buildSchedule(sect, edate, dhrs)
     setState(p => ({
       ...p,
-      sect, edate, dhrs, bpct,
+      sect, edate, dhrs,
       schedule, bossMaxHp, bossHp: bossMaxHp,
-      readiness: initialReadiness,
+      readiness: 0,
       plan: true,
       phase: 'dashboard',
       earned: p.earned.includes('start') ? p.earned : [...p.earned, 'start'],
