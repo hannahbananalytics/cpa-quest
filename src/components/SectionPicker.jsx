@@ -32,7 +32,7 @@ export default function SectionPicker({ hero, onComplete }) {
           <div style={{ fontSize: 40 }}>{hero.avatar}</div>
           <div>
             <div className="ps" style={{ fontSize: 11, color: 'var(--bone)' }}>{hero.name}</div>
-            <div className="ps" style={{ fontSize: 8, color: 'var(--gold)', marginTop: 4, letterSpacing: 0 }}>{hero.title}</div>
+            <div className="ps" style={{ fontSize: 10, color: 'var(--gold)', marginTop: 4, letterSpacing: 0 }}>{hero.title}</div>
           </div>
           <div style={{ marginLeft: 'auto' }} className="tiny">Ready to pick a dungeon</div>
         </div>

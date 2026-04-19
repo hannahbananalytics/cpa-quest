@@ -201,7 +201,7 @@ export default function Dashboard({ state, setState, showToast }) {
           </div>
 
           <div>
-            <HeroCard hero={hero} streak={state.streak} />
+            <HeroCard hero={hero} streak={state.streak} sectData={sectData} />
 
             <div className="tab-bar mt-16">
               {[['quests', 'QUESTS'], ['map', 'MAP'], ['skills', 'SKILLS'], ['badges', 'BADGES']].map(([k, l]) => (
@@ -244,8 +244,8 @@ function TopHud({ hero, state }) {
       </div>
       <div style={{ flex: 1, maxWidth: 520 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14 }}>
-          <span className="ps" style={{ fontSize: 8, color: 'var(--gold)' }}>LV {hero.level} · {LEVEL_NAMES[hero.level - 1] || 'LEGEND'}</span>
-          <span className="ps" style={{ fontSize: 8, color: 'var(--ash)' }}>{hero.xp} / {nxt} XP</span>
+          <span className="ps" style={{ fontSize: 10, color: 'var(--gold)' }}>LV {hero.level} · {LEVEL_NAMES[hero.level - 1] || 'LEGEND'}</span>
+          <span className="ps" style={{ fontSize: 10, color: 'var(--ash)' }}>{hero.xp} / {nxt} XP</span>
         </div>
         <div className="px-bar mt-8" style={{ height: 12 }}>
           <div className="px-bar-fill gold" style={{ width: pct + '%' }} />
@@ -278,7 +278,7 @@ function BossBar({ boss, sectData, bossHp, bossMaxHp, bossPct }) {
             <div className="px-bar-fill blood" style={{ width: bossPct + '%', background: color }} />
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 6, fontSize: 16 }}>
-            <span className="ps" style={{ fontSize: 8, color: 'var(--ash)' }}>BOSS HP</span>
+            <span className="ps" style={{ fontSize: 10, color: 'var(--ash)' }}>BOSS HP</span>
             <span>{bossHp} / {bossMaxHp}</span>
           </div>
         </div>
@@ -287,18 +287,30 @@ function BossBar({ boss, sectData, bossHp, bossMaxHp, bossPct }) {
   )
 }
 
-function HeroCard({ hero, streak }) {
+function HeroCard({ hero, streak, sectData }) {
   const cls = CLASSES.find(c => c.id === hero.clsId)
   const wpn = WEAPONS.find(w => w.id === hero.weaponId)
   return (
     <div className="px-panel">
-      <div style={{ display: 'flex', gap: 14, alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start' }}>
         <div style={{ fontSize: 54, filter: 'drop-shadow(3px 3px 0 var(--ink))' }}>{hero.avatar}</div>
         <div style={{ flex: 1 }}>
           <div className="ps" style={{ fontSize: 12, color: 'var(--bone)' }}>{hero.name}</div>
-          <div className="ps mt-8" style={{ fontSize: 8, color: 'var(--gold)', letterSpacing: 0 }}>{hero.title}</div>
+          <div className="ps mt-8" style={{ fontSize: 10, color: 'var(--gold)', letterSpacing: 0 }}>{hero.title}</div>
           <div className="tiny mt-8">{cls.emoji} {cls.name} · {wpn.emoji} {wpn.name}</div>
         </div>
+        {sectData && (
+          <div className="ps" style={{
+            fontSize: 11, letterSpacing: 0,
+            color: sectData.color,
+            background: 'var(--ink)',
+            border: '2px solid ' + sectData.color,
+            padding: '4px 8px',
+            alignSelf: 'flex-start',
+          }}>
+            {sectData.name}
+          </div>
+        )}
       </div>
       <div className="grid-3 mt-12" style={{ gap: 8 }}>
         <MiniStat lbl="HP"  val={`${hero.hp}/${hero.maxHp}`} color="var(--grass)" />
@@ -311,9 +323,9 @@ function HeroCard({ hero, streak }) {
 
 function MiniStat({ lbl, val, color }) {
   return (
-    <div style={{ background: 'var(--ink)', border: '2px solid var(--ink)', padding: '6px 8px', textAlign: 'center' }}>
-      <div className="ps" style={{ fontSize: 7, color: 'var(--ash)' }}>{lbl}</div>
-      <div className="ps" style={{ fontSize: 12, color, marginTop: 4 }}>{val}</div>
+    <div style={{ background: 'var(--ink)', border: '2px solid var(--ink)', padding: '8px 8px', textAlign: 'center' }}>
+      <div className="ps" style={{ fontSize: 10, color: 'var(--ash)' }}>{lbl}</div>
+      <div className="ps" style={{ fontSize: 15, color, marginTop: 6 }}>{val}</div>
     </div>
   )
 }
@@ -351,7 +363,7 @@ function QuestList({ schedule, onComplete, sect }) {
               <div className="quest-meta">Day {q.day} · {q.type.toUpperCase()}</div>
             </div>
             <div className="tiny">{new Date(q.date).toLocaleDateString('en-US',{month:'short',day:'numeric'})}</div>
-            {isToday && <div className="ps" style={{ fontSize: 7, color: 'var(--gold)' }}>TODAY</div>}
+            {isToday && <div className="ps" style={{ fontSize: 10, color: 'var(--gold)' }}>TODAY</div>}
           </div>
         )
       })}

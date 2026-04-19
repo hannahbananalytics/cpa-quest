@@ -119,7 +119,7 @@ function StepClass({ clsId, setClsId }) {
             <div className="choice-icon">{c.emoji}</div>
             <div className="choice-name">{c.name}</div>
             <div className="choice-desc">{c.bonus}</div>
-            <div className="ps mt-8" style={{ fontSize: 8, color: c.color, letterSpacing: 0 }}>+{c.stat}</div>
+            <div className="ps mt-8" style={{ fontSize: 10, color: c.color, letterSpacing: 0 }}>+{c.stat}</div>
           </div>
         ))}
       </div>
@@ -181,12 +181,12 @@ function StepConfirm({ name, avatar, cls, weapon, title }) {
 
         <div style={{ display: 'flex', justifyContent: 'center', gap: 28, marginTop: 18, flexWrap: 'wrap' }}>
           <div>
-            <div className="ps" style={{ fontSize: 8, color: 'var(--ash)' }}>CLASS</div>
+            <div className="ps" style={{ fontSize: 10, color: 'var(--ash)' }}>CLASS</div>
             <div style={{ fontSize: 34, marginTop: 6 }}>{cls.emoji}</div>
             <div className="tiny mt-8">{cls.name}</div>
           </div>
           <div>
-            <div className="ps" style={{ fontSize: 8, color: 'var(--ash)' }}>WEAPON</div>
+            <div className="ps" style={{ fontSize: 10, color: 'var(--ash)' }}>WEAPON</div>
             <div style={{ fontSize: 34, marginTop: 6 }}>{weapon.emoji}</div>
             <div className="tiny mt-8">{weapon.name}</div>
           </div>
