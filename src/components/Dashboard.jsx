@@ -82,11 +82,10 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
       }
     }
 
-    // Normal phase: regular topic mob or mini-boss, driven by fightIdx so
-    // rapid completions play out as a sequential chain.
+    // Normal phase: regular topic mob or mini-boss (practice quests only).
     const topicIdx = sectData.topics.findIndex(t => t.n === fightQuest.topic)
     const topic = topicIdx >= 0 ? sectData.topics[topicIdx] : sectData.topics[0]
-    const isMiniBoss = (fightIdx + 1) % 7 === 0
+    const isMiniBoss = fightQuest.type === 'practice'
     const maxHp = isMiniBoss ? 180 : 60 + Math.floor(Math.random() * 40)
     return {
       topicIdx: topicIdx >= 0 ? topicIdx : 0,
@@ -632,7 +631,7 @@ function WorldMap({ schedule, activeIdx, sectData, bossHp, bossMaxHp, hero }) {
     const col = row % 2 === 0 ? colInRow : (COLS - 1 - colInRow)
     const x = 8 + col * 14
     const y = Y_START + row * yStep
-    const isMini = q.type !== 'review' && (i + 1) % 7 === 0
+    const isMini = q.type === 'practice'
     const isReview = q.type === 'review'
     const isFinalBoss = i === total - 1 && isReview
     const isPractice = q.type === 'practice'

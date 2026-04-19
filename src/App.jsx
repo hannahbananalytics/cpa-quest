@@ -13,7 +13,6 @@ function defaultState() {
     sect: 'FAR',
     edate: null,
     dhrs: 3,
-    mcqFreq: 5,
     plan: false,
     schedule: [],
     activity: {},
@@ -40,13 +39,13 @@ function loadState() {
 function saveState(s) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)) } catch {} }
 
 // Quests are sequenced, not date-stamped.
-// exam date is only used to derive total slot count and pacing — not attached to individual quests.
-function buildSchedule(sect, edate, dhrs, mcqFreq) {
+// Exam date is only used to derive total slot count and pacing — not attached to individual quests.
+// One MCQ / TBS Practice quest is inserted after each topic block (not frequency-based).
+function buildSchedule(sect, edate, dhrs) {
   const sectInfo = SECTIONS[sect]
   const topics = sectInfo.topics
   const today = new Date(); today.setHours(0,0,0,0)
   const dlyHrs = Math.max(1, Number(dhrs) || 3)
-  const freq = Math.max(3, Math.min(10, Number(mcqFreq) || 5))
 
   const midHrs = (sectInfo.minHrs + sectInfo.maxHrs) / 2
   const recommendedDays = Math.round(midHrs / dlyHrs)
@@ -61,26 +60,21 @@ function buildSchedule(sect, edate, dhrs, mcqFreq) {
   const slotsPerTopic = Math.max(1, Math.floor(contentSlots / topics.length))
 
   const schedule = []
-  let seqIdx = 0  // global sequence counter (drives MCQ frequency)
 
   for (let t = 0; t < topics.length; t++) {
     const topic = topics[t]
     const isLast = t === topics.length - 1
-    // Last topic absorbs any leftover slots
+    // Last topic absorbs any leftover content slots
     const slots = isLast
       ? Math.max(1, contentSlots - t * slotsPerTopic)
       : slotsPerTopic
 
+    // Content quests for this topic
     for (let i = 0; i < slots; i++) {
-      // Every freq-th quest (1-indexed) is an MCQ practice slot
-      const isPrac = (seqIdx + 1) % freq === 0
-      schedule.push({
-        topic: isPrac ? 'MCQ Practice' : topic.n,
-        type: isPrac ? 'practice' : 'content',
-        done: false,
-      })
-      seqIdx++
+      schedule.push({ topic: topic.n, type: 'content', done: false })
     }
+    // One MCQ / TBS Practice checkpoint after each topic block
+    schedule.push({ topic: 'MCQ / TBS Practice', type: 'practice', done: false })
   }
 
   // Append full-review block
@@ -90,7 +84,7 @@ function buildSchedule(sect, edate, dhrs, mcqFreq) {
 
   return {
     schedule,
-    bossMaxHp: Math.max(600, dl * 20),
+    bossMaxHp: Math.max(600, schedule.length * 20),
     recommendedDays,
     startDate: today.toISOString(),
   }
@@ -132,11 +126,11 @@ export default function App() {
     }))
   }
 
-  function onSectionComplete({ sect, edate, dhrs, mcqFreq }) {
-    const { schedule, bossMaxHp, startDate } = buildSchedule(sect, edate, dhrs, mcqFreq)
+  function onSectionComplete({ sect, edate, dhrs }) {
+    const { schedule, bossMaxHp, startDate } = buildSchedule(sect, edate, dhrs)
     setState(p => ({
       ...p,
-      sect, edate, dhrs, mcqFreq,
+      sect, edate, dhrs,
       schedule, bossMaxHp, bossHp: bossMaxHp,
       startDate,
       readiness: 0,

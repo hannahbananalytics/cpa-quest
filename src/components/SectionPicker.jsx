@@ -8,7 +8,6 @@ export default function SectionPicker({ hero, onComplete }) {
     return d.toISOString().slice(0, 10)
   })
   const [dhrs, setDhrs] = useState(3)
-  const [mcqFreq, setMcqFreq] = useState(5)
 
   const sectData = SECTIONS[sect]
 
@@ -17,7 +16,6 @@ export default function SectionPicker({ hero, onComplete }) {
       sect,
       edate,
       dhrs: Number(dhrs) || 3,
-      mcqFreq: Math.max(3, Math.min(10, Number(mcqFreq) || 5)),
     })
   }
 
@@ -64,7 +62,7 @@ export default function SectionPicker({ hero, onComplete }) {
         </div>
 
         <div className="section-label">PLAN YOUR RUN</div>
-        <div className="grid-3 mb-16">
+        <div className="grid-2 mb-16">
           <div className="px-panel">
             <label className="input-label">EXAM DATE</label>
             <input type="date" className="px-input" value={edate} onChange={e => setEdate(e.target.value)} />
@@ -72,11 +70,6 @@ export default function SectionPicker({ hero, onComplete }) {
           <div className="px-panel">
             <label className="input-label">AVERAGE STUDY HOURS / DAY</label>
             <input type="number" min={1} max={12} className="px-input" value={dhrs} onChange={e => setDhrs(e.target.value)} />
-          </div>
-          <div className="px-panel">
-            <label className="input-label">MCQ PRACTICE EVERY</label>
-            <input type="number" min={3} max={10} className="px-input" value={mcqFreq} onChange={e => setMcqFreq(e.target.value)} />
-            <div className="tiny mt-8">quests &nbsp;·&nbsp; min 3, max 10</div>
           </div>
         </div>
 

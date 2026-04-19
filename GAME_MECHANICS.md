@@ -3,6 +3,15 @@
 > Written for the builder. Documents actual implemented behavior as of April 2026.
 > Covers every formula, rule, and system in the codebase.
 
+### Core Terminology
+
+| Term | Definition |
+|------|------------|
+| **Topic** | A major exam-content concept from the CPA section blueprint (e.g. "Revenue Recognition", "Audit Sampling"). Topics are the higher-level curriculum units. Each section has 12–22 topics. |
+| **Quest** | An individual playable study task shown in the quest log. A topic maps to one or more quests. Larger topics get more quests; smaller topics may get just one. |
+| **MCQ / TBS Practice quest** | A checkpoint quest inserted automatically after every topic block is complete. Always `type: 'practice'`. Spawns a mini-boss encounter. |
+| **Full Review quest** | A quest in the final phase of the schedule. Always `type: 'review'`. Spawns the section's final boss. |
+
 ---
 
 ## Table of Contents
@@ -107,7 +116,6 @@ Each section has a boss, a color, and a list of topics. Each topic has a name (`
 |-------|---------|-------|---------|
 | Exam Date | today + 60 days | any future date | Drives total slot count and pacing |
 | Study Hours / Day (`dhrs`) | 3 | 1–12 | Used to estimate recommended days and accumulate `hrs` stat |
-| MCQ Practice Every N Quests (`mcqFreq`) | 5 | 3–10 | How often a practice quest appears in the sequence |
 
 ### Pacing Indicator (shown on Section Picker)
 
@@ -129,7 +137,6 @@ The exam date influences total slot count and the Pace Tracker, but not which qu
 ```
 midHrs = (minHrs + maxHrs) / 2
 recommendedDays = round(midHrs / dhrs)
-freq = clamp(mcqFreq, 3, 10)
 
 dl = max(topics.length + 3, ceil((examDate - today) / 86400000))
 
@@ -140,20 +147,24 @@ slotsPerTopic = max(1, floor(contentSlots / topics.length))
 
 **Quest sequence generation:**
 
-Topics are assigned in blocks. Every `freq`-th quest (1-indexed, so positions freq, 2×freq, 3×freq…) is replaced with an MCQ Practice quest. The last topic absorbs any leftover content slots.
+Topics are assigned in blocks. After each topic block, one MCQ / TBS Practice quest is inserted as a checkpoint. The last topic absorbs any leftover content slots.
 
 ```
 for each topic t:
   slots = slotsPerTopic  (last topic: contentSlots - t × slotsPerTopic)
-  for each slot:
-    if (seqIdx + 1) % freq === 0:
-      push MCQ Practice (type: 'practice')
-    else:
-      push topic.n (type: 'content')
-    seqIdx++
+  push slots × topic.n           (type: 'content')
+  push 1 × 'MCQ / TBS Practice' (type: 'practice')
 
-then append revCount × Full Review (type: 'review')
+then append revCount × 'Full Review' (type: 'review')
 ```
+
+**Quest type → encounter mapping:**
+
+| Quest type | Encounter |
+|------------|-----------|
+| `content` | Normal topic mob |
+| `practice` | Mini-boss (topic checkpoint) |
+| `review` | Final boss |
 
 **Quest entry shape (no date field):**
 ```js
@@ -162,8 +173,9 @@ then append revCount × Full Review (type: 'review')
 
 **Boss HP:**
 ```
-bossMaxHp = max(600, dl × 20)
+bossMaxHp = max(600, schedule.length × 20)
 ```
+Boss HP is calculated from the full schedule length (including practice quests) after the schedule is built.
 
 **`startDate`** (ISO string for plan creation day) is stored in state alongside `edate` for use by the Pace Tracker.
 
@@ -181,7 +193,6 @@ bossMaxHp = max(600, dl × 20)
   sect: string,          // e.g. 'FAR'
   edate: string,         // ISO date string (exam date)
   dhrs: number,          // study hours per day
-  mcqFreq: number,       // MCQ practice frequency (3–10)
   plan: boolean,
   schedule: [...],       // ordered quest entries, no dates
   activity: {},          // { 'YYYY-MM-DD': 'done' } — calendar streak tracking
@@ -232,11 +243,11 @@ Runs in this order:
 10. Badge checks run (see §13)
 11. Triggers `attack(true)` after 350ms delay → one-shot kills the current mob
 
-### MCQ Practice Frequency
+### MCQ / TBS Practice Quests
 
-Set at plan creation (`mcqFreq`, 3–10, default 5). Every `mcqFreq`-th quest in the sequence (1-indexed) is a practice quest. Example with `mcqFreq=5`: positions 5, 10, 15, 20… are practice. Positions 5, 12, 19… if any slot in between would also be practice.
+One **MCQ / TBS Practice** quest is inserted automatically after every topic block. There is no user-configurable frequency — the number of practice quests always equals the number of topics in the section (12–22 depending on section).
 
-Completing a practice quest follows the same logic as any other quest — same XP, same mob kill, same readiness gain.
+These quests spawn a **mini-boss** encounter (see §7). Completing a practice quest follows the same XP/readiness logic as any content quest.
 
 ---
 
@@ -325,22 +336,30 @@ Two separate pointers exist:
 
 ### Normal Quest Phase (content & practice quests)
 
+Quest type directly determines encounter type — no interval or positional logic:
+
+| Quest type | Encounter |
+|------------|-----------|
+| `content` | Normal mob (topic mob emoji, 60–100 HP) |
+| `practice` | Mini-boss (topic emoji from fallback, 180 HP) |
+| `review` | Final boss (see Full Review Phase below) |
+
 ```
 fightIdx = state.kills
 fightQuest = schedule[fightIdx]
 topicIdx = sectData.topics.findIndex(t => t.n === fightQuest.topic)
-topic = sectData.topics[topicIdx]  (falls back to index 0 if not found)
+topic = sectData.topics[topicIdx]  (falls back to topics[0] if not found)
 
-isMiniBoss = fightQuest.type !== 'review' && (fightIdx + 1) % 7 === 0
+isMiniBoss = fightQuest.type === 'practice'
 
-Regular mob:
+Regular mob (content quest):
   emoji    = topic.mob
   name     = topic.mobName
   hp       = 60 + floor(random × 40)   // 60–100 HP
   level    = hero.level
   isBoss   = false
 
-Mini-boss:
+Mini-boss (practice quest):
   emoji    = 👺
   name     = topic.n + ' MINI-BOSS'
   hp       = 180
@@ -348,7 +367,7 @@ Mini-boss:
   isBoss   = false
 ```
 
-- MCQ Practice quests fall back to `topics[0]` for their mob.
+- Practice quests use `topics[0]` as the fallback topic (since `'MCQ / TBS Practice'` is not in the topic list).
 
 ### Full Review Phase (boss quests)
 
@@ -724,5 +743,5 @@ On mount, `loadState()` reads and parses this key. If absent or unparseable, `de
 | Scholar class bonus | constants.js | Described as "MCQ review grants bonus HP" — never implemented. |
 | Weapon stats | constants.js | All weapon `desc` values mention stat bonuses — none are read by any game logic. Purely cosmetic. |
 | Title choice | CharacterCreator.jsx | Purely cosmetic, no gameplay effect. |
-| Stale saves | localStorage | Saves from before the scheduling refactor contain `day` and `date` per quest entry. These fields are now ignored. If `startDate` is null in an old save, the Pace Tracker renders nothing. |
-| Regular attack UI | Dashboard.jsx | `attack(false)` logic exists but is never triggered via UI (button was removed). Combat only happens automatically via `attack(true)` on quest complete. |
+| Stale saves | localStorage | Saves from before this refactor may contain `mcqFreq` in state or old `'MCQ Practice'` topic strings. These fields are harmless but the topic label in old saves will show "MCQ Practice" instead of "MCQ / TBS Practice". Reset clears this. |
+| Regular attack UI | Dashboard.jsx | `attack(false)` logic exists but is never triggered via UI. Combat only happens automatically via `attack(true)` on quest complete. |
