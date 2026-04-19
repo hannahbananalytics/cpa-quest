@@ -225,10 +225,7 @@ export default function Dashboard({ state, setState, showToast }) {
           <StatBox ic="📊" lbl="READINESS"  val={state.readiness + '%'} />
         </div>
 
-        <div className="mt-16 px-panel">
-          <div className="section-label">LAST 28 DAYS</div>
-          <Heatmap activity={state.activity} />
-        </div>
+
       </div>
     </div>
   )
