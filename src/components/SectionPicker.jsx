@@ -8,12 +8,11 @@ export default function SectionPicker({ hero, onComplete }) {
     return d.toISOString().slice(0, 10)
   })
   const [dhrs, setDhrs] = useState(3)
-  const [bpct, setBpct] = useState(0)
 
   const sectData = SECTIONS[sect]
 
   function go() {
-    onComplete({ sect, edate, dhrs: Number(dhrs) || 3, bpct: Number(bpct) || 0 })
+    onComplete({ sect, edate, dhrs: Number(dhrs) || 3 })
   }
 
   return (
@@ -59,7 +58,7 @@ export default function SectionPicker({ hero, onComplete }) {
         </div>
 
         <div className="section-label">PLAN YOUR RUN</div>
-        <div className="grid-3 mb-16">
+        <div className="grid-2 mb-16">
           <div className="px-panel">
             <label className="input-label">EXAM DATE</label>
             <input type="date" className="px-input" value={edate} onChange={e => setEdate(e.target.value)} />
@@ -67,10 +66,6 @@ export default function SectionPicker({ hero, onComplete }) {
           <div className="px-panel">
             <label className="input-label">AVERAGE STUDY HOURS / DAY</label>
             <input type="number" min={1} max={12} className="px-input" value={dhrs} onChange={e => setDhrs(e.target.value)} />
-          </div>
-          <div className="px-panel">
-            <label className="input-label">BECKER % DONE</label>
-            <input type="number" min={0} max={100} className="px-input" value={bpct} onChange={e => setBpct(e.target.value)} />
           </div>
         </div>
 
