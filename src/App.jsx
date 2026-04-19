@@ -13,6 +13,7 @@ function defaultState() {
     sect: 'FAR',
     edate: null,
     dhrs: 3,
+    mcqFreq: 5,
     plan: false,
     schedule: [],
     activity: {},
@@ -27,6 +28,7 @@ function defaultState() {
     bossHp: 1000,
     bossMaxHp: 1000,
     mobState: null,
+    startDate: null,
     xpMult: 1,
   }
 }
@@ -37,60 +39,60 @@ function loadState() {
 }
 function saveState(s) { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(s)) } catch {} }
 
-function buildSchedule(sect, edate, dhrs) {
+// Quests are sequenced, not date-stamped.
+// exam date is only used to derive total slot count and pacing — not attached to individual quests.
+function buildSchedule(sect, edate, dhrs, mcqFreq) {
   const sectInfo = SECTIONS[sect]
   const topics = sectInfo.topics
-  const ed = new Date(edate)
   const today = new Date(); today.setHours(0,0,0,0)
   const dlyHrs = Math.max(1, Number(dhrs) || 3)
+  const freq = Math.max(3, Math.min(10, Number(mcqFreq) || 5))
 
-  // Recommended days based on baseline hours (midpoint of range)
   const midHrs = (sectInfo.minHrs + sectInfo.maxHrs) / 2
   const recommendedDays = Math.round(midHrs / dlyHrs)
 
-  // Use exam date if provided, otherwise fall back to recommended
-  const rawDays = edate ? Math.max(topics.length + 3, Math.ceil((ed - today) / 86400000)) : recommendedDays
-  const dl = rawDays
+  const dl = edate
+    ? Math.max(topics.length + 3, Math.ceil((new Date(edate) - today) / 86400000))
+    : recommendedDays
 
-  // Reserve last 12% (min 3) for full review
-  const revDays = Math.max(3, Math.round(dl * 0.12))
-  const contentDays = dl - revDays
-
-  // Distribute content days evenly across topics (block schedule: finish one before starting next)
-  const daysPerTopic = Math.max(1, Math.floor(contentDays / topics.length))
+  // Last 12% of slots (min 3) are full-review quests
+  const revCount = Math.max(3, Math.round(dl * 0.12))
+  const contentSlots = dl - revCount
+  const slotsPerTopic = Math.max(1, Math.floor(contentSlots / topics.length))
 
   const schedule = []
-  let dayIdx = 0
+  let seqIdx = 0  // global sequence counter (drives MCQ frequency)
 
   for (let t = 0; t < topics.length; t++) {
     const topic = topics[t]
-    // Last topic absorbs any leftover days so we don't overshoot contentDays
-    const days = t === topics.length - 1 ? (contentDays - dayIdx) : daysPerTopic
-    for (let i = 0; i < days && dayIdx < contentDays; i++) {
-      const dt = new Date(today); dt.setDate(today.getDate() + dayIdx)
-      const isPrac = (dayIdx % 6 === 5)
+    const isLast = t === topics.length - 1
+    // Last topic absorbs any leftover slots
+    const slots = isLast
+      ? Math.max(1, contentSlots - t * slotsPerTopic)
+      : slotsPerTopic
+
+    for (let i = 0; i < slots; i++) {
+      // Every freq-th quest (1-indexed) is an MCQ practice slot
+      const isPrac = (seqIdx + 1) % freq === 0
       schedule.push({
-        day: dayIdx + 1,
-        date: dt.toISOString(),
         topic: isPrac ? 'MCQ Practice' : topic.n,
         type: isPrac ? 'practice' : 'content',
         done: false,
       })
-      dayIdx++
+      seqIdx++
     }
   }
 
-  // Full review block at the end
-  for (let r = 0; r < revDays; r++) {
-    const dt = new Date(today); dt.setDate(today.getDate() + dayIdx)
-    schedule.push({ day: dayIdx + 1, date: dt.toISOString(), topic: 'Full Review', type: 'review', done: false })
-    dayIdx++
+  // Append full-review block
+  for (let r = 0; r < revCount; r++) {
+    schedule.push({ topic: 'Full Review', type: 'review', done: false })
   }
 
   return {
     schedule,
     bossMaxHp: Math.max(600, dl * 20),
     recommendedDays,
+    startDate: today.toISOString(),
   }
 }
 
@@ -130,12 +132,13 @@ export default function App() {
     }))
   }
 
-  function onSectionComplete({ sect, edate, dhrs }) {
-    const { schedule, bossMaxHp } = buildSchedule(sect, edate, dhrs)
+  function onSectionComplete({ sect, edate, dhrs, mcqFreq }) {
+    const { schedule, bossMaxHp, startDate } = buildSchedule(sect, edate, dhrs, mcqFreq)
     setState(p => ({
       ...p,
-      sect, edate, dhrs,
+      sect, edate, dhrs, mcqFreq,
       schedule, bossMaxHp, bossHp: bossMaxHp,
+      startDate,
       readiness: 0,
       plan: true,
       phase: 'dashboard',
@@ -143,9 +146,7 @@ export default function App() {
     }))
   }
 
-  function reset() {
-    setResetConfirmOpen(true)
-  }
+  function reset() { setResetConfirmOpen(true) }
 
   function confirmReset() {
     localStorage.removeItem(STORAGE_KEY)
@@ -221,4 +222,3 @@ export default function App() {
     </div>
   )
 }
-

@@ -22,49 +22,90 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
   const [battleMsg, setBattleMsg] = useState('')
   const [lastDmgHero, setLastDmgHero] = useState(0)
   const [lastDmgMob, setLastDmgMob] = useState(0)
+  const [bossReveal, setBossReveal] = useState(false)
 
-  const tk = todayKey()
-  const todayIdx = schedule.findIndex(s => s.date.slice(0, 10) === tk)
-  // The quest the player is currently fighting: today's if undone, else the
-  // first undone quest in the schedule.
-  const activeQuest = (todayIdx >= 0 && !schedule[todayIdx].done)
-    ? schedule[todayIdx]
-    : schedule.find(s => !s.done)
+  // Active quest = first undone quest in sequence
+  const activeIdx = schedule.findIndex(q => !q.done)
+  const activeQuest = activeIdx >= 0 ? schedule[activeIdx] : null
+
+  // Full Review phase: the active quest is a review quest.
+  // Since review quests are always last, this means all content is done.
+  const inReviewPhase = activeQuest?.type === 'review'
+
+  // Damage per review quest: boss total HP divided evenly across all review quests
+  const reviewCount = Math.max(1, schedule.filter(q => q.type === 'review').length)
+  const dmgPerReview = Math.ceil(state.bossMaxHp / reviewCount)
+
+  // Detect transition into review phase and show boss reveal overlay.
+  // The ref is initialized to the current type on first render so loading
+  // mid-review doesn't re-trigger the reveal.
+  const hasInitRef = useRef(false)
+  const prevQuestTypeRef = useRef(null)
+  if (!hasInitRef.current) {
+    hasInitRef.current = true
+    prevQuestTypeRef.current = activeQuest?.type
+  }
+  useEffect(() => {
+    const prev = prevQuestTypeRef.current
+    const curr = activeQuest?.type
+    if (curr === 'review' && prev !== 'review') {
+      setBossReveal(true)
+      const t = setTimeout(() => setBossReveal(false), 4000)
+      return () => clearTimeout(t)
+    }
+    prevQuestTypeRef.current = curr
+  }, [activeQuest?.type])
 
   const currentMob = useMemo(() => {
-    // Keep the existing mob in view (even at 0 HP) until attack() explicitly
-    // clears mobState after the faint animation — prevents the sprite from
-    // swapping mid-death.
-    if (mobState) return mobState
+    if (mobState && mobState.mobHp > 0) return mobState
     if (!activeQuest) return null
+
+    if (inReviewPhase) {
+      // Boss phase: the final boss IS the mob for each review encounter
+      return {
+        topicIdx: -1,
+        mob: boss.emoji,
+        mobName: boss.name,
+        level: 99,
+        isBoss: true,
+        isMiniBoss: false,
+        mobMaxHp: dmgPerReview,
+        mobHp: dmgPerReview,
+        lastDmg: 0,
+      }
+    }
+
+    // Normal phase: regular topic mob or mini-boss
     const topicIdx = sectData.topics.findIndex(t => t.n === activeQuest.topic)
     const topic = topicIdx >= 0 ? sectData.topics[topicIdx] : sectData.topics[0]
-    const isMiniBoss = activeQuest.day % 7 === 0
+    const isMiniBoss = (activeIdx + 1) % 7 === 0
     const maxHp = isMiniBoss ? 180 : 60 + Math.floor(Math.random() * 40)
     return {
       topicIdx: topicIdx >= 0 ? topicIdx : 0,
       mob: isMiniBoss ? '👺' : topic.mob,
       mobName: isMiniBoss ? (topic.n + ' MINI-BOSS') : topic.mobName,
       level: Math.max(1, hero.level + (isMiniBoss ? 2 : 0)),
+      isBoss: false,
       isMiniBoss,
       mobMaxHp: maxHp,
       mobHp: maxHp,
       lastDmg: 0,
     }
-  }, [mobState, activeQuest, sect, hero.level, sectData.topics])
+  }, [mobState, activeQuest, activeIdx, inReviewPhase, dmgPerReview, boss, sect, hero.level, sectData.topics])
 
   useEffect(() => {
     if (!mobState && currentMob) {
-      const t = setTimeout(() => {
-        setState(p => (p.mobState ? p : { ...p, mobState: currentMob }))
-      }, 600)
-      return () => clearTimeout(t)
+      setState(p => ({ ...p, mobState: currentMob }))
     }
   }, [currentMob, mobState, setState])
 
   useEffect(() => {
-    setBattleMsg(`A wild ${currentMob?.mobName || 'mob'} appears!`)
-  }, [currentMob?.mobName])
+    if (!currentMob) return
+    const msg = currentMob.isBoss
+      ? `⚠ ${boss.name.toUpperCase()} CHALLENGES YOU!`
+      : `A wild ${currentMob.mobName} appears!`
+    setBattleMsg(msg)
+  }, [currentMob?.mobName, currentMob?.isBoss, boss.name])
 
   const attacking = useRef(false)
   async function attack(isComplete = false) {
@@ -73,7 +114,7 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
 
     const crit = Math.random() < (hero.clsId === 'clutch' ? 0.25 : 0.1)
     const base = hero.clsId === 'strategist' ? 28 : 22
-    // Quest check-off is a one-shot kill — deal full remaining HP.
+    // Quest check-off is always a one-shot kill
     const dmg = isComplete
       ? currentMob.mobHp
       : Math.floor(base + Math.random() * 12) * (crit ? 2 : 1)
@@ -86,21 +127,26 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
     setState(p => ({ ...p, mobState: { ...p.mobState, mobHp: Math.max(0, p.mobState.mobHp - dmg), lastDmg: dmg } }))
     await wait(500)
 
-    const newHp = Math.max(0, currentMob.mobHp - dmg)
-    if (newHp <= 0) {
-      setBattleMsg(`${currentMob.mobName} was defeated! +${currentMob.isMiniBoss ? 150 : 60} XP`)
+    const newMobHp = Math.max(0, currentMob.mobHp - dmg)
+    if (newMobHp <= 0) {
+      const xpGain = currentMob.isBoss ? 250 : (currentMob.isMiniBoss ? 150 : 60)
+      setBattleMsg(`${currentMob.mobName} was defeated! +${xpGain} XP`)
       setBattlePhase('faint-foe')
       await wait(700)
       setState(p => {
-        const gain = p.mobState.isMiniBoss ? 150 : 60
-        const newXp = p.hero.xp + gain
+        const newXp = p.hero.xp + xpGain
         const newLv = computeLevel(newXp)
-        const newBossHp = Math.max(0, p.bossHp - (p.mobState.isMiniBoss ? 180 : 60))
+        // Boss HP only decreases during review phase (boss encounters)
+        // Normal mobs and mini-bosses do NOT damage the boss
+        const newBossHp = p.mobState.isBoss
+          ? Math.max(0, p.bossHp - dmgPerReview)
+          : p.bossHp
         const newKills = p.kills + 1
         const newEarned = [...p.earned]
         if (!newEarned.includes('log1') && isComplete) newEarned.push('log1')
         if (newKills >= 10 && !newEarned.includes('mob10')) newEarned.push('mob10')
         if (p.mobState.isMiniBoss && !newEarned.includes('mini1')) newEarned.push('mini1')
+        if (p.mobState.isBoss && newBossHp <= 0 && !newEarned.includes('boss1')) newEarned.push('boss1')
         return {
           ...p,
           hero: { ...p.hero, xp: newXp, level: newLv },
@@ -165,23 +211,8 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
         earned,
       }
     })
-    showToast('QUEST COMPLETE! +XP  +HP')
+    showToast(inReviewPhase ? '⚔ BOSS HIT! +XP  +HP' : 'QUEST COMPLETE! +XP  +HP')
     setTimeout(() => attack(true), 350)
-  }
-
-  function bossBattle() {
-    if (state.bossHp <= 0) { showToast('Boss already slain!'); return }
-    if (state.readiness < 80) { showToast('Need 80% readiness to challenge boss!'); return }
-    setState(p => {
-      const newBossHp = Math.max(0, p.bossHp - 300)
-      const earned = [...p.earned]
-      if (newBossHp <= 0 && !earned.includes('boss1')) earned.push('boss1')
-      return {
-        ...p, bossHp: newBossHp, earned,
-        hero: { ...p.hero, xp: p.hero.xp + 500, level: computeLevel(p.hero.xp + 500) },
-      }
-    })
-    showToast('MASSIVE HIT! Boss -300 HP')
   }
 
   const bossPct = Math.max(0, Math.round((state.bossHp / state.bossMaxHp) * 100))
@@ -191,7 +222,13 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
     <div className="app-wrap crt">
       <div style={{ maxWidth: 1400, margin: '0 auto' }}>
         <TopHud hero={hero} state={state} onOpenSettings={onOpenSettings} onReset={onReset} />
-        <BossBar boss={boss} sectData={sectData} bossHp={state.bossHp} bossMaxHp={state.bossMaxHp} bossPct={bossPct} />
+
+        {/* Boss bar: only shown during Full Review phase */}
+        {inReviewPhase && (
+          <BossBar boss={boss} sectData={sectData} bossHp={state.bossHp} bossMaxHp={state.bossMaxHp} bossPct={bossPct} />
+        )}
+
+        <PaceTracker schedule={schedule} startDate={state.startDate} edate={state.edate} />
 
         <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 16, marginTop: 16 }}>
           <div>
@@ -206,10 +243,21 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
                   phase={battlePhase}
                 />
               : <div className="px-panel center" style={{ minHeight: 400, display: 'grid', placeItems: 'center' }}>
-                  <div>
-                    <div style={{ fontSize: 64 }}>🌳</div>
-                    <div className="ps mt-12" style={{ fontSize: 12, color: 'var(--gold)' }}>ALL CLEAR</div>
-                    <div className="mt-8 muted">Complete a quest to spawn the next minion.</div>
+                  <div style={{ textAlign: 'center' }}>
+                    {state.bossHp <= 0
+                      ? <>
+                          <div style={{ fontSize: 64 }}>{boss.emoji}</div>
+                          <div className="ps mt-12" style={{ fontSize: 13, color: 'var(--gold)' }}>
+                            ★ {boss.name.toUpperCase()} DEFEATED ★
+                          </div>
+                          <div className="tiny mt-8" style={{ color: 'var(--grass)' }}>Run complete. Well done.</div>
+                        </>
+                      : <>
+                          <div style={{ fontSize: 64 }}>🌳</div>
+                          <div className="ps mt-12" style={{ fontSize: 12, color: 'var(--gold)' }}>ALL CLEAR</div>
+                          <div className="mt-8 muted">Complete a quest to spawn the next minion.</div>
+                        </>
+                    }
                   </div>
                 </div>
             }
@@ -232,18 +280,110 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
             </div>
 
             <div className="px-panel" style={{ minHeight: 380, maxHeight: 540, overflow: 'auto' }}>
-              {tab === 'quests' && <QuestList schedule={schedule} onComplete={completeQuest} sect={sect} />}
-              {tab === 'map'    && <WorldMap schedule={schedule} todayIdx={todayIdx} sectData={sectData} bossHp={state.bossHp} bossMaxHp={state.bossMaxHp} />}
+              {tab === 'quests' && <QuestList schedule={schedule} onComplete={completeQuest} sect={sect} activeIdx={activeIdx} boss={boss} />}
+              {tab === 'map'    && <WorldMap schedule={schedule} activeIdx={activeIdx} sectData={sectData} bossHp={state.bossHp} bossMaxHp={state.bossMaxHp} />}
               {tab === 'skills' && <SkillTree sect={sect} mastery={state.mastery} />}
               {tab === 'badges' && <BadgeGrid earned={state.earned} />}
             </div>
           </div>
         </div>
+      </div>
 
+      {/* Boss reveal overlay — fires once when review phase begins */}
+      {bossReveal && (
+        <div style={{
+          position: 'fixed', inset: 0, zIndex: 900,
+          background: 'rgba(10,0,5,0.92)',
+          display: 'grid', placeItems: 'center',
+          pointerEvents: 'none',
+        }}>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{
+              fontSize: 120,
+              filter: 'drop-shadow(0 0 32px #b13e53)',
+              animation: 'hero-bob 0.8s steps(2) infinite',
+            }}>
+              {boss.emoji}
+            </div>
+            <div className="ps" style={{
+              fontSize: 20, color: 'var(--blood)',
+              marginTop: 24, letterSpacing: 4,
+            }}>
+              ▲ {boss.name.toUpperCase()} AWAKENS ▲
+            </div>
+            <div className="ps mt-12" style={{ fontSize: 9, color: 'var(--gold)', letterSpacing: 3 }}>
+              FINAL REVIEW PHASE BEGINS
+            </div>
+            <div className="tiny mt-8" style={{ color: 'var(--ash)' }}>{boss.tagline}</div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+// ── Pace Tracker ──────────────────────────────────────────────────────────────
+function PaceTracker({ schedule, startDate, edate }) {
+  const total = schedule.length
+  const completed = schedule.filter(q => q.done).length
+
+  if (!edate || !startDate || total === 0) return null
+
+  const today = new Date(); today.setHours(0,0,0,0)
+  const start = new Date(startDate); start.setHours(0,0,0,0)
+  const exam  = new Date(edate);  exam.setHours(0,0,0,0)
+
+  const daysTotal   = Math.max(1, Math.ceil((exam  - start) / 86400000))
+  const daysElapsed = Math.max(0, Math.min(daysTotal, Math.ceil((today - start) / 86400000)))
+  const daysLeft    = Math.max(0, Math.ceil((exam  - today) / 86400000))
+
+  const expectedPos  = Math.round((daysElapsed / daysTotal) * total)
+  const completedPct = Math.min(100, (completed / total) * 100)
+  const expectedPct  = Math.min(100, (expectedPos / total) * 100)
+
+  const gap = completed - expectedPos
+  const status = gap > 2 ? 'AHEAD' : gap >= -2 ? 'ON PACE' : 'BEHIND'
+  const statusColor = status === 'AHEAD' ? 'var(--grass)' : status === 'ON PACE' ? 'var(--gold)' : 'var(--blood)'
+
+  return (
+    <div className="px-panel mt-12">
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+        <div className="section-label" style={{ margin: 0 }}>PACE TRACKER</div>
+        <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
+          <span className="tiny">{completed} / {total} quests</span>
+          <span className="tiny">{daysLeft}d until exam</span>
+          <div className="chip" style={{ background: statusColor, color: 'var(--ink)', padding: '2px 10px' }}>{status}</div>
+        </div>
+      </div>
+      <div style={{ position: 'relative', height: 16, background: 'var(--ink)', border: '2px solid var(--dusk)' }}>
+        <div style={{
+          position: 'absolute', left: 0, top: 0, bottom: 0,
+          width: completedPct + '%',
+          background: statusColor,
+          transition: 'width 0.4s',
+        }} />
+        <div style={{
+          position: 'absolute', top: -3, bottom: -3,
+          left: `calc(${expectedPct}% - 1px)`,
+          width: 3,
+          background: 'var(--bone)',
+          opacity: 0.85,
+        }} />
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 4 }}>
+        <span className="tiny" style={{ color: 'var(--ash)' }}>START</span>
+        {gap !== 0 && (
+          <span className="tiny" style={{ color: statusColor }}>
+            {Math.abs(gap)} quest{Math.abs(gap) !== 1 ? 's' : ''} {gap > 0 ? 'ahead' : 'behind'}
+          </span>
+        )}
+        <span className="tiny" style={{ color: 'var(--ash)' }}>EXAM</span>
       </div>
     </div>
   )
 }
+
+// ── Sub-components ────────────────────────────────────────────────────────────
 
 function TopHud({ hero, onOpenSettings, onReset }) {
   const pct = xpPct(hero.xp, hero.level)
@@ -283,7 +423,7 @@ function BossBar({ boss, sectData, bossHp, bossMaxHp, bossPct }) {
         <div style={{ flex: 1 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div>
-              <div className="ps" style={{ fontSize: 11, color: 'var(--blood)' }}>▲ {boss.name.toUpperCase()}</div>
+              <div className="ps" style={{ fontSize: 11, color: 'var(--blood)' }}>▲ FINAL BOSS · {boss.name.toUpperCase()}</div>
               <div className="tiny mt-8">{boss.tagline} · {sectData.full}</div>
             </div>
             <div className="ps" style={{ fontSize: 10, color }}>{rage}</div>
@@ -356,27 +496,44 @@ function StatBox({ ic, lbl, val }) {
   )
 }
 
-function QuestList({ schedule, onComplete, sect }) {
-  const tk = todayKey()
+function QuestList({ schedule, onComplete, sect, activeIdx, boss }) {
   const sectData = SECTIONS[sect]
   return (
     <div>
       <div className="section-label">QUEST LOG</div>
       {schedule.map((q, idx) => {
-        const isToday = q.date.slice(0, 10) === tk
+        const isActive = idx === activeIdx
+        const isReview = q.type === 'review'
         const topic = sectData.topics.find(t => t.n === q.topic)
-        const icon = q.type === 'practice' ? '🎯' : q.type === 'review' ? '📖' : (topic?.mob || '⚔️')
+        const icon = isReview
+          ? boss.emoji
+          : q.type === 'practice' ? '🎯' : (topic?.mob || '⚔️')
+
         return (
-          <div key={idx} className={'quest-row' + (q.done ? ' done' : '') + (isToday ? ' today' : '')}>
+          <div
+            key={idx}
+            className={'quest-row' + (q.done ? ' done' : '') + (isActive ? ' today' : '')}
+            style={isReview && !q.done ? {
+              borderLeft: '4px solid var(--blood)',
+              background: 'rgba(177,62,83,0.08)',
+            } : {}}
+          >
             <div className={'quest-check' + (q.done ? ' on' : '')} onClick={() => !q.done && onComplete(idx)}>
               {q.done ? '✓' : ''}
             </div>
             <div>
-              <div style={{ fontSize: 20 }}>{icon} {q.topic}</div>
-              <div className="quest-meta">Day {q.day} · {q.type.toUpperCase()}</div>
+              <div style={{ fontSize: 20 }}>
+                {icon} {isReview ? `FINAL REVIEW — ${boss.name}` : q.topic}
+              </div>
+              <div className="quest-meta" style={isReview ? { color: 'var(--blood)' } : {}}>
+                Quest {idx + 1} · {isReview ? 'BOSS PHASE' : q.type.toUpperCase()}
+              </div>
             </div>
-            <div className="tiny">{new Date(q.date).toLocaleDateString('en-US',{month:'short',day:'numeric'})}</div>
-            {isToday && <div className="ps" style={{ fontSize: 10, color: 'var(--gold)' }}>TODAY</div>}
+            {isActive && (
+              <div className="ps" style={{ fontSize: 10, color: isReview ? 'var(--blood)' : 'var(--gold)' }}>
+                {isReview ? '⚔ BOSS' : '▶ CURRENT'}
+              </div>
+            )}
           </div>
         )
       })}
@@ -384,7 +541,7 @@ function QuestList({ schedule, onComplete, sect }) {
   )
 }
 
-function WorldMap({ schedule, todayIdx, sectData, bossHp, bossMaxHp }) {
+function WorldMap({ schedule, activeIdx, sectData, bossHp, bossMaxHp }) {
   const nodes = schedule.slice(0, 28)
   return (
     <div>
@@ -397,14 +554,15 @@ function WorldMap({ schedule, todayIdx, sectData, bossHp, bossMaxHp }) {
           const col = row % 2 === 0 ? colInRow : (cols - 1 - colInRow)
           const x = 10 + (col * 13)
           const y = 8 + row * 22
-          const isMini = q.day % 7 === 0
-          const cls = q.done ? 'done' : (i === todayIdx ? 'today' : '')
+          const isMini = q.type !== 'review' && (i + 1) % 7 === 0
+          const isReview = q.type === 'review'
+          const cls = q.done ? 'done' : (i === activeIdx ? 'today' : '')
           return (
             <div key={i}
-                 className={'map-node ' + cls + (isMini ? ' mini' : '')}
+                 className={'map-node ' + cls + (isMini ? ' mini' : '') + (isReview ? ' boss' : '')}
                  style={{ left: x + '%', top: y + '%' }}
-                 title={`Day ${q.day}: ${q.topic}`}>
-              {q.done ? '✓' : (isMini ? '👺' : q.day)}
+                 title={`Quest ${i + 1}: ${q.topic}`}>
+              {q.done ? '✓' : isReview ? sectData.boss.emoji : (isMini ? '👺' : i + 1)}
             </div>
           )
         })}
@@ -413,7 +571,7 @@ function WorldMap({ schedule, todayIdx, sectData, bossHp, bossMaxHp }) {
         </div>
       </div>
       <div className="tiny mt-12">
-        ◆ Today &nbsp;·&nbsp; ✓ Done &nbsp;·&nbsp; 👺 Mini-boss &nbsp;·&nbsp; {sectData.boss.emoji} Final Boss ({bossHp}/{bossMaxHp} HP)
+        ▶ Current &nbsp;·&nbsp; ✓ Done &nbsp;·&nbsp; 👺 Mini-boss &nbsp;·&nbsp; {sectData.boss.emoji} Boss phase &nbsp;·&nbsp; Boss HP: {bossHp}/{bossMaxHp}
       </div>
     </div>
   )
@@ -442,7 +600,6 @@ function SkillTree({ sect, mastery }) {
                 ))}
               </div>
             </div>
-            <div className="tiny">{t.w}</div>
           </div>
         )
       })}
@@ -468,23 +625,4 @@ function BadgeGrid({ earned }) {
       </div>
     </div>
   )
-}
-
-function Heatmap({ activity }) {
-  const cells = []
-  for (let i = 27; i >= 0; i--) {
-    const d = addDays(new Date(), -i)
-    const k = d.toISOString().slice(0, 10)
-    const done = activity[k] === 'done'
-    const isToday = i === 0
-    cells.push(
-      <div key={k} style={{
-        aspectRatio: '1',
-        background: done ? 'var(--grass)' : 'var(--dusk)',
-        border: '2px solid var(--ink)',
-        boxShadow: isToday ? 'inset 0 0 0 2px var(--gold)' : 'none',
-      }} title={k} />
-    )
-  }
-  return <div style={{ display: 'grid', gridTemplateColumns: 'repeat(14, 1fr)', gap: 4 }}>{cells}</div>
 }
