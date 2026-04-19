@@ -145,7 +145,7 @@ export const CLASSES = [
   { id: 'grinder',    name: 'The Grinder',    emoji: '⚔️', color: '#ffcd75', bonus: '+20% XP per session',      stat: 'XP' },
   { id: 'strategist', name: 'The Strategist', emoji: '🧠', color: '#41a6f6', bonus: '2× damage on weak topics', stat: 'ATK' },
   { id: 'clutch',     name: 'The Clutch',     emoji: '⚡', color: '#a7f070', bonus: '1.5× streak multiplier',    stat: 'CRIT' },
-  { id: 'scholar',    name: 'The Scholar',    emoji: '📚', color: '#ef7d57', bonus: 'Full HP restore on mini-boss kill', stat: 'DEF' },
+  { id: 'scholar',    name: 'The Scholar',    emoji: '📚', color: '#ef7d57', bonus: 'Full HP restore on mini-boss kill · Revive at 100% HP on Revival Trial', stat: 'DEF' },
 ]
 
 export const WEAPONS = [

@@ -37,6 +37,7 @@
 19. [Settings & Reset](#19-settings--reset)
 20. [Dead Code & Known Issues](#20-dead-code--known-issues)
 21. [Question Bank](#21-question-bank)
+22. [Resurrection Mechanic](#22-resurrection-mechanic)
 
 ---
 
@@ -84,7 +85,7 @@ maxHp: 100
 | `grinder` | The Grinder | Quest-complete XP × 1.2 |
 | `strategist` | The Strategist | Mini-boss damage × 2 (weak-topic bonus) · Boss damage × 1.5 (stacks on crit multiplier) |
 | `clutch` | The Clutch | Crit chance 25% (others: 10%) |
-| `scholar` | The Scholar | Full HP restore on mini-boss kill |
+| `scholar` | The Scholar | Full HP restore on mini-boss kill · Revive at **100% max HP** on Revival Trial (others: 80%) |
 
 ### Weapons
 
@@ -936,10 +937,86 @@ Questions are distributed across all topics in each section, with a balanced dif
 | ISC | 14 |
 | TCP | 14 |
 
-### Intended Future Use
+### Current Use
 
-The question bank is designed to power the **MCQ / TBS Practice** quest encounters. Planned integration points:
-- Surface a random question (filtered by the current topic block) when a practice quest is active
-- Use `difficulty` to scale encounter difficulty as the player progresses
-- Use `explanation` to provide post-answer feedback in the battle dialog
-- Track correct/incorrect answers to feed into the `mastery` system (currently unimplemented — see §20)
+Questions are **live in production** for the [Resurrection Mechanic (§22)](#22-resurrection-mechanic). When the hero's HP reaches 0, a random MCQ from the active section is drawn and presented in the Revival Trial modal. The `choices` object, `answer`, and `explanation` fields are all consumed.
+
+### Notes on Schema
+
+The `choices` field in the actual JSON files is a **plain object** (`{ "A": "...", "B": "...", "C": "...", "D": "..." }`), not an array. `Object.entries(currentQ.choices)` is used to render the four choice buttons in order.
+
+---
+
+## 22. Resurrection Mechanic
+
+When the hero's HP hits 0 during active combat, instead of a game-over the game pauses and presents a **Revival Trial** — a real CPA MCQ drawn from the section's question bank.
+
+### Trigger Condition
+
+```
+state.hero.hp === 0  AND  activeIdx >= 0  AND  revival === null
+```
+
+A `useEffect` watching `state.hero.hp` fires. It checks `revivalRef.current` (not `revival` state, to avoid stale closure) to prevent double-trigger from rapid state writes.
+
+### Combat Pause
+
+While `revivalRef.current` is non-null:
+- `attack()` returns immediately at entry (no further hits land)
+- The queue-drain `useEffect` (`mobState?.topicKey` dependency) also bails early
+
+This means any pending attack queue entries are preserved and resume after revival.
+
+### Revival Trial Flow
+
+| Phase | UI | Action |
+|-------|----|--------|
+| `loading` | Skull overlay, "PREPARING REVIVAL TRIAL…" | Async question load |
+| `challenge` | Question + 4 choice buttons | Player selects an answer |
+| `wrong` | Same question, wrong choice in red, correct in green, explanation shown | Auto-advances to next question after 2.8s |
+| `correct` | "REVIVAL GRANTED!" overlay | Hero HP restored, modal cleared after 1.8s |
+
+### Question Selection
+
+```js
+const questions = await loadSectionQuestions(sect)  // lazy Vite import
+const q = questions[Math.floor(Math.random() * questions.length)]
+```
+
+Questions are loaded lazily via Vite `import.meta.glob`. Each section's 100-question JSON file is a separate async chunk — only the active section's file is ever downloaded.
+
+**On wrong answer:** A new question is selected from the unused pool (`usedIds` tracks IDs already shown). When the pool is exhausted, any question other than the current one is fair game.
+
+### Revive HP Formula
+
+| Class | Revived HP |
+|-------|------------|
+| The Scholar | `hero.maxHp` (100%) |
+| All others | `Math.round(hero.maxHp * 0.8)` (80%) |
+
+### Edge Case: No Questions Available
+
+If `loadSectionQuestions` returns an empty array (network failure, missing file), the hero is revived immediately at 50% max HP with no trial. This is the silent fallback.
+
+### Queue Resume After Revival
+
+After a correct answer resolves and HP is written back:
+```js
+if (pendingQueue.current.length > 0) {
+  setTimeout(() => { if (!attacking.current) attackRef.current?.() }, 400)
+}
+```
+Any attack beats queued before the hero died are processed normally once revival clears.
+
+### Key Refs
+
+| Ref | Purpose |
+|-----|---------|
+| `revivalRef` | Mirrors `revival` state for synchronous checks inside async `attack()` |
+
+### Implementation Location
+
+- **Trigger effect**: `Dashboard.jsx` — `useEffect([state.hero.hp])`
+- **Modal component**: `RevivalModal` at the bottom of `Dashboard.jsx`
+- **Question loader**: `loadSectionQuestions(sect)` — module-level async function using `import.meta.glob`
+- **Answer handler**: `handleRevivalAnswer(letter)` — inside Dashboard, called by `RevivalModal.onAnswer`

@@ -6,6 +6,18 @@ import {
 } from '../constants.js'
 import { sfx } from '../sfx.js'
 
+// Lazy-load MCQ question bank by CPA section for revival trials
+const questionFiles = import.meta.glob('/questions/*.json', { eager: false })
+async function loadSectionQuestions(sect) {
+  const key = `/questions/cpaquest_questions_${sect.toLowerCase()}_100.json`
+  try {
+    const mod = await questionFiles[key]?.()
+    return (mod?.default || []).filter(q => q.type === 'MCQ')
+  } catch {
+    return []
+  }
+}
+
 function localDateKey(d = new Date()) {
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`
 }
@@ -31,6 +43,11 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
   const [lastDmgMob, setLastDmgMob] = useState(0)
   const [bossReveal, setBossReveal] = useState(false)
   const [victoryBanner, setVictoryBanner] = useState(false)
+  // revival: null | { phase: 'loading'|'challenge'|'wrong'|'correct', questions, currentQ, usedIds, selectedAnswer, correctAnswer }
+  const [revival, setRevival] = useState(null)
+  const revivalRef = useRef(null)
+  // Keep revivalRef in sync for async attack loops
+  useEffect(() => { revivalRef.current = revival }, [revival])
 
   // `activeIdx` / `activeQuest` drive progress UI (quest-log CURRENT marker,
   // world-map hero, pace tracker). They point at the first *undone* quest.
@@ -79,6 +96,29 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
     const t = setTimeout(() => setBossReveal(false), 4000)
     return () => clearTimeout(t)
   }, [bossReveal])
+
+  // Trigger Revival Trial when hero HP reaches 0.
+  // Only fires when the game is in progress (activeIdx >= 0) and no revival
+  // is already running (prevents double-trigger from rapid state writes).
+  useEffect(() => {
+    if (state.hero.hp > 0) return
+    if (revivalRef.current) return
+    if (activeIdx < 0) return  // game already won / all quests done
+    ;(async () => {
+      setRevival({ phase: 'loading', questions: [], currentQ: null, usedIds: new Set(), selectedAnswer: null, correctAnswer: null })
+      sfx('hurt')
+      const questions = await loadSectionQuestions(sect)
+      if (questions.length === 0) {
+        // No question file available — free revive at half HP as fallback
+        setState(p => ({ ...p, hero: { ...p.hero, hp: Math.max(1, Math.floor(p.hero.maxHp * 0.5)) } }))
+        setRevival(null)
+        return
+      }
+      const q = questions[Math.floor(Math.random() * questions.length)]
+      setRevival({ phase: 'challenge', questions, currentQ: q, usedIds: new Set([q.id]), selectedAnswer: null, correctAnswer: null })
+    })()
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.hero.hp])
 
   const currentMob = useMemo(() => {
     // Keep the existing mob through its death animation — don't swap mid-faint.
@@ -157,8 +197,10 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
   }, [currentMob, mobState, setState])
 
   // When a fresh mob spawns and the attack queue has entries, drain one.
+  // Paused during Revival Trial so queued hits don't land while the modal is up.
   useEffect(() => {
     if (!mobState || attacking.current || pendingQueue.current.length === 0) return
+    if (revivalRef.current) return
     const t = setTimeout(() => attackRef.current?.(), scaled(200))
     return () => clearTimeout(t)
   }, [mobState?.topicKey])
@@ -229,6 +271,7 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
   async function attack() {
     if (attacking.current) return
     if (pendingQueue.current.length === 0) return
+    if (revivalRef.current) return  // paused during Revival Trial
 
     // Peek the next queued beat and resolve which mob it targets.
     const nextIdx = pendingQueue.current[0]
@@ -506,6 +549,54 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
   }
   completeQuestRef.current = completeQuest
 
+  function handleRevivalAnswer(letter) {
+    if (!revival || revival.phase !== 'challenge') return
+    const { currentQ, questions, usedIds } = revival
+    const isCorrect = letter === currentQ.answer
+
+    if (isCorrect) {
+      sfx('confirm')
+      setRevival(p => ({ ...p, phase: 'correct', selectedAnswer: letter }))
+      setTimeout(() => {
+        setState(p => {
+          const reviveHp = p.hero.clsId === 'scholar' ? p.hero.maxHp : Math.round(p.hero.maxHp * 0.8)
+          return { ...p, hero: { ...p.hero, hp: reviveHp } }
+        })
+        setRevival(null)
+        setBattleMsg(`${hero.name} rises again!`)
+        // Resume the attack queue after revival if there are pending hits
+        if (pendingQueue.current.length > 0) {
+          setTimeout(() => { if (!attacking.current) attackRef.current?.() }, 400)
+        }
+      }, 1800)
+    } else {
+      sfx('hurt')
+      // Build pool of unused questions for the next round
+      const newUsedIds = new Set([...usedIds, currentQ.id])
+      const unused = questions.filter(q => !newUsedIds.has(q.id))
+      const pool = unused.length > 0 ? unused : questions.filter(q => q.id !== currentQ.id)
+      const nextQ = pool.length > 0 ? pool[Math.floor(Math.random() * pool.length)] : currentQ
+
+      setRevival(p => p ? ({
+        ...p,
+        phase: 'wrong',
+        selectedAnswer: letter,
+        correctAnswer: currentQ.answer,
+      }) : null)
+
+      setTimeout(() => {
+        setRevival(p => p ? ({
+          ...p,
+          phase: 'challenge',
+          currentQ: nextQ,
+          usedIds: new Set([...newUsedIds, nextQ.id]),
+          selectedAnswer: null,
+          correctAnswer: null,
+        }) : null)
+      }, 2800)
+    }
+  }
+
   const bossPct = Math.max(0, Math.round((state.bossHp / state.bossMaxHp) * 100))
   const mobForArena = currentMob ? { ...currentMob, lastDmg: lastDmgMob } : null
 
@@ -625,6 +716,9 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
           </div>
         </div>
       )}
+
+      {/* Revival Trial modal — shown when hero HP hits 0 */}
+      <RevivalModal revival={revival} onAnswer={handleRevivalAnswer} heroName={hero.name} />
 
       {/* Victory banner — fires once after the finisher sequence */}
       {victoryBanner && (
@@ -999,6 +1093,133 @@ function BadgeGrid({ earned }) {
               <div className="bn">{b.name}</div>
               <div className="tiny mt-8" style={{ fontSize: 12, lineHeight: 1.3 }}>{b.desc}</div>
             </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+// ── Revival Trial Modal ────────────────────────────────────────────────────────
+function RevivalModal({ revival, onAnswer, heroName }) {
+  if (!revival) return null
+
+  const { phase, currentQ } = revival
+  const overlayStyle = {
+    position: 'fixed', inset: 0, zIndex: 950,
+    background: 'rgba(10,0,5,0.95)',
+    display: 'grid', placeItems: 'center',
+    padding: '20px',
+  }
+
+  if (phase === 'loading') {
+    return (
+      <div style={overlayStyle}>
+        <div className="px-panel" style={{ textAlign: 'center', padding: '48px 56px' }}>
+          <div style={{ fontSize: 76, filter: 'drop-shadow(0 0 20px #b13e53)' }}>☠</div>
+          <div className="ps mt-16" style={{ fontSize: 20, color: 'var(--blood)', letterSpacing: 3 }}>HERO FALLEN</div>
+          <div className="tiny mt-8" style={{ color: 'var(--ash)' }}>Preparing Revival Trial…</div>
+        </div>
+      </div>
+    )
+  }
+
+  if (phase === 'correct') {
+    return (
+      <div style={overlayStyle}>
+        <div className="px-panel" style={{ textAlign: 'center', padding: '48px 56px' }}>
+          <div style={{ fontSize: 76, filter: 'drop-shadow(0 0 20px #38b764)' }}>✨</div>
+          <div className="ps mt-16" style={{ fontSize: 20, color: 'var(--grass)', letterSpacing: 3 }}>REVIVAL GRANTED!</div>
+          <div className="tiny mt-8" style={{ color: 'var(--bone)' }}>{heroName} rises again!</div>
+        </div>
+      </div>
+    )
+  }
+
+  // 'challenge' or 'wrong' — show the question
+  // choices is an array of { key: "A", text: "..." } objects (not a plain object)
+  const choices = currentQ?.choices || []
+  const isWrong = phase === 'wrong'
+  const cap = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : ''
+  const selectedText = cap(choices.find(c => c.key === revival?.selectedAnswer)?.text || '')
+  const correctText  = cap(choices.find(c => c.key === revival?.correctAnswer)?.text  || '')
+
+  return (
+    <div style={overlayStyle}>
+      <div className="px-panel" style={{ maxWidth: 640, width: '100%', padding: '28px 32px', maxHeight: '90vh', overflowY: 'auto' }}>
+
+        {/* Header */}
+        <div style={{ textAlign: 'center', marginBottom: 20 }}>
+          <div style={{ fontSize: 56, filter: 'drop-shadow(0 0 16px #b13e53)', animation: 'hero-bob 1s steps(2) infinite' }}>☠</div>
+          <div className="ps" style={{ fontSize: 18, color: 'var(--blood)', marginTop: 10, letterSpacing: 3 }}>REVIVAL TRIAL</div>
+          <div className="tiny mt-8" style={{ color: 'var(--ash)' }}>
+            {isWrong
+              ? 'INCORRECT — Next trial loading…'
+              : `${heroName} has fallen! Answer correctly to be revived.`}
+          </div>
+        </div>
+
+        {/* Wrong-answer feedback panel */}
+        {isWrong && (
+          <div style={{
+            background: 'rgba(177,62,83,0.12)', border: '2px solid var(--blood)',
+            padding: '12px 16px', marginBottom: 18,
+          }}>
+            <div className="tiny" style={{ color: 'var(--blood)', marginBottom: 6 }}>
+              ✗ You chose {revival.selectedAnswer}: {selectedText}
+            </div>
+            <div className="tiny" style={{ color: 'var(--grass)', marginBottom: 6 }}>
+              ✓ Correct: {revival.correctAnswer}: {correctText}
+            </div>
+            {currentQ?.explanation && (
+              <div className="tiny" style={{ color: 'var(--bone)', marginTop: 6, lineHeight: 1.6 }}>
+                {currentQ.explanation}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Topic / difficulty tag */}
+        <div className="tiny" style={{ color: 'var(--gold)', marginBottom: 12 }}>
+          {currentQ?.topic} · {(currentQ?.difficulty || 'STANDARD').toUpperCase()}
+        </div>
+
+        {/* Question text */}
+        <div style={{ fontSize: 19, color: 'var(--bone)', marginBottom: 22, lineHeight: 1.65, whiteSpace: 'pre-wrap' }}>
+          {currentQ?.question}
+        </div>
+
+        {/* Answer choices — each entry is { key: "A", text: "..." } */}
+        {choices.map(({ key, text }) => {
+          let borderColor = 'var(--dusk)'
+          let bg = 'transparent'
+          let color = 'var(--bone)'
+          let keyColor = 'var(--gold)'
+          if (isWrong) {
+            if (key === revival.correctAnswer) {
+              bg = 'rgba(56,183,100,0.12)'; borderColor = 'var(--grass)'; color = 'var(--grass)'; keyColor = 'var(--grass)'
+            } else if (key === revival.selectedAnswer) {
+              bg = 'rgba(177,62,83,0.12)'; borderColor = 'var(--blood)'; color = 'var(--blood)'; keyColor = 'var(--blood)'
+            } else {
+              color = 'var(--ash)'; keyColor = 'var(--dusk)'
+            }
+          }
+          return (
+            <button
+              key={key}
+              disabled={isWrong}
+              onClick={() => onAnswer(key)}
+              style={{
+                display: 'block', width: '100%', textAlign: 'left',
+                marginBottom: 8, padding: '10px 14px',
+                background: bg, border: '2px solid ' + borderColor, color,
+                cursor: isWrong ? 'default' : 'pointer',
+                fontFamily: 'inherit', fontSize: 17,
+                opacity: isWrong && key !== revival.correctAnswer && key !== revival.selectedAnswer ? 0.45 : 1,
+              }}
+            >
+              <span style={{ color: keyColor, fontWeight: 700, marginRight: 6 }}>{key}.</span>{text.charAt(0).toUpperCase() + text.slice(1)}
+            </button>
           )
         })}
       </div>
