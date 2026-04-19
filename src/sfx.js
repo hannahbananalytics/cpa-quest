@@ -130,6 +130,39 @@ const PATCHES = {
     tone(ac, { freq: 784,  dur: 0.12, vol: 0.07, startAt: t + 0.22, pitchVar: 0 })
     tone(ac, { freq: 1046, dur: 0.30, vol: 0.07, startAt: t + 0.33, pitchVar: 0 })
   },
+  // Victory-banner fanfare: quick ascending run, held major-third chord,
+  // a bass sawtooth underneath, and a final high ding.
+  fanfare: ac => {
+    const t = ac.currentTime
+    // Ascending run: C5 → E5 → G5 → C6
+    tone(ac, { freq: 523,  dur: 0.10, vol: 0.08, startAt: t + 0.00, pitchVar: 0 })
+    tone(ac, { freq: 659,  dur: 0.10, vol: 0.08, startAt: t + 0.10, pitchVar: 0 })
+    tone(ac, { freq: 784,  dur: 0.10, vol: 0.08, startAt: t + 0.20, pitchVar: 0 })
+    tone(ac, { freq: 1046, dur: 0.15, vol: 0.09, startAt: t + 0.30, pitchVar: 0 })
+    // Held triumph chord: C6 + E6 major third
+    tone(ac, { freq: 1046, dur: 0.70, vol: 0.09, type: 'square', startAt: t + 0.55, pitchVar: 0 })
+    tone(ac, { freq: 1318, dur: 0.70, vol: 0.06, type: 'square', startAt: t + 0.60, pitchVar: 0 })
+    // Bass C3 support through the fanfare
+    tone(ac, { freq: 131,  dur: 1.30, vol: 0.07, type: 'sawtooth', startAt: t, pitchVar: 0 })
+    // Final G6 "ding" cap
+    tone(ac, { freq: 1568, dur: 0.22, vol: 0.06, startAt: t + 1.15, pitchVar: 0 })
+  },
+  // Boss-reveal sting: a dissonant low drone (tritone pair), a descending
+  // minor 3-note motif, and a final high stab.
+  'boss-reveal': ac => {
+    const t = ac.currentTime
+    // Tritone drone — A1 + D#2, the "devil's interval"
+    tone(ac, { freq: 55, dur: 1.6, vol: 0.11, type: 'sawtooth', startAt: t,        pitchVar: 0 })
+    tone(ac, { freq: 78, dur: 1.6, vol: 0.06, type: 'sawtooth', startAt: t + 0.02, pitchVar: 0 })
+    // Sub-rumble noise for atmosphere
+    noise(ac, { dur: 1.6, vol: 0.05, filterFreq: 280, startAt: t })
+    // Descending minor motif — C5 → A#4 → G#4
+    tone(ac, { freq: 523, dur: 0.22, vol: 0.07, type: 'square', startAt: t + 0.35, pitchVar: 0 })
+    tone(ac, { freq: 466, dur: 0.22, vol: 0.07, type: 'square', startAt: t + 0.60, pitchVar: 0 })
+    tone(ac, { freq: 415, dur: 0.45, vol: 0.08, type: 'square', startAt: t + 0.85, slide: -40, pitchVar: 0 })
+    // Final high sting — quick stab that drops
+    tone(ac, { freq: 1175, dur: 0.18, vol: 0.06, type: 'square', slide: -220, startAt: t + 1.45, pitchVar: 0 })
+  },
 }
 
 export function sfx(name) {

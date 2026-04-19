@@ -13,10 +13,16 @@ function todayKey() { return localDateKey() }
 function addDays(date, n) { const d = new Date(date); d.setDate(d.getDate() + n); return d }
 async function wait(ms) { return new Promise(r => setTimeout(r, ms)) }
 
-export default function Dashboard({ state, setState, showToast, onOpenSettings, onReset }) {
+export default function Dashboard({ state, setState, showToast, onOpenSettings, onReset, battleSpeed = 1 }) {
   const { hero, sect, schedule, mobState } = state
   const sectData = SECTIONS[sect]
   const boss = sectData.boss
+  // Ref mirror so in-flight async attack loops see the latest speed immediately.
+  const speedRef = useRef(battleSpeed)
+  speedRef.current = battleSpeed || 1
+  // Scales a base duration (ms) by the current battle speed.
+  const scaled = (ms) => Math.max(0, Math.round(ms / (speedRef.current || 1)))
+  const waitS = (ms) => wait(scaled(ms))
 
   const [tab, setTab] = useState('quests')
   const [battlePhase, setBattlePhase] = useState('idle')
@@ -54,25 +60,25 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
   // content quest of a topic is the killing blow exactly.
   const PER_HIT = 50
 
-  // Detect transition into review phase and show boss reveal overlay.
-  // The ref is initialized to the current type on first render so loading
-  // mid-review doesn't re-trigger the reveal.
-  const hasInitRef = useRef(false)
-  const prevQuestTypeRef = useRef(null)
-  if (!hasInitRef.current) {
-    hasInitRef.current = true
-    prevQuestTypeRef.current = combatQuest?.type
-  }
+  // Boss reveal fires exactly once per run — the first time combat enters
+  // the review phase. A persisted `state.bossIntroShown` flag prevents the
+  // overlay from re-triggering when the user hops back to review after
+  // visiting a content/practice quest, and survives page reloads.
   useEffect(() => {
-    const prev = prevQuestTypeRef.current
-    const curr = combatQuest?.type
-    if (curr === 'review' && prev !== 'review') {
-      setBossReveal(true)
-      const t = setTimeout(() => setBossReveal(false), 4000)
-      return () => clearTimeout(t)
-    }
-    prevQuestTypeRef.current = curr
-  }, [combatQuest?.type])
+    if (state.bossIntroShown) return
+    if (combatQuest?.type !== 'review') return
+    setBossReveal(true)
+    sfx('boss-reveal')
+    setState(p => p.bossIntroShown ? p : { ...p, bossIntroShown: true })
+  }, [combatQuest?.type, state.bossIntroShown, setState])
+
+  // Auto-hide the overlay 4 s after it appears. Lives in its own effect so
+  // the flag-flip setState above doesn't tear down the timer mid-reveal.
+  useEffect(() => {
+    if (!bossReveal) return
+    const t = setTimeout(() => setBossReveal(false), 4000)
+    return () => clearTimeout(t)
+  }, [bossReveal])
 
   const currentMob = useMemo(() => {
     // Keep the existing mob through its death animation — don't swap mid-faint.
@@ -145,7 +151,7 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
     if (!mobState && currentMob) {
       const t = setTimeout(() => {
         setState(p => (p.mobState ? p : { ...p, mobState: currentMob }))
-      }, 600)
+      }, scaled(600))
       return () => clearTimeout(t)
     }
   }, [currentMob, mobState, setState])
@@ -153,9 +159,40 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
   // When a fresh mob spawns and the attack queue has entries, drain one.
   useEffect(() => {
     if (!mobState || attacking.current || pendingQueue.current.length === 0) return
-    const t = setTimeout(() => attackRef.current?.(), 200)
+    const t = setTimeout(() => attackRef.current?.(), scaled(200))
     return () => clearTimeout(t)
   }, [mobState?.topicKey])
+
+  // Enter ticks the current (first-undone) quest — same as clicking its
+  // checkbox. Skipped when the user is focused in an input/button so form
+  // typing and button-Enter keep their native behavior. After the tick the
+  // quest list scrolls so the just-completed row aligns with the top of
+  // the panel, keeping the next quest to do in the first visible slot.
+  useEffect(() => {
+    function onKey(e) {
+      if (e.key !== 'Enter') return
+      const el = document.activeElement
+      if (el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA'
+        || el.tagName === 'BUTTON' || el.isContentEditable)) return
+      if (activeIdx < 0 || schedule[activeIdx]?.done) return
+      e.preventDefault()
+      const completedIdx = activeIdx
+      sfx('tick')
+      completeQuestRef.current?.(completedIdx)
+      requestAnimationFrame(() => {
+        const row = document.querySelector(`[data-quest-idx="${completedIdx}"]`)
+        if (!row) return
+        const panel = row.closest('.px-panel')
+        if (!panel) return
+        const rowRect = row.getBoundingClientRect()
+        const panelRect = panel.getBoundingClientRect()
+        const delta = rowRect.top - panelRect.top
+        if (delta !== 0) panel.scrollBy({ top: delta, behavior: 'smooth' })
+      })
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [activeIdx, schedule])
 
   useEffect(() => {
     if (!currentMob) return
@@ -173,6 +210,7 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
   // practice clicks push 3–5 (the flurry).
   const pendingQueue = useRef([])
   const attackRef = useRef()
+  const completeQuestRef = useRef()
   const attacksUntilThrow = useRef(1 + Math.floor(Math.random() * 4))
 
   // Weapon flat ATK bonus (applied to variable-damage fights: mini-boss)
@@ -252,7 +290,7 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
     setBattleMsg(`${hero.name} ${isThrow ? 'hurls their weapon!' : 'attacks!'} ${crit ? 'CRITICAL HIT!' : ''}`)
     sfx(isThrow ? 'throw' : 'swing')
     setBattlePhase(isThrow ? 'hero-throw' : 'hero-attack')
-    await wait(isThrow ? 550 : 450)
+    await waitS(isThrow ? 550 : 450)
     sfx('hit')
     setBattlePhase('hit-foe')
     setState(p => {
@@ -264,7 +302,7 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
         bossHp: p.mobState.isBoss ? Math.max(0, p.bossHp - dmg) : p.bossHp,
       }
     })
-    await wait(500)
+    await waitS(500)
 
     const newMobHp = Math.max(0, currentMob.mobHp - dmg)
 
@@ -283,16 +321,16 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
         setBattleMsg('☠ FINAL BLOW! ☠')
         sfx('finisher')
         setBattlePhase('boss-finisher')
-        await wait(700)
+        await waitS(700)
         setBattleMsg(`${currentMob.mobName.toUpperCase()} IS VANQUISHED!`)
         sfx('victory')
         setBattlePhase('boss-shatter')
-        await wait(1700)
+        await waitS(1700)
       } else {
         setBattleMsg(`${currentMob.mobName} was defeated! +${xpGain} XP`)
         sfx('faint')
         setBattlePhase('faint-foe')
-        await wait(700)
+        await waitS(700)
       }
 
       // Drop the beat we just resolved, plus any leftover queued beats still
@@ -337,6 +375,7 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
 
       if (isFinalBlow) {
         setVictoryBanner(true)
+        sfx('fanfare')
         setTimeout(() => setVictoryBanner(false), 5000)
       }
     } else {
@@ -344,7 +383,7 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
       // Mini-bosses only counter ~50% of the time so the flurry doesn't grind the hero.
       const counters = currentMob.isMiniBoss ? Math.random() < 0.5 : true
       if (counters) {
-        await wait(250)
+        await waitS(250)
         const foeDmg = currentMob.isBoss
           ? Math.floor(14 + Math.random() * 12)   // boss: 14–25
           : currentMob.isMiniBoss
@@ -354,14 +393,14 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
         setBattleMsg(`${currentMob.mobName} strikes back!`)
         sfx('counter')
         setBattlePhase('foe-attack')
-        await wait(450)
+        await waitS(450)
         sfx('hurt')
         setBattlePhase('hit-hero')
         setState(p => ({
           ...p,
           hero: { ...p.hero, hp: Math.max(0, p.hero.hp - foeDmg), lastDmg: foeDmg },
         }))
-        await wait(500)
+        await waitS(500)
       }
       setBattlePhase('idle')
       setBattleMsg(`What will ${hero.name} do?`)
@@ -384,7 +423,7 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
     }
 
     if (pendingQueue.current.length > 0) {
-      const chainDelay = newMobHp <= 0 ? 950 : 300
+      const chainDelay = scaled(newMobHp <= 0 ? 950 : 300)
       setTimeout(() => {
         if (!attacking.current) attackRef.current?.()
       }, chainDelay)
@@ -462,20 +501,25 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
     const queued = questType === 'practice' ? 3 + Math.floor(Math.random() * 3) : 1
     for (let i = 0; i < queued; i++) pendingQueue.current.push(idx)
     if (!attacking.current) {
-      setTimeout(() => attackRef.current?.(), 350)
+      setTimeout(() => attackRef.current?.(), scaled(350))
     }
   }
+  completeQuestRef.current = completeQuest
 
   const bossPct = Math.max(0, Math.round((state.bossHp / state.bossMaxHp) * 100))
   const mobForArena = currentMob ? { ...currentMob, lastDmg: lastDmgMob } : null
 
   // Environment follows quest progress, as if traveling toward the boss.
-  // Final Review phase = hell showdown.
+  // Final Review phase = hell showdown; stays on hell once entered, even
+  // after the final blow (when activeQuest becomes null and progress hits 1).
   const envStages = ['grass', 'meadow', 'desert', 'cave', 'snow']
   const totalQuests = schedule.length
   const doneQuests = schedule.filter(s => s.done).length
   const progress = totalQuests ? doneQuests / totalQuests : 0
-  const arenaEnv = activeQuest?.type === 'review'
+  const firstReviewIdx = schedule.findIndex(q => q.type === 'review')
+  const hasReachedHell = firstReviewIdx >= 0
+    && (activeIdx < 0 || activeIdx >= firstReviewIdx)
+  const arenaEnv = hasReachedHell
     ? 'hell'
     : envStages[Math.min(envStages.length - 1, Math.floor(progress * envStages.length))]
 
@@ -484,12 +528,12 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
       <div style={{ maxWidth: 1400, margin: '0 auto' }}>
         <TopHud hero={hero} state={state} onOpenSettings={onOpenSettings} onReset={onReset} />
 
+        <PaceTracker schedule={schedule} startDate={state.startDate} edate={state.edate} />
+
         {/* Boss bar: only shown during Full Review phase */}
         {inReviewPhase && (
           <BossBar boss={boss} sectData={sectData} bossHp={state.bossHp} bossMaxHp={state.bossMaxHp} bossPct={bossPct} />
         )}
-
-        <PaceTracker schedule={schedule} startDate={state.startDate} edate={state.edate} />
 
         <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 16, marginTop: 16 }}>
           <div>
@@ -788,6 +832,7 @@ function QuestList({ schedule, onComplete, sect, activeIdx, boss }) {
         return (
           <div
             key={idx}
+            data-quest-idx={idx}
             className={'quest-row' + (q.done ? ' done' : '') + (isActive ? ' today' : '')}
             style={isReview && !q.done ? {
               borderLeft: '4px solid var(--blood)',

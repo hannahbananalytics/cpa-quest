@@ -32,6 +32,7 @@ function defaultState() {
     startDate: null,
     xpMult: 1,
     focusIdx: null,
+    bossIntroShown: false,
   }
 }
 
@@ -104,7 +105,21 @@ export default function App() {
   // own wizard step in local state) remount and clear their selections.
   const [resetNonce, setResetNonce] = useState(0)
   const [sfxOff, setSfxOff] = useState(() => isSfxMuted())
+  const [battleSpeed, setBattleSpeed] = useState(() => {
+    try {
+      const n = Number(localStorage.getItem('cpa-quest-battle-speed'))
+      return n === 2 || n === 3 ? n : 1
+    } catch { return 1 }
+  })
   const toastRef = useRef()
+
+  function cycleBattleSpeed() {
+    setBattleSpeed(s => {
+      const next = s === 1 ? 2 : s === 2 ? 3 : 1
+      try { localStorage.setItem('cpa-quest-battle-speed', String(next)) } catch {}
+      return next
+    })
+  }
 
   useEffect(() => { saveState(state) }, [state])
 
@@ -169,6 +184,7 @@ export default function App() {
         showToast={showToast}
         onOpenSettings={() => setTweaksOpen(v => !v)}
         onReset={reset}
+        battleSpeed={battleSpeed}
       />
     )
   }
@@ -203,6 +219,12 @@ export default function App() {
               setSfxOff(next)
               if (!next) sfx('click')
             }}>{sfxOff ? 'OFF' : 'ON'}</button>
+          </div>
+          <div className="tweak-row">
+            <label>BATTLE SPEED</label>
+            <button className="px-btn sm" onClick={() => { sfx('click'); cycleBattleSpeed() }}>
+              {battleSpeed}×
+            </button>
           </div>
         </div>
       )}
