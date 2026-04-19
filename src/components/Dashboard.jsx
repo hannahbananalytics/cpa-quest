@@ -583,7 +583,10 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
       }, 1800)
     } else {
       sfx('hurt')
-      // Build pool of unused questions for the next round
+      // Build pool of unused questions for the next round and stash the
+      // pre-computed next question on the revival state. The user advances
+      // manually via the NEXT QUESTION button in the modal (no auto-timer)
+      // so they have as long as they want to read the explanation.
       const newUsedIds = new Set([...usedIds, currentQ.id])
       const unused = questions.filter(q => !newUsedIds.has(q.id))
       const pool = unused.length > 0 ? unused : questions.filter(q => q.id !== currentQ.id)
@@ -594,19 +597,30 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
         phase: 'wrong',
         selectedAnswer: letter,
         correctAnswer: currentQ.answer,
+        nextQ,
+        nextUsedIds: new Set([...newUsedIds, nextQ.id]),
       }) : null)
-
-      setTimeout(() => {
-        setRevival(p => p ? ({
-          ...p,
-          phase: 'challenge',
-          currentQ: nextQ,
-          usedIds: new Set([...newUsedIds, nextQ.id]),
-          selectedAnswer: null,
-          correctAnswer: null,
-        }) : null)
-      }, 2800)
     }
+  }
+
+  // Advance past the "wrong" feedback screen to the next revival question.
+  // Uses the nextQ + nextUsedIds stashed on the revival state when the wrong
+  // answer was recorded so no fresh random roll is needed here.
+  function handleRevivalNext() {
+    if (!revival || revival.phase !== 'wrong') return
+    sfx('click')
+    const { nextQ, nextUsedIds } = revival
+    if (!nextQ) return
+    setRevival(p => p ? ({
+      ...p,
+      phase: 'challenge',
+      currentQ: nextQ,
+      usedIds: nextUsedIds,
+      selectedAnswer: null,
+      correctAnswer: null,
+      nextQ: undefined,
+      nextUsedIds: undefined,
+    }) : null)
   }
 
   // Un-tick a completed quest. Doesn't reverse any previously-awarded side
@@ -743,7 +757,7 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
       )}
 
       {/* Revival Trial modal — shown when hero HP hits 0 */}
-      <RevivalModal revival={revival} onAnswer={handleRevivalAnswer} heroName={hero.name} />
+      <RevivalModal revival={revival} onAnswer={handleRevivalAnswer} onNext={handleRevivalNext} heroName={hero.name} />
 
       {/* Victory banner — fires once after the finisher sequence */}
       {victoryBanner && (
@@ -1133,7 +1147,7 @@ function BadgeGrid({ earned }) {
 }
 
 // ── Revival Trial Modal ────────────────────────────────────────────────────────
-function RevivalModal({ revival, onAnswer, heroName }) {
+function RevivalModal({ revival, onAnswer, onNext, heroName }) {
   if (!revival) return null
 
   const { phase, currentQ } = revival
@@ -1148,9 +1162,9 @@ function RevivalModal({ revival, onAnswer, heroName }) {
     return (
       <div style={overlayStyle}>
         <div className="px-panel" style={{ textAlign: 'center', padding: '48px 56px' }}>
-          <div style={{ fontSize: 76, filter: 'drop-shadow(0 0 20px #b13e53)' }}>☠</div>
-          <div className="ps mt-16" style={{ fontSize: 20, color: 'var(--blood)', letterSpacing: 3 }}>HERO FALLEN</div>
-          <div className="tiny mt-8" style={{ color: 'var(--ash)' }}>Preparing Revival Trial…</div>
+          <div style={{ fontSize: 85, filter: 'drop-shadow(0 0 20px #b13e53)' }}>☠</div>
+          <div className="ps mt-16" style={{ fontSize: 22, color: 'var(--blood)', letterSpacing: 3 }}>HERO FALLEN</div>
+          <div className="tiny mt-8" style={{ fontSize: 18, color: 'var(--ash)' }}>Preparing Revival Trial…</div>
         </div>
       </div>
     )
@@ -1160,9 +1174,9 @@ function RevivalModal({ revival, onAnswer, heroName }) {
     return (
       <div style={overlayStyle}>
         <div className="px-panel" style={{ textAlign: 'center', padding: '48px 56px' }}>
-          <div style={{ fontSize: 76, filter: 'drop-shadow(0 0 20px #38b764)' }}>✨</div>
-          <div className="ps mt-16" style={{ fontSize: 20, color: 'var(--grass)', letterSpacing: 3 }}>REVIVAL GRANTED!</div>
-          <div className="tiny mt-8" style={{ color: 'var(--bone)' }}>{heroName} rises again!</div>
+          <div style={{ fontSize: 85, filter: 'drop-shadow(0 0 20px #38b764)' }}>✨</div>
+          <div className="ps mt-16" style={{ fontSize: 22, color: 'var(--grass)', letterSpacing: 3 }}>REVIVAL GRANTED!</div>
+          <div className="tiny mt-8" style={{ fontSize: 18, color: 'var(--bone)' }}>{heroName} rises again!</div>
         </div>
       </div>
     )
@@ -1172,52 +1186,29 @@ function RevivalModal({ revival, onAnswer, heroName }) {
   // choices is an array of { key: "A", text: "..." } objects (not a plain object)
   const choices = currentQ?.choices || []
   const isWrong = phase === 'wrong'
-  const cap = s => s ? s.charAt(0).toUpperCase() + s.slice(1) : ''
-  const selectedText = cap(choices.find(c => c.key === revival?.selectedAnswer)?.text || '')
-  const correctText  = cap(choices.find(c => c.key === revival?.correctAnswer)?.text  || '')
 
   return (
     <div style={overlayStyle}>
-      <div className="px-panel" style={{ maxWidth: 640, width: '100%', padding: '28px 32px', maxHeight: '90vh', overflowY: 'auto' }}>
+      <div className="px-panel" style={{ maxWidth: 720, width: '100%', padding: '28px 32px', maxHeight: '90vh', overflowY: 'auto' }}>
 
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: 20 }}>
-          <div style={{ fontSize: 56, filter: 'drop-shadow(0 0 16px #b13e53)', animation: 'hero-bob 1s steps(2) infinite' }}>☠</div>
-          <div className="ps" style={{ fontSize: 18, color: 'var(--blood)', marginTop: 10, letterSpacing: 3 }}>REVIVAL TRIAL</div>
-          <div className="tiny mt-8" style={{ color: 'var(--ash)' }}>
+          <div style={{ fontSize: 64, filter: 'drop-shadow(0 0 16px #b13e53)', animation: 'hero-bob 1s steps(2) infinite' }}>☠</div>
+          <div className="ps" style={{ fontSize: 20, color: 'var(--blood)', marginTop: 10, letterSpacing: 3 }}>REVIVAL TRIAL</div>
+          <div className="tiny mt-8" style={{ fontSize: 18, color: 'var(--ash)' }}>
             {isWrong
-              ? 'INCORRECT — Next trial loading…'
+              ? 'INCORRECT — review the answer and try another.'
               : `${heroName} has fallen! Answer correctly to be revived.`}
           </div>
         </div>
 
-        {/* Wrong-answer feedback panel */}
-        {isWrong && (
-          <div style={{
-            background: 'rgba(177,62,83,0.12)', border: '2px solid var(--blood)',
-            padding: '12px 16px', marginBottom: 18,
-          }}>
-            <div className="tiny" style={{ color: 'var(--blood)', marginBottom: 6 }}>
-              ✗ You chose {revival.selectedAnswer}: {selectedText}
-            </div>
-            <div className="tiny" style={{ color: 'var(--grass)', marginBottom: 6 }}>
-              ✓ Correct: {revival.correctAnswer}: {correctText}
-            </div>
-            {currentQ?.explanation && (
-              <div className="tiny" style={{ color: 'var(--bone)', marginTop: 6, lineHeight: 1.6 }}>
-                {currentQ.explanation}
-              </div>
-            )}
-          </div>
-        )}
-
         {/* Topic / difficulty tag */}
-        <div className="tiny" style={{ color: 'var(--gold)', marginBottom: 12 }}>
+        <div className="tiny" style={{ fontSize: 18, color: 'var(--gold)', marginBottom: 12 }}>
           {currentQ?.topic} · {(currentQ?.difficulty || 'STANDARD').toUpperCase()}
         </div>
 
         {/* Question text */}
-        <div style={{ fontSize: 19, color: 'var(--bone)', marginBottom: 22, lineHeight: 1.65, whiteSpace: 'pre-wrap' }}>
+        <div style={{ fontSize: 21, color: 'var(--bone)', marginBottom: 22, lineHeight: 1.65, whiteSpace: 'pre-wrap' }}>
           {currentQ?.question}
         </div>
 
@@ -1243,10 +1234,10 @@ function RevivalModal({ revival, onAnswer, heroName }) {
               onClick={() => onAnswer(key)}
               style={{
                 display: 'block', width: '100%', textAlign: 'left',
-                marginBottom: 8, padding: '10px 14px',
+                marginBottom: 8, padding: '11px 15px',
                 background: bg, border: '2px solid ' + borderColor, color,
                 cursor: isWrong ? 'default' : 'pointer',
-                fontFamily: 'inherit', fontSize: 17,
+                fontFamily: 'inherit', fontSize: 19,
                 opacity: isWrong && key !== revival.correctAnswer && key !== revival.selectedAnswer ? 0.45 : 1,
               }}
             >
@@ -1254,6 +1245,32 @@ function RevivalModal({ revival, onAnswer, heroName }) {
             </button>
           )
         })}
+
+        {/* Explanation panel — wrong-phase only, below the choices. The
+            color-coded choices above already show what was picked vs. the
+            correct answer, so this panel only needs the prose explanation. */}
+        {isWrong && currentQ?.explanation && (
+          <div style={{
+            background: 'rgba(41,54,111,0.25)', border: '2px solid var(--dusk)',
+            padding: '14px 18px', marginTop: 18,
+          }}>
+            <div className="ps" style={{ fontSize: 14, color: 'var(--sky)', letterSpacing: 2, marginBottom: 10 }}>
+              EXPLANATION
+            </div>
+            <div style={{ fontSize: 19, color: 'var(--bone)', lineHeight: 1.6 }}>
+              {currentQ.explanation}
+            </div>
+          </div>
+        )}
+
+        {/* Advance-to-next-question button (wrong-phase only) */}
+        {isWrong && (
+          <div style={{ marginTop: 18, display: 'flex', justifyContent: 'flex-end' }}>
+            <button className="px-btn blood" style={{ fontSize: 12 }} onClick={onNext}>
+              NEXT QUESTION ▶
+            </button>
+          </div>
+        )}
       </div>
     </div>
   )
