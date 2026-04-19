@@ -100,6 +100,7 @@ export default function App() {
   const [toastOn, setToastOn] = useState(false)
   const [tweaksOpen, setTweaksOpen] = useState(false)
   const [crtOn, setCrtOn] = useState(true)
+  const [resetConfirmOpen, setResetConfirmOpen] = useState(false)
   const toastRef = useRef()
 
   useEffect(() => { saveState(state) }, [state])
@@ -143,9 +144,13 @@ export default function App() {
   }
 
   function reset() {
-    if (!confirm('Reset all progress and start over?')) return
+    setResetConfirmOpen(true)
+  }
+
+  function confirmReset() {
     localStorage.removeItem(STORAGE_KEY)
     setState(defaultState())
+    setResetConfirmOpen(false)
   }
 
   let view
@@ -154,8 +159,18 @@ export default function App() {
   } else if (state.phase === 'section' || !state.plan) {
     view = <SectionPicker hero={state.hero} onComplete={onSectionComplete} />
   } else {
-    view = <Dashboard state={state} setState={setState} showToast={showToast} />
+    view = (
+      <Dashboard
+        state={state}
+        setState={setState}
+        showToast={showToast}
+        onOpenSettings={() => setTweaksOpen(v => !v)}
+        onReset={reset}
+      />
+    )
   }
+
+  const showFloatingNav = !state.hero || state.phase === 'creator' || state.phase === 'section' || !state.plan
 
   return (
     <div className={crtOn ? '' : 'no-crt'}>
@@ -163,10 +178,12 @@ export default function App() {
         {view}
       </div>
 
-      <div style={{ position: 'fixed', top: 16, right: 16, display: 'flex', gap: 8, zIndex: 700 }}>
-        <button className="px-btn sm ghost" onClick={() => setTweaksOpen(v => !v)}>⚙ SETTINGS</button>
-        <button className="px-btn sm ghost" onClick={reset}>RESET</button>
-      </div>
+      {showFloatingNav && (
+        <div style={{ position: 'fixed', top: 16, right: 16, display: 'flex', gap: 8, zIndex: 700 }}>
+          <button className="px-btn sm ghost" onClick={() => setTweaksOpen(v => !v)}>⚙ SETTINGS</button>
+          <button className="px-btn sm ghost" onClick={reset}>RESET</button>
+        </div>
+      )}
 
       {tweaksOpen && (
         <div className="tweak-panel">
@@ -174,6 +191,28 @@ export default function App() {
           <div className="tweak-row">
             <label>CRT SCANLINES</label>
             <button className="px-btn sm" onClick={() => setCrtOn(c => !c)}>{crtOn ? 'ON' : 'OFF'}</button>
+          </div>
+        </div>
+      )}
+
+      {resetConfirmOpen && (
+        <div className="overlay" onClick={() => setResetConfirmOpen(false)}>
+          <div
+            className="px-panel"
+            onClick={e => e.stopPropagation()}
+            style={{ maxWidth: 460, width: '100%', padding: '22px 26px', textAlign: 'center' }}
+          >
+            <div className="ps" style={{ fontSize: 14, color: 'var(--blood)', marginBottom: 16 }}>
+              ⚠ RESET QUEST?
+            </div>
+            <div style={{ fontSize: 20, color: 'var(--bone)', marginBottom: 20, lineHeight: 1.3 }}>
+              All progress will be lost.<br />
+              Your hero, schedule, streaks, and badges will be erased.
+            </div>
+            <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
+              <button className="px-btn ghost" onClick={() => setResetConfirmOpen(false)}>◀ CANCEL</button>
+              <button className="px-btn blood" onClick={confirmReset}>☠ RESET</button>
+            </div>
           </div>
         </div>
       )}

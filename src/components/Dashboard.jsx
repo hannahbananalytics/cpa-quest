@@ -9,7 +9,7 @@ function todayKey() { return new Date().toISOString().slice(0, 10) }
 function addDays(date, n) { const d = new Date(date); d.setDate(d.getDate() + n); return d }
 async function wait(ms) { return new Promise(r => setTimeout(r, ms)) }
 
-export default function Dashboard({ state, setState, showToast }) {
+export default function Dashboard({ state, setState, showToast, onOpenSettings, onReset }) {
   const { hero, sect, schedule, mobState } = state
   const sectData = SECTIONS[sect]
   const boss = sectData.boss
@@ -22,14 +22,18 @@ export default function Dashboard({ state, setState, showToast }) {
 
   const tk = todayKey()
   const todayIdx = schedule.findIndex(s => s.date.slice(0, 10) === tk)
-  const todayQuest = todayIdx >= 0 ? schedule[todayIdx] : schedule.find(s => !s.done)
+  // The quest the player is currently fighting: today's if undone, else the
+  // first undone quest in the schedule.
+  const activeQuest = (todayIdx >= 0 && !schedule[todayIdx].done)
+    ? schedule[todayIdx]
+    : schedule.find(s => !s.done)
 
   const currentMob = useMemo(() => {
     if (mobState && mobState.mobHp > 0) return mobState
-    if (!todayQuest) return null
-    const topicIdx = sectData.topics.findIndex(t => t.n === todayQuest.topic)
+    if (!activeQuest) return null
+    const topicIdx = sectData.topics.findIndex(t => t.n === activeQuest.topic)
     const topic = topicIdx >= 0 ? sectData.topics[topicIdx] : sectData.topics[0]
-    const isMiniBoss = todayQuest.day % 7 === 0
+    const isMiniBoss = activeQuest.day % 7 === 0
     const maxHp = isMiniBoss ? 180 : 60 + Math.floor(Math.random() * 40)
     return {
       topicIdx: topicIdx >= 0 ? topicIdx : 0,
@@ -41,7 +45,7 @@ export default function Dashboard({ state, setState, showToast }) {
       mobHp: maxHp,
       lastDmg: 0,
     }
-  }, [mobState, todayQuest, sect, hero.level, sectData.topics])
+  }, [mobState, activeQuest, sect, hero.level, sectData.topics])
 
   useEffect(() => {
     if (!mobState && currentMob) {
@@ -60,7 +64,10 @@ export default function Dashboard({ state, setState, showToast }) {
 
     const crit = Math.random() < (hero.clsId === 'clutch' ? 0.25 : 0.1)
     const base = hero.clsId === 'strategist' ? 28 : 22
-    const dmg = Math.floor(base + Math.random() * 12) * (crit ? 2 : 1)
+    // Quest check-off is a one-shot kill — deal full remaining HP.
+    const dmg = isComplete
+      ? currentMob.mobHp
+      : Math.floor(base + Math.random() * 12) * (crit ? 2 : 1)
     setLastDmgMob(dmg)
 
     setBattleMsg(`${hero.name} attacks! ${crit ? 'CRITICAL HIT!' : ''}`)
@@ -174,7 +181,7 @@ export default function Dashboard({ state, setState, showToast }) {
   return (
     <div className="app-wrap crt">
       <div style={{ maxWidth: 1400, margin: '0 auto' }}>
-        <TopHud hero={hero} state={state} />
+        <TopHud hero={hero} state={state} onOpenSettings={onOpenSettings} onReset={onReset} />
         <BossBar boss={boss} sectData={sectData} bossHp={state.bossHp} bossMaxHp={state.bossMaxHp} bossPct={bossPct} />
 
         <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 16, marginTop: 16 }}>
@@ -198,6 +205,12 @@ export default function Dashboard({ state, setState, showToast }) {
                 </div>
             }
 
+            <div className="grid-2 mt-16">
+              <StatBox ic="🔥" lbl="STREAK"     val={state.streak + 'd'} />
+              <StatBox ic="⏱️" lbl="HOURS"      val={state.hrs + 'h'} />
+              <StatBox ic="⚔️" lbl="MOBS SLAIN" val={state.kills} />
+              <StatBox ic="📊" lbl="READINESS"  val={state.readiness + '%'} />
+            </div>
           </div>
 
           <div>
@@ -218,20 +231,12 @@ export default function Dashboard({ state, setState, showToast }) {
           </div>
         </div>
 
-        <div className="grid-4 mt-16">
-          <StatBox ic="🔥" lbl="STREAK"     val={state.streak + 'd'} />
-          <StatBox ic="⏱️" lbl="HOURS"      val={state.hrs + 'h'} />
-          <StatBox ic="⚔️" lbl="MOBS SLAIN" val={state.kills} />
-          <StatBox ic="📊" lbl="READINESS"  val={state.readiness + '%'} />
-        </div>
-
-
       </div>
     </div>
   )
 }
 
-function TopHud({ hero, state }) {
+function TopHud({ hero, onOpenSettings, onReset }) {
   const pct = xpPct(hero.xp, hero.level)
   const nxt = xpToNext(hero.level)
   return (
@@ -248,7 +253,10 @@ function TopHud({ hero, state }) {
           <div className="px-bar-fill gold" style={{ width: pct + '%' }} />
         </div>
       </div>
-      <div className="chip">⚡ {state.xpMult || 1}× XP</div>
+      <div style={{ display: 'flex', gap: 8 }}>
+        <button className="px-btn sm ghost" onClick={onOpenSettings}>⚙ SETTINGS</button>
+        <button className="px-btn sm ghost" onClick={onReset}>RESET</button>
+      </div>
     </div>
   )
 }

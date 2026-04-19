@@ -65,7 +65,7 @@ export default function CharacterCreator({ onComplete, initial }) {
 
 function StepAvatar({ avatar, setAvatar }) {
   return (
-    <>
+    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: 364 }}>
       <div className="section-label">PICK YOUR AVATAR</div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(8, 1fr)', gap: 10 }}>
         {AVATARS.map(a => (
@@ -81,13 +81,13 @@ function StepAvatar({ avatar, setAvatar }) {
         <span className="muted">Selected: </span>
         <span style={{ fontSize: 44 }}>{avatar}</span>
       </div>
-    </>
+    </div>
   )
 }
 
 function StepName({ name, setName, avatar }) {
   return (
-    <>
+    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: 364 }}>
       <div className="section-label">NAME YOUR HERO</div>
       <div style={{ display: 'flex', gap: 24, alignItems: 'center', marginTop: 10 }}>
         <div style={{
@@ -103,13 +103,13 @@ function StepName({ name, setName, avatar }) {
           <div className="tiny mt-8">Up to 16 characters. This appears on every HP bar.</div>
         </div>
       </div>
-    </>
+    </div>
   )
 }
 
 function StepClass({ clsId, setClsId }) {
   return (
-    <>
+    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: 364 }}>
       <div className="section-label">CHOOSE YOUR CLASS</div>
       <div className="grid-4">
         {CLASSES.map(c => (
@@ -123,13 +123,13 @@ function StepClass({ clsId, setClsId }) {
           </div>
         ))}
       </div>
-    </>
+    </div>
   )
 }
 
 function StepWeapon({ weaponId, setWeaponId }) {
   return (
-    <>
+    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: 364 }}>
       <div className="section-label">CHOOSE A STARTING WEAPON</div>
       <div className="grid-3">
         {WEAPONS.map(w => (
@@ -142,13 +142,13 @@ function StepWeapon({ weaponId, setWeaponId }) {
           </div>
         ))}
       </div>
-    </>
+    </div>
   )
 }
 
 function StepTitle({ title, setTitle }) {
   return (
-    <>
+    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: 364 }}>
       <div className="section-label">PICK A TITLE</div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
         {TITLES.map(t => (
@@ -160,13 +160,13 @@ function StepTitle({ title, setTitle }) {
           </div>
         ))}
       </div>
-    </>
+    </div>
   )
 }
 
 function StepConfirm({ name, avatar, cls, weapon, title }) {
   return (
-    <>
+    <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: 364 }}>
       <div className="section-label">READY?</div>
       <div style={{
         background: 'var(--ink)',
@@ -194,6 +194,6 @@ function StepConfirm({ name, avatar, cls, weapon, title }) {
 
         <div className="tiny mt-16" style={{ color: 'var(--grass)' }}>Press START QUEST to choose your exam section →</div>
       </div>
-    </>
+    </div>
   )
 }
