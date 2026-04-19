@@ -99,6 +99,9 @@ export default function App() {
   const [tweaksOpen, setTweaksOpen] = useState(false)
   const [crtOn, setCrtOn] = useState(true)
   const [resetConfirmOpen, setResetConfirmOpen] = useState(false)
+  // Bumped on every reset so the setup-stage components (which hold their
+  // own wizard step in local state) remount and clear their selections.
+  const [resetNonce, setResetNonce] = useState(0)
   const toastRef = useRef()
 
   useEffect(() => { saveState(state) }, [state])
@@ -148,13 +151,14 @@ export default function App() {
     localStorage.removeItem(STORAGE_KEY)
     setState(defaultState())
     setResetConfirmOpen(false)
+    setResetNonce(n => n + 1)
   }
 
   let view
   if (!state.hero || state.phase === 'creator') {
-    view = <CharacterCreator onComplete={onHeroComplete} />
+    view = <CharacterCreator key={'creator-' + resetNonce} onComplete={onHeroComplete} />
   } else if (state.phase === 'section' || !state.plan) {
-    view = <SectionPicker hero={state.hero} onComplete={onSectionComplete} />
+    view = <SectionPicker key={'section-' + resetNonce} hero={state.hero} onComplete={onSectionComplete} />
   } else {
     view = (
       <Dashboard

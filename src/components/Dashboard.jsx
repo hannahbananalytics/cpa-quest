@@ -271,11 +271,10 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
       const xpGain = crit ? Math.ceil(baseKillXp * 1.5) : baseKillXp
       const isFinalBlow = currentMob.isBoss
 
-      // Heal on mob defeat (not on quest completion).
-      let healAmount
-      if (currentMob.isBoss) healAmount = 0
-      else if (currentMob.isMiniBoss) healAmount = hero.clsId === 'scholar' ? 45 : 30
-      else healAmount = 12
+      // Kill-heals are off by default (per-quest heal in completeQuest is the
+      // main regen source). Scholar's class ability: full HP restore on any
+      // mini-boss kill.
+      const fullRestoreOnMiniBoss = currentMob.isMiniBoss && hero.clsId === 'scholar'
 
       if (isFinalBlow) {
         setBattleMsg('☠ FINAL BLOW! ☠')
@@ -302,7 +301,7 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
         const newXp = p.hero.xp + xpGain
         const newLv = computeLevel(newXp)
         const newKills = p.kills + 1
-        const newHp = Math.min(p.hero.maxHp, p.hero.hp + healAmount)
+        const newHp = fullRestoreOnMiniBoss ? p.hero.maxHp : p.hero.hp
         const newEarned = [...p.earned]
         if (newKills >= 10 && !newEarned.includes('mob10')) newEarned.push('mob10')
         if (p.mobState?.isMiniBoss && !newEarned.includes('mini1')) newEarned.push('mini1')
@@ -404,6 +403,11 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
       const newXp = p.hero.xp + xpGain
       const newLv = computeLevel(newXp)
 
+      // Small heal on every quest completion. Main source of regen — kill
+      // heals are gone (except Scholar's full-restore on mini-boss kills).
+      const QUEST_HEAL = 8
+      const newHp = Math.min(p.hero.maxHp, p.hero.hp + QUEST_HEAL)
+
       const earned = [...p.earned]
       if (!earned.includes('log1')) earned.push('log1')
       if (sessions >= 5 && !earned.includes('log5')) earned.push('log5')
@@ -417,7 +421,7 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
         ...p,
         schedule: newSchedule, sessions, hrs, streak, bestStreak, readiness,
         activity: newActivity,
-        hero: { ...p.hero, xp: newXp, level: newLv },
+        hero: { ...p.hero, xp: newXp, level: newLv, hp: newHp },
         earned,
       }
     })

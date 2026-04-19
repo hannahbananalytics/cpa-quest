@@ -84,7 +84,7 @@ maxHp: 100
 | `grinder` | The Grinder | Quest-complete XP × 1.2 |
 | `strategist` | The Strategist | Mini-boss damage × 2 (weak-topic bonus) · Boss damage × 1.5 (stacks on crit multiplier) |
 | `clutch` | The Clutch | Crit chance 25% (others: 10%) |
-| `scholar` | The Scholar | Mini-boss kill heal × 1.5 (30 → 45 HP) |
+| `scholar` | The Scholar | Full HP restore on mini-boss kill |
 
 ### Weapons
 
@@ -248,19 +248,18 @@ Runs in this order:
 5. `readiness += round(80 / max(schedule.length, 30))`, capped at 100
 6. `xpGain = 80 + (streak × 10)` — if Grinder class, `xpGain × 1.2`
 7. `hero.xp += xpGain`, level recalculated via `computeLevel(xp)`
-8. `activity[todayKey()] = 'done'`
-9. Badge checks run (see §13)
-10. Queues combat beats in `pendingAttacks` and triggers `attack()` after 350ms if idle. Subsequent completions queue via the same ref and chain at the end of each attack.
-    - **content / review**: queues **1** attack
-    - **practice**: queues a **3–5 hit flurry** (random)
-
-Heals are not applied on quest completion — they are applied on mob defeat (see §6).
+8. **Partial heal**: `hero.hp = min(maxHp, hero.hp + 8)`. This is the main HP-regen source; kill-heals no longer fire (except Scholar's class ability).
+9. `activity[todayKey()] = 'done'`
+10. Badge checks run (see §13)
+11. Queues combat beats in `pendingQueue` and triggers `attack()` after 350ms if idle. Subsequent completions queue via the same ref and chain at the end of each attack.
+    - **content / review**: pushes **1** entry
+    - **practice**: pushes a **3–5 entry flurry** (random)
 
 ### MCQ / TBS Practice Quests
 
 One **MCQ / TBS Practice** quest is inserted automatically after every topic block. There is no user-configurable frequency — the number of practice quests always equals the number of topics in the section (12–22 depending on section).
 
-These quests spawn a **mini-boss** encounter (see §7) — a tanky 240-HP checkpoint fought via a 3–5 hit flurry with random, class/weapon-scaled damage. Defeating the mini-boss heals the hero by 30 HP (45 for Scholar).
+These quests spawn a **mini-boss** encounter (see §7) — a tanky 240-HP checkpoint fought via a 3–5 hit flurry with random, class/weapon-scaled damage. Defeating the mini-boss restores the Scholar to full HP; other classes get no bonus on kill (the +8 per-quest heal still fires on the click that triggered the flurry).
 
 ---
 
@@ -303,15 +302,9 @@ dmg = min(dmg, mobHp)               // never overkill
 
 Because content mob HP = `topicQuestCount × 50` (§7), exactly `topicQuestCount` content hits kill the topic mob — the final content quest of a topic is always the killing blow.
 
-### Heal on Mob Defeat
+### Heals
 
-Heals are triggered when a mob dies, not on quest completion:
-
-- Content mob killed: `hero.hp += 12`
-- Mini-boss killed: `hero.hp += 30` (Scholar: `+45`)
-- Boss killed: no heal (the run is over)
-
-Capped at `hero.maxHp`.
+Per-quest heal (`completeQuest`) is the main regen source: **+8 HP on every quest completion**, capped at `maxHp`. Kill branches do not heal by default — except the Scholar class ability, which **fully restores HP on any mini-boss kill**. Boss kill: no heal (run is over).
 
 ### Mini-boss Flurry Drain
 
