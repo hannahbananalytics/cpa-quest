@@ -32,7 +32,10 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
     : schedule.find(s => !s.done)
 
   const currentMob = useMemo(() => {
-    if (mobState && mobState.mobHp > 0) return mobState
+    // Keep the existing mob in view (even at 0 HP) until attack() explicitly
+    // clears mobState after the faint animation — prevents the sprite from
+    // swapping mid-death.
+    if (mobState) return mobState
     if (!activeQuest) return null
     const topicIdx = sectData.topics.findIndex(t => t.n === activeQuest.topic)
     const topic = topicIdx >= 0 ? sectData.topics[topicIdx] : sectData.topics[0]
@@ -52,7 +55,10 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
 
   useEffect(() => {
     if (!mobState && currentMob) {
-      setState(p => ({ ...p, mobState: currentMob }))
+      const t = setTimeout(() => {
+        setState(p => (p.mobState ? p : { ...p, mobState: currentMob }))
+      }, 600)
+      return () => clearTimeout(t)
     }
   }, [currentMob, mobState, setState])
 

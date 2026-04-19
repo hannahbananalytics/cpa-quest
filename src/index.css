@@ -213,12 +213,20 @@ h1,h2,h3,h4 { font-family: 'Press Start 2P', monospace; font-weight: normal; }
       #3d7a35 65%, #3d7a35 100%
     );
   border: 4px solid var(--ink);
-  box-shadow:
-    inset 0 0 0 2px var(--bone),
-    inset 0 0 0 4px var(--ink),
-    8px 8px 0 0 rgba(0,0,0,0.5);
+  box-shadow: 8px 8px 0 0 rgba(0,0,0,0.5);
   overflow: hidden;
   image-rendering: pixelated;
+}
+/* Inner frame (white highlight + ink edge) — layered above grass-front so the frame stays visible. */
+.arena::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  box-shadow:
+    inset 0 0 0 2px var(--bone),
+    inset 0 0 0 4px var(--ink);
+  pointer-events: none;
+  z-index: 10;
 }
 .arena-ground {
   position: absolute;
@@ -232,6 +240,28 @@ h1,h2,h3,h4 { font-family: 'Press Start 2P', monospace; font-weight: normal; }
       rgba(0,0,0,0.04) 0 2px, transparent 2px 10px
     );
   pointer-events: none;
+}
+
+/* Foreground grass band — sits in front of the foe so a fainting sprite sinks behind it.
+   Starts at the second (mid-green) band so the mob visibly clips into the grass. */
+.arena-grass-front {
+  position: absolute;
+  left: 0; right: 0;
+  top: 55%;
+  bottom: 0;
+  background: linear-gradient(180deg,
+    #5fa94a 0%,  #5fa94a 22.2%,
+    #3d7a35 22.2%, #3d7a35 100%
+  );
+  background-image:
+    repeating-linear-gradient(90deg, rgba(0,0,0,0.06) 0 2px, transparent 2px 10px),
+    repeating-linear-gradient(0deg,  rgba(0,0,0,0.04) 0 2px, transparent 2px 10px),
+    linear-gradient(180deg,
+      #5fa94a 0%,  #5fa94a 22.2%,
+      #3d7a35 22.2%, #3d7a35 100%
+    );
+  pointer-events: none;
+  z-index: 3;
 }
 .arena-cloud {
   position: absolute;
@@ -274,10 +304,12 @@ h1,h2,h3,h4 { font-family: 'Press Start 2P', monospace; font-weight: normal; }
   bottom: 16%; left: 14%;
   transform: scaleX(1);
   animation: hero-bob 1.6s steps(2) infinite;
+  z-index: 4;
 }
 .fighter.foe {
   bottom: 50%; right: 14%;
   animation: foe-bob 1.4s steps(2) infinite;
+  z-index: 2;
 }
 @keyframes hero-bob {
   0%, 100% { transform: translateY(0) scaleX(1); }
@@ -312,6 +344,15 @@ h1,h2,h3,h4 { font-family: 'Press Start 2P', monospace; font-weight: normal; }
   100% { transform: translate(0, 0); }
 }
 
+/* Pokémon-style faint: sprite slides down through the ground and fades. */
+.fighter.is-fainted { animation: foe-faint 0.7s steps(14) forwards; }
+@keyframes foe-faint {
+  0%   { transform: translateY(0);     opacity: 1; }
+  15%  { transform: translateY(-6px);  opacity: 1; }
+  25%  { transform: translateY(0);     opacity: 1; }
+  100% { transform: translateY(220px); opacity: 0; }
+}
+
 .dmg-float {
   position: absolute;
   font-family: 'Press Start 2P', monospace;
@@ -341,6 +382,7 @@ h1,h2,h3,h4 { font-family: 'Press Start 2P', monospace; font-weight: normal; }
   padding: 6px 10px;
   min-width: 180px;
   box-shadow: 4px 4px 0 0 var(--ink);
+  z-index: 5;
 }
 .hp-card.foe-card  { top: 4%; left: 4%; }
 .hp-card.hero-card { bottom: 4%; right: 4%; }

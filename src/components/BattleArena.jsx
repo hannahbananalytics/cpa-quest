@@ -24,17 +24,8 @@ export default function BattleArena({ hero, mob, heroHp, heroMaxHp, mobHp, mobMa
         <div className="arena-cloud c2" />
         <div className="arena-cloud c3" />
 
-        <div style={{
-          position: 'absolute', bottom: '40%', right: '4%',
-          fontSize: 36, opacity: 0.35, filter: 'grayscale(1)',
-        }}>{boss.emoji}</div>
-        <div style={{
-          position: 'absolute', bottom: '41%', right: '3%',
-          fontSize: 10, opacity: 0.5, color: '#1a1c2c',
-          fontFamily: 'Press Start 2P, monospace', letterSpacing: 0,
-        }}>BOSS LAIR</div>
-
         <div className="arena-ground" />
+        <div className="arena-grass-front" />
 
         <div className="grass-blade" style={{ left: '18%', bottom: '12%' }} />
         <div className="grass-blade" style={{ left: '28%', bottom: '10%' }} />
@@ -80,13 +71,7 @@ export default function BattleArena({ hero, mob, heroHp, heroMaxHp, mobHp, mobMa
 
         <div className={heroClasses}>{hero.avatar}</div>
 
-        {mobShown && (
-          <div className={foeClasses} style={{
-            opacity: phase === 'faint-foe' ? 0 : 1,
-            transition: 'opacity 0.4s steps(4)',
-            transform: phase === 'faint-foe' ? 'translateY(20px)' : '',
-          }}>{mob.mob}</div>
-        )}
+        {mob && <div className={foeClasses}>{mob.mob}</div>}
 
         {phase === 'hit-foe' && (
           <div className="dmg-float" style={{ top: '35%', right: '18%' }}>
