@@ -24,13 +24,19 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
   const [lastDmgMob, setLastDmgMob] = useState(0)
   const [bossReveal, setBossReveal] = useState(false)
 
-  // Active quest = first undone quest in sequence
+  // Active quest = first undone quest in sequence (used for UI like "today's quest")
   const activeIdx = schedule.findIndex(q => !q.done)
   const activeQuest = activeIdx >= 0 ? schedule[activeIdx] : null
 
-  // Full Review phase: the active quest is a review quest.
-  // Since review quests are always last, this means all content is done.
-  const inReviewPhase = activeQuest?.type === 'review'
+  // Fight quest = the quest whose mob is currently being fought. Driven by
+  // state.kills (one mob killed per quest completion) so rapid-fire check-offs
+  // play out as a sequential combat chain rather than snapping to the new
+  // activeQuest and skipping intermediate mobs.
+  const fightIdx = state.kills
+  const fightQuest = fightIdx < schedule.length ? schedule[fightIdx] : activeQuest
+
+  // Full Review phase based on the fight pointer, not activeQuest.
+  const inReviewPhase = fightQuest?.type === 'review'
 
   // Damage per review quest: boss total HP divided evenly across all review quests
   const reviewCount = Math.max(1, schedule.filter(q => q.type === 'review').length)
@@ -47,18 +53,18 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
   }
   useEffect(() => {
     const prev = prevQuestTypeRef.current
-    const curr = activeQuest?.type
+    const curr = fightQuest?.type
     if (curr === 'review' && prev !== 'review') {
       setBossReveal(true)
       const t = setTimeout(() => setBossReveal(false), 4000)
       return () => clearTimeout(t)
     }
     prevQuestTypeRef.current = curr
-  }, [activeQuest?.type])
+  }, [fightQuest?.type])
 
   const currentMob = useMemo(() => {
     if (mobState && mobState.mobHp > 0) return mobState
-    if (!activeQuest) return null
+    if (!fightQuest) return null
 
     if (inReviewPhase) {
       // Boss phase: the final boss IS the mob for each review encounter
@@ -75,10 +81,11 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
       }
     }
 
-    // Normal phase: regular topic mob or mini-boss
-    const topicIdx = sectData.topics.findIndex(t => t.n === activeQuest.topic)
+    // Normal phase: regular topic mob or mini-boss, driven by fightIdx so
+    // rapid completions play out as a sequential chain.
+    const topicIdx = sectData.topics.findIndex(t => t.n === fightQuest.topic)
     const topic = topicIdx >= 0 ? sectData.topics[topicIdx] : sectData.topics[0]
-    const isMiniBoss = (activeIdx + 1) % 7 === 0
+    const isMiniBoss = (fightIdx + 1) % 7 === 0
     const maxHp = isMiniBoss ? 180 : 60 + Math.floor(Math.random() * 40)
     return {
       topicIdx: topicIdx >= 0 ? topicIdx : 0,
@@ -91,7 +98,7 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
       mobHp: maxHp,
       lastDmg: 0,
     }
-  }, [mobState, activeQuest, activeIdx, inReviewPhase, dmgPerReview, boss, sect, hero.level, sectData.topics])
+  }, [mobState, fightQuest, fightIdx, inReviewPhase, dmgPerReview, boss, sect, hero.level, sectData.topics])
 
   useEffect(() => {
     if (!mobState && currentMob) {
@@ -108,6 +115,9 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
   }, [currentMob?.mobName, currentMob?.isBoss, boss.name])
 
   const attacking = useRef(false)
+  const pendingKills = useRef(0)
+  const attackRef = useRef()
+  const attacksUntilThrow = useRef(1 + Math.floor(Math.random() * 4))
   async function attack(isComplete = false) {
     if (attacking.current || !currentMob || currentMob.mobHp <= 0) return
     attacking.current = true
@@ -120,9 +130,13 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
       : Math.floor(base + Math.random() * 12) * (crit ? 2 : 1)
     setLastDmgMob(dmg)
 
-    setBattleMsg(`${hero.name} attacks! ${crit ? 'CRITICAL HIT!' : ''}`)
-    setBattlePhase('hero-attack')
-    await wait(450)
+    attacksUntilThrow.current -= 1
+    const isThrow = attacksUntilThrow.current <= 0
+    if (isThrow) attacksUntilThrow.current = 1 + Math.floor(Math.random() * 4)
+
+    setBattleMsg(`${hero.name} ${isThrow ? 'hurls their weapon!' : 'attacks!'} ${crit ? 'CRITICAL HIT!' : ''}`)
+    setBattlePhase(isThrow ? 'hero-throw' : 'hero-attack')
+    await wait(isThrow ? 550 : 450)
     setBattlePhase('hit-foe')
     setState(p => ({ ...p, mobState: { ...p.mobState, mobHp: Math.max(0, p.mobState.mobHp - dmg), lastDmg: dmg } }))
     await wait(500)
@@ -157,6 +171,7 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
         }
       })
       setBattlePhase('idle')
+      pendingKills.current = Math.max(0, pendingKills.current - 1)
     } else {
       await wait(250)
       const foeDmg = Math.floor(8 + Math.random() * 8)
@@ -175,6 +190,20 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
     }
     attacking.current = false
   }
+  attackRef.current = attack
+
+  // Chain the next attack when a fresh mob spawns and kills are still pending.
+  useEffect(() => {
+    if (
+      mobState &&
+      mobState.mobHp === mobState.mobMaxHp &&
+      pendingKills.current > 0 &&
+      !attacking.current
+    ) {
+      const t = setTimeout(() => attackRef.current?.(true), 350)
+      return () => clearTimeout(t)
+    }
+  }, [mobState])
 
   function completeQuest(idx) {
     if (schedule[idx].done) return
@@ -212,11 +241,26 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
       }
     })
     showToast(inReviewPhase ? '⚔ BOSS HIT! +XP  +HP' : 'QUEST COMPLETE! +XP  +HP')
-    setTimeout(() => attack(true), 350)
+    pendingKills.current += 1
+    // If nothing is currently animating, kick off the first attack.
+    // Subsequent completions stay queued and auto-chain after each mob respawns.
+    if (!attacking.current) {
+      setTimeout(() => attackRef.current?.(true), 350)
+    }
   }
 
   const bossPct = Math.max(0, Math.round((state.bossHp / state.bossMaxHp) * 100))
   const mobForArena = currentMob ? { ...currentMob, lastDmg: lastDmgMob } : null
+
+  // Environment follows quest progress, as if traveling toward the boss.
+  // Final Review phase = hell showdown.
+  const envStages = ['grass', 'meadow', 'desert', 'cave', 'snow']
+  const totalQuests = schedule.length
+  const doneQuests = schedule.filter(s => s.done).length
+  const progress = totalQuests ? doneQuests / totalQuests : 0
+  const arenaEnv = activeQuest?.type === 'review'
+    ? 'hell'
+    : envStages[Math.min(envStages.length - 1, Math.floor(progress * envStages.length))]
 
   return (
     <div className="app-wrap crt">
@@ -235,10 +279,12 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
             {mobForArena
               ? <BattleArena
                   hero={{ ...hero, lastDmg: lastDmgHero, xpPct: xpPct(hero.xp, hero.level) }}
+                  weapon={WEAPONS.find(w => w.id === hero.weaponId)}
                   mob={mobForArena}
                   heroHp={hero.hp} heroMaxHp={hero.maxHp}
                   mobHp={mobForArena.mobHp} mobMaxHp={mobForArena.mobMaxHp}
                   boss={boss}
+                  env={arenaEnv}
                   message={battleMsg}
                   phase={battlePhase}
                 />
@@ -281,7 +327,7 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
 
             <div className="px-panel" style={{ minHeight: 380, maxHeight: 540, overflow: 'auto' }}>
               {tab === 'quests' && <QuestList schedule={schedule} onComplete={completeQuest} sect={sect} activeIdx={activeIdx} boss={boss} />}
-              {tab === 'map'    && <WorldMap schedule={schedule} activeIdx={activeIdx} sectData={sectData} bossHp={state.bossHp} bossMaxHp={state.bossMaxHp} />}
+              {tab === 'map'    && <WorldMap schedule={schedule} activeIdx={activeIdx} sectData={sectData} bossHp={state.bossHp} bossMaxHp={state.bossMaxHp} hero={hero} />}
               {tab === 'skills' && <SkillTree sect={sect} mastery={state.mastery} />}
               {tab === 'badges' && <BadgeGrid earned={state.earned} />}
             </div>
@@ -541,37 +587,95 @@ function QuestList({ schedule, onComplete, sect, activeIdx, boss }) {
   )
 }
 
-function WorldMap({ schedule, activeIdx, sectData, bossHp, bossMaxHp }) {
-  const nodes = schedule.slice(0, 28)
+function WorldMap({ schedule, activeIdx, sectData, bossHp, bossMaxHp, hero }) {
+  const COLS = 7
+  const total = schedule.length
+  const rows = Math.max(1, Math.ceil(total / COLS))
+  const Y_START = 10
+  const Y_END = 90
+  const yStep = rows > 1 ? (Y_END - Y_START) / (rows - 1) : 0
+
+  const nodes = schedule.map((q, i) => {
+    const row = Math.floor(i / COLS)
+    const colInRow = i % COLS
+    const col = row % 2 === 0 ? colInRow : (COLS - 1 - colInRow)
+    const x = 8 + col * 14
+    const y = Y_START + row * yStep
+    const isMini = q.type !== 'review' && (i + 1) % 7 === 0
+    const isReview = q.type === 'review'
+    const isFinalBoss = i === total - 1 && isReview
+    const isPractice = q.type === 'practice'
+    const topic = sectData.topics.find(t => t.n === q.topic)
+    let icon
+    if (q.done) icon = '✓'
+    else if (isFinalBoss) icon = sectData.boss.emoji
+    else if (isReview) icon = '📖'
+    else if (isMini) icon = '👺'
+    else if (isPractice) icon = '🎯'
+    else icon = topic?.mob || '⚔️'
+    return { idx: i, done: q.done, isMini, isReview, isFinalBoss, isPractice, topic, x, y, icon, topicName: q.topic }
+  })
+
+  const doneCount = schedule.filter(q => q.done).length
+  const activeNode = nodes[activeIdx]
+  const mapHeight = Math.max(260, rows * 64)
+  const trailPoints = nodes.map(n => `${n.x},${n.y}`).join(' ')
+
   return (
     <div>
       <div className="section-label">WORLD MAP</div>
-      <div className="world-map" style={{ minHeight: 340 }}>
-        {nodes.map((q, i) => {
-          const cols = 7
-          const row = Math.floor(i / cols)
-          const colInRow = i % cols
-          const col = row % 2 === 0 ? colInRow : (cols - 1 - colInRow)
-          const x = 10 + (col * 13)
-          const y = 8 + row * 22
-          const isMini = q.type !== 'review' && (i + 1) % 7 === 0
-          const isReview = q.type === 'review'
-          const cls = q.done ? 'done' : (i === activeIdx ? 'today' : '')
+      <div className="tiny mb-12">
+        <span className="muted">JOURNEY </span><span className="gold-text">{doneCount} / {total}</span>
+      </div>
+      <div className="world-map" style={{ minHeight: mapHeight, position: 'relative' }}>
+        {/* Connector trail */}
+        <svg className="map-trail" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          <polyline
+            points={trailPoints}
+            fill="none"
+            stroke="rgba(0,0,0,0.35)"
+            strokeWidth="0.5"
+            strokeDasharray="1.5 1.2"
+            vectorEffect="non-scaling-stroke"
+          />
+        </svg>
+
+        {/* Start flag */}
+        {nodes[0] && (
+          <div className="map-flag" style={{ left: (nodes[0].x - 8) + '%', top: nodes[0].y + '%' }}>🏁</div>
+        )}
+
+        {/* Nodes */}
+        {nodes.map(n => {
+          const isActive = n.idx === activeIdx
+          const cls = [
+            'map-node',
+            n.done ? 'done' : '',
+            isActive ? 'active' : '',
+            n.isMini ? 'mini' : '',
+            n.isReview ? 'review' : '',
+            n.isFinalBoss ? 'final-boss' : '',
+          ].filter(Boolean).join(' ')
           return (
-            <div key={i}
-                 className={'map-node ' + cls + (isMini ? ' mini' : '') + (isReview ? ' boss' : '')}
-                 style={{ left: x + '%', top: y + '%' }}
-                 title={`Quest ${i + 1}: ${q.topic}`}>
-              {q.done ? '✓' : isReview ? sectData.boss.emoji : (isMini ? '👺' : i + 1)}
+            <div key={n.idx}
+                 className={cls}
+                 style={{ left: n.x + '%', top: n.y + '%' }}
+                 title={`${n.idx + 1}. ${n.topicName}`}>
+              {n.icon}
             </div>
           )
         })}
-        <div className="map-node boss" style={{ left: '92%', top: '50%' }} title={sectData.boss.name}>
-          {sectData.boss.emoji}
-        </div>
+
+        {/* Hero marker bobbing above the active node */}
+        {activeNode && (
+          <div className="map-hero"
+               style={{ left: activeNode.x + '%', top: activeNode.y + '%' }}>
+            {hero.avatar}
+          </div>
+        )}
       </div>
       <div className="tiny mt-12">
-        ▶ Current &nbsp;·&nbsp; ✓ Done &nbsp;·&nbsp; 👺 Mini-boss &nbsp;·&nbsp; {sectData.boss.emoji} Boss phase &nbsp;·&nbsp; Boss HP: {bossHp}/{bossMaxHp}
+        🏁 Start &nbsp;·&nbsp; 🎯 Practice &nbsp;·&nbsp; 👺 Mini-boss &nbsp;·&nbsp; 📖 Review &nbsp;·&nbsp; {sectData.boss.emoji} Final Boss
       </div>
     </div>
   )

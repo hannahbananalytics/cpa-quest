@@ -201,21 +201,69 @@ h1,h2,h3,h4 { font-family: 'Press Start 2P', monospace; font-weight: normal; }
 
 /* =========== BATTLE ARENA =========== */
 .arena {
+  /* Environment palette — overridden by .arena--{env} variants. */
+  --sky:    #5bb8e8;
+  --grass1: #8bd66e;
+  --grass2: #5fa94a;
+  --grass3: #3d7a35;
+  --sun:    #ffffff;
+  --cloud:  #f4f4f4;
+
   position: relative;
   width: 100%;
   aspect-ratio: 16 / 9;
   background:
-    radial-gradient(circle at 78% 22%, #fff 0 8px, transparent 9px),
+    radial-gradient(circle at 78% 22%, var(--sun) 0 8px, transparent 9px),
     linear-gradient(180deg,
-      #5bb8e8 0%, #5bb8e8 45%,
-      #8bd66e 45%, #8bd66e 55%,
-      #5fa94a 55%, #5fa94a 65%,
-      #3d7a35 65%, #3d7a35 100%
+      var(--sky)    0%,  var(--sky)    45%,
+      var(--grass1) 45%, var(--grass1) 55%,
+      var(--grass2) 55%, var(--grass2) 65%,
+      var(--grass3) 65%, var(--grass3) 100%
     );
   border: 4px solid var(--ink);
   box-shadow: 8px 8px 0 0 rgba(0,0,0,0.5);
   overflow: hidden;
   image-rendering: pixelated;
+}
+
+/* Arena environment palettes */
+.arena--snow {
+  --sky:    #c6dff0;
+  --grass1: #fafcfe;
+  --grass2: #dae8f1;
+  --grass3: #b6cada;
+  --sun:    #ffffff;
+  --cloud:  #ffffff;
+}
+.arena--desert {
+  --sky:    #f4c76a;
+  --grass1: #efb85f;
+  --grass2: #c8923f;
+  --grass3: #8b6526;
+  --sun:    #fff3c4;
+  --cloud:  #f9e4b3;
+}
+.arena--meadow {
+  --sky:    #86d0ec;
+  --grass1: #b6ee92;
+  --grass2: #7cc266;
+  --grass3: #4a8a3d;
+}
+.arena--cave {
+  --sky:    #1a1525;
+  --grass1: #4e3e5e;
+  --grass2: #2f2338;
+  --grass3: #0f0a18;
+  --sun:    #d7c9ff;
+  --cloud:  #3b2d4e;
+}
+.arena--hell {
+  --sky:    #1a0505;
+  --grass1: #ff5a1f;
+  --grass2: #a72c14;
+  --grass3: #3a0806;
+  --sun:    #ffd54f;
+  --cloud:  #5a1a12;
 }
 /* Inner frame (white highlight + ink edge) — layered above grass-front so the frame stays visible. */
 .arena::before {
@@ -243,22 +291,22 @@ h1,h2,h3,h4 { font-family: 'Press Start 2P', monospace; font-weight: normal; }
 }
 
 /* Foreground grass band — sits in front of the foe so a fainting sprite sinks behind it.
-   Starts at the second (mid-green) band so the mob visibly clips into the grass. */
+   Uses the arena's env palette so it matches the backdrop. */
 .arena-grass-front {
   position: absolute;
   left: 0; right: 0;
   top: 55%;
   bottom: 0;
   background: linear-gradient(180deg,
-    #5fa94a 0%,  #5fa94a 22.2%,
-    #3d7a35 22.2%, #3d7a35 100%
+    var(--grass2) 0%,     var(--grass2) 22.2%,
+    var(--grass3) 22.2%,  var(--grass3) 100%
   );
   background-image:
     repeating-linear-gradient(90deg, rgba(0,0,0,0.06) 0 2px, transparent 2px 10px),
     repeating-linear-gradient(0deg,  rgba(0,0,0,0.04) 0 2px, transparent 2px 10px),
     linear-gradient(180deg,
-      #5fa94a 0%,  #5fa94a 22.2%,
-      #3d7a35 22.2%, #3d7a35 100%
+      var(--grass2) 0%,     var(--grass2) 22.2%,
+      var(--grass3) 22.2%,  var(--grass3) 100%
     );
   pointer-events: none;
   z-index: 3;
@@ -267,11 +315,11 @@ h1,h2,h3,h4 { font-family: 'Press Start 2P', monospace; font-weight: normal; }
   position: absolute;
   top: 8%;
   width: 80px; height: 16px;
-  background: var(--bone);
+  background: var(--cloud, var(--bone));
   border-radius: 10px;
   box-shadow:
-    20px -8px 0 -2px var(--bone),
-    -15px -4px 0 -2px var(--bone);
+    20px -8px 0 -2px var(--cloud, var(--bone)),
+    -15px -4px 0 -2px var(--cloud, var(--bone));
   opacity: 0.85;
   animation: cloud-drift 40s linear infinite;
 }
@@ -289,8 +337,8 @@ h1,h2,h3,h4 { font-family: 'Press Start 2P', monospace; font-weight: normal; }
   background: radial-gradient(ellipse, rgba(0,0,0,0.35) 40%, transparent 70%);
   pointer-events: none;
 }
-.arena-platform.hero { bottom: 14%; left: 12%; }
-.arena-platform.foe  { bottom: 48%; right: 14%; width: 100px; height: 18px; }
+.arena-platform.hero { bottom: 14%; left: 12%; z-index: 4; }
+.arena-platform.foe  { bottom: 48%; right: 14%; width: 100px; height: 18px; z-index: 2; }
 
 .fighter {
   position: absolute;
@@ -301,13 +349,17 @@ h1,h2,h3,h4 { font-family: 'Press Start 2P', monospace; font-weight: normal; }
   user-select: none;
 }
 .fighter.hero {
-  bottom: 16%; left: 14%;
+  bottom: 16%; left: 12%;
+  width: 140px;
+  text-align: center;
   transform: scaleX(1);
   animation: hero-bob 1.6s steps(2) infinite;
   z-index: 4;
 }
 .fighter.foe {
   bottom: 50%; right: 14%;
+  width: 100px;
+  text-align: center;
   animation: foe-bob 1.4s steps(2) infinite;
   z-index: 2;
 }
@@ -342,6 +394,33 @@ h1,h2,h3,h4 { font-family: 'Press Start 2P', monospace; font-weight: normal; }
   0%   { transform: translate(0, 0); }
   50%  { transform: translate(-70px, 16px); }
   100% { transform: translate(0, 0); }
+}
+
+/* Hero wind-up when throwing a weapon — stays put, bobs back then hops forward. */
+.fighter.is-throwing.hero { animation: hero-throw 0.55s steps(6) forwards; }
+@keyframes hero-throw {
+  0%   { transform: translate(0, 0) scaleX(1); }
+  25%  { transform: translate(-10px, -2px) scaleX(1); }
+  55%  { transform: translate(12px, -4px) scaleX(1); }
+  100% { transform: translate(0, 0) scaleX(1); }
+}
+
+/* Thrown weapon projectile — flies from hero toward mob, spinning. */
+.weapon-proj {
+  position: absolute;
+  font-size: 40px;
+  left: 22%;
+  bottom: 22%;
+  z-index: 6;
+  filter: drop-shadow(2px 2px 0 var(--ink));
+  pointer-events: none;
+  animation: weapon-throw 0.5s steps(12) forwards;
+}
+@keyframes weapon-throw {
+  0%   { left: 22%; bottom: 22%; transform: rotate(0deg); opacity: 0; }
+  10%  { opacity: 1; }
+  50%  { left: 52%; bottom: 62%; transform: rotate(540deg); opacity: 1; }
+  100% { left: 76%; bottom: 52%; transform: rotate(1080deg); opacity: 1; }
 }
 
 /* Pokémon-style faint: sprite slides down through the ground and fades. */
@@ -383,7 +462,14 @@ h1,h2,h3,h4 { font-family: 'Press Start 2P', monospace; font-weight: normal; }
   min-width: 180px;
   box-shadow: 4px 4px 0 0 var(--ink);
   z-index: 5;
+  transform: scale(1.25);
+  transform-origin: top left;
 }
+.hp-card.hero-card { transform-origin: bottom right; }
+.hp-card.foe-card { animation: hp-fade-in 0.45s steps(6) forwards; }
+.hp-card.foe-card.is-out { animation: hp-fade-out 0.45s steps(6) forwards; }
+@keyframes hp-fade-in  { from { opacity: 0; transform: scale(1.25) translateY(-6px); } to { opacity: 1; transform: scale(1.25) translateY(0); } }
+@keyframes hp-fade-out { from { opacity: 1; transform: scale(1.25) translateY(0); } to { opacity: 0; transform: scale(1.25) translateY(-6px); } }
 .hp-card.foe-card  { top: 4%; left: 4%; }
 .hp-card.hero-card { bottom: 4%; right: 4%; }
 .hp-card .nm {
@@ -736,26 +822,60 @@ h1,h2,h3,h4 { font-family: 'Press Start 2P', monospace; font-weight: normal; }
   overflow: hidden;
   image-rendering: pixelated;
 }
-.map-path {
+.map-trail {
   position: absolute;
-  inset: 20px;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
+  z-index: 1;
 }
 .map-node {
   position: absolute;
-  width: 28px; height: 28px;
+  width: 40px; height: 40px;
   background: var(--bone);
   border: 3px solid var(--ink);
   transform: translate(-50%, -50%);
   display: grid; place-items: center;
   font-family: 'Press Start 2P', monospace;
-  font-size: 10px;
+  font-size: 18px;
   color: var(--ink);
+  box-shadow: 3px 3px 0 0 rgba(0,0,0,0.45);
+  z-index: 2;
 }
-.map-node.done { background: var(--grass); }
-.map-node.today { background: var(--gold); animation: blink 0.6s steps(2) infinite; }
-.map-node.boss { width: 44px; height: 44px; background: var(--blood); font-size: 20px; color: var(--bone); }
-.map-node.mini { width: 34px; height: 34px; background: var(--rust); font-size: 14px; }
+.map-node.done    { background: var(--grass); font-size: 14px; }
+.map-node.active  { background: var(--gold); box-shadow: 3px 3px 0 0 var(--ink), 0 0 0 3px var(--gold); animation: map-active-pulse 0.9s steps(2) infinite; }
+.map-node.mini    { background: var(--rust); border-color: var(--ink); }
+.map-node.review  { background: #ef7d57; }
+.map-node.final-boss {
+  width: 56px; height: 56px; font-size: 28px;
+  background: var(--blood); color: var(--bone);
+  box-shadow: 4px 4px 0 0 var(--ink), inset 0 0 0 2px var(--gold);
+  z-index: 3;
+}
+
+@keyframes map-active-pulse {
+  0%, 100% { box-shadow: 3px 3px 0 0 var(--ink), 0 0 0 3px var(--gold); }
+  50%      { box-shadow: 3px 3px 0 0 var(--ink), 0 0 0 6px var(--gold); }
+}
+
+.map-flag {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  font-size: 22px;
+  filter: drop-shadow(2px 2px 0 var(--ink));
+  pointer-events: none;
+  z-index: 2;
+}
+.map-hero {
+  position: absolute;
+  transform: translate(-50%, -120%);
+  font-size: 30px;
+  filter: drop-shadow(2px 2px 0 var(--ink));
+  pointer-events: none;
+  z-index: 4;
+  animation: hero-bob 1.4s steps(2) infinite;
+}
 
 /* =========== SECTION BANNER =========== */
 .section-hero {

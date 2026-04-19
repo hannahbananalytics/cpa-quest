@@ -1,10 +1,11 @@
-export default function BattleArena({ hero, mob, heroHp, heroMaxHp, mobHp, mobMaxHp, boss, message, phase }) {
+export default function BattleArena({ hero, weapon, mob, heroHp, heroMaxHp, mobHp, mobMaxHp, boss, env, message, phase }) {
   const heroPct = Math.max(0, Math.round((heroHp / heroMaxHp) * 100))
   const mobPct  = Math.max(0, Math.round((mobHp  / mobMaxHp)  * 100))
 
   const heroClasses = [
     'fighter', 'hero',
     phase === 'hero-attack' ? 'is-attacking' : '',
+    phase === 'hero-throw' ? 'is-throwing' : '',
     phase === 'hit-hero' ? 'is-hit' : '',
   ].join(' ')
 
@@ -17,9 +18,11 @@ export default function BattleArena({ hero, mob, heroHp, heroMaxHp, mobHp, mobMa
 
   const mobShown = mobHp > 0 ? mob : null
 
+  const envClass = env ? ` arena--${env}` : ''
+
   return (
     <div>
-      <div className="arena">
+      <div className={'arena' + envClass}>
         <div className="arena-cloud c1" style={{ left: '10%' }} />
         <div className="arena-cloud c2" />
         <div className="arena-cloud c3" />
@@ -37,8 +40,11 @@ export default function BattleArena({ hero, mob, heroHp, heroMaxHp, mobHp, mobMa
         <div className="arena-platform hero" />
         <div className="arena-platform foe" />
 
-        {mobShown && (
-          <div className="hp-card foe-card">
+        {mob && (
+          <div
+            key={mob.mobName}
+            className={'hp-card foe-card' + (phase === 'faint-foe' ? ' is-out' : '')}
+          >
             <div className="nm">
               <span>{mob.mobName}</span>
               <span className="lvl">Lv{mob.level}</span>
@@ -57,7 +63,7 @@ export default function BattleArena({ hero, mob, heroHp, heroMaxHp, mobHp, mobMa
         <div className="hp-card hero-card">
           <div className="nm">
             <span>{hero.name}</span>
-            <span className="lvl" style={{ color: 'var(--sky)' }}>Lv{hero.level}</span>
+            <span className="lvl" style={{ color: 'var(--shadow)' }}>Lv{hero.level}</span>
           </div>
           <div className="px-bar" style={{ height: 10 }}>
             <div className={'px-bar-fill ' + (heroPct > 50 ? 'grass' : heroPct > 20 ? 'gold' : 'blood')}
@@ -72,6 +78,10 @@ export default function BattleArena({ hero, mob, heroHp, heroMaxHp, mobHp, mobMa
         <div className={heroClasses}>{hero.avatar}</div>
 
         {mob && <div className={foeClasses}>{mob.mob}</div>}
+
+        {phase === 'hero-throw' && weapon && (
+          <div className="weapon-proj">{weapon.emoji}</div>
+        )}
 
         {phase === 'hit-foe' && (
           <div className="dmg-float" style={{ top: '35%', right: '18%' }}>
