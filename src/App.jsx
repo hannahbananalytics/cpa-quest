@@ -73,17 +73,19 @@ function buildSchedule(sect, edate, dhrs) {
       ? Math.max(1, contentSlots - t * slotsPerTopic)
       : slotsPerTopic
 
-    // Content quests for this topic
+    // Content quests for this topic. `fought` tracks whether the quest has
+    // ever been ticked (and therefore had its side effects applied + attack
+    // queued). Un-ticking leaves `fought: true` so a subsequent re-tick just
+    // re-marks done without re-running the fight or re-awarding rewards.
     for (let i = 0; i < slots; i++) {
-      schedule.push({ topic: topic.n, type: 'content', done: false })
+      schedule.push({ topic: topic.n, type: 'content', done: false, fought: false })
     }
-    // One MCQ / TBS Practice checkpoint after each topic block
-    schedule.push({ topic: 'MCQ / TBS Practice', type: 'practice', done: false })
+    schedule.push({ topic: 'MCQ / TBS Practice', type: 'practice', done: false, fought: false })
   }
 
   // Append full-review block
   for (let r = 0; r < revCount; r++) {
-    schedule.push({ topic: 'Full Review', type: 'review', done: false })
+    schedule.push({ topic: 'Full Review', type: 'review', done: false, fought: false })
   }
 
   return {

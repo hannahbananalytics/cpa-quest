@@ -213,6 +213,7 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
   useEffect(() => {
     function onKey(e) {
       if (e.key !== 'Enter') return
+      if (tab !== 'quests') return
       const el = document.activeElement
       if (el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA'
         || el.tagName === 'BUTTON' || el.isContentEditable)) return
@@ -234,7 +235,7 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [activeIdx, schedule])
+  }, [activeIdx, schedule, tab])
 
   useEffect(() => {
     if (!currentMob) return
@@ -478,8 +479,19 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
     if (schedule[idx].done) return
     const questType = schedule[idx].type
 
+    // Re-tick of a previously-fought quest (user un-ticked then ticked again):
+    // just re-mark done, no side effects, no attack queued. The one-time
+    // rewards were already granted on the original tick.
+    if (schedule[idx].fought) {
+      setState(p => ({
+        ...p,
+        schedule: p.schedule.map((s, i) => i === idx ? { ...s, done: true } : s),
+      }))
+      return
+    }
+
     setState(p => {
-      const newSchedule = p.schedule.map((s, i) => i === idx ? { ...s, done: true } : s)
+      const newSchedule = p.schedule.map((s, i) => i === idx ? { ...s, done: true, fought: true } : s)
       const sessions = p.sessions + 1
       const hrs = p.hrs + p.dhrs
       const yk = localDateKey(addDays(new Date(), -1))
@@ -597,6 +609,19 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
     }
   }
 
+  // Un-tick a completed quest. Doesn't reverse any previously-awarded side
+  // effects (XP, streak, hours, etc.) — those are earned on the first tick
+  // and stay. Drains any still-queued attack beats for this quest so a
+  // misclick caught quickly doesn't land a fight after the untick.
+  function uncompleteQuest(idx) {
+    if (!schedule[idx] || !schedule[idx].done) return
+    pendingQueue.current = pendingQueue.current.filter(i => i !== idx)
+    setState(p => ({
+      ...p,
+      schedule: p.schedule.map((s, i) => i === idx ? { ...s, done: false } : s),
+    }))
+  }
+
   const bossPct = Math.max(0, Math.round((state.bossHp / state.bossMaxHp) * 100))
   const mobForArena = currentMob ? { ...currentMob, lastDmg: lastDmgMob } : null
 
@@ -678,7 +703,7 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
             </div>
 
             <div className="px-panel" style={{ minHeight: 380, maxHeight: 540, overflow: 'auto' }}>
-              {tab === 'quests' && <QuestList schedule={schedule} onComplete={completeQuest} sect={sect} activeIdx={activeIdx} boss={boss} />}
+              {tab === 'quests' && <QuestList schedule={schedule} onComplete={completeQuest} onUncomplete={uncompleteQuest} sect={sect} activeIdx={activeIdx} boss={boss} />}
               {tab === 'map'    && <WorldMap schedule={schedule} activeIdx={activeIdx} sectData={sectData} bossHp={state.bossHp} bossMaxHp={state.bossMaxHp} hero={hero} />}
               {tab === 'skills' && <SkillTree sect={sect} mastery={state.mastery} />}
               {tab === 'badges' && <BadgeGrid earned={state.earned} />}
@@ -910,7 +935,7 @@ function StatBox({ ic, lbl, val }) {
   )
 }
 
-function QuestList({ schedule, onComplete, sect, activeIdx, boss }) {
+function QuestList({ schedule, onComplete, onUncomplete, sect, activeIdx, boss }) {
   const sectData = SECTIONS[sect]
   return (
     <div>
@@ -933,7 +958,14 @@ function QuestList({ schedule, onComplete, sect, activeIdx, boss }) {
               background: 'rgba(177,62,83,0.08)',
             } : {}}
           >
-            <div className={'quest-check' + (q.done ? ' on' : '')} onClick={() => { if (!q.done) { sfx('tick'); onComplete(idx) } }}>
+            <div
+              className={'quest-check' + (q.done ? ' on' : '')}
+              title={q.done ? 'Click to un-tick' : 'Click to complete'}
+              onClick={() => {
+                if (q.done) { sfx('cancel'); onUncomplete(idx) }
+                else        { sfx('tick');   onComplete(idx) }
+              }}
+            >
               {q.done ? '✓' : ''}
             </div>
             <div>
