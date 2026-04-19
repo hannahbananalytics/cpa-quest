@@ -4,6 +4,7 @@ import {
   SECTIONS, CLASSES, WEAPONS, BADGES, LEVEL_NAMES,
   computeLevel, xpPct, xpToNext,
 } from '../constants.js'
+import { sfx } from '../sfx.js'
 
 function localDateKey(d = new Date()) {
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`
@@ -249,8 +250,10 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
     if (isThrow) attacksUntilThrow.current = 1 + Math.floor(Math.random() * 4)
 
     setBattleMsg(`${hero.name} ${isThrow ? 'hurls their weapon!' : 'attacks!'} ${crit ? 'CRITICAL HIT!' : ''}`)
+    sfx(isThrow ? 'throw' : 'swing')
     setBattlePhase(isThrow ? 'hero-throw' : 'hero-attack')
     await wait(isThrow ? 550 : 450)
+    sfx('hit')
     setBattlePhase('hit-foe')
     setState(p => {
       if (!p.mobState) return p
@@ -278,13 +281,16 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
 
       if (isFinalBlow) {
         setBattleMsg('☠ FINAL BLOW! ☠')
+        sfx('finisher')
         setBattlePhase('boss-finisher')
         await wait(700)
         setBattleMsg(`${currentMob.mobName.toUpperCase()} IS VANQUISHED!`)
+        sfx('victory')
         setBattlePhase('boss-shatter')
         await wait(1700)
       } else {
         setBattleMsg(`${currentMob.mobName} was defeated! +${xpGain} XP`)
+        sfx('faint')
         setBattlePhase('faint-foe')
         await wait(700)
       }
@@ -346,8 +352,10 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
             : Math.floor(5 + Math.random() * 7)   // mob:  5–11
         setLastDmgHero(foeDmg)
         setBattleMsg(`${currentMob.mobName} strikes back!`)
+        sfx('counter')
         setBattlePhase('foe-attack')
         await wait(450)
+        sfx('hurt')
         setBattlePhase('hit-hero')
         setState(p => ({
           ...p,
@@ -516,7 +524,7 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
 
             <div className="tab-bar mt-16">
               {[['quests', 'QUESTS'], ['map', 'MAP'], ['skills', 'SKILLS'], ['badges', 'BADGES']].map(([k, l]) => (
-                <div key={k} className={'tab' + (tab === k ? ' on' : '')} onClick={() => setTab(k)}>{l}</div>
+                <div key={k} className={'tab' + (tab === k ? ' on' : '')} onClick={() => { sfx('click'); setTab(k) }}>{l}</div>
               ))}
             </div>
 
@@ -657,8 +665,8 @@ function TopHud({ hero, onOpenSettings, onReset }) {
         </div>
       </div>
       <div style={{ display: 'flex', gap: 8 }}>
-        <button className="px-btn sm ghost" onClick={onOpenSettings}>⚙ SETTINGS</button>
-        <button className="px-btn sm ghost" onClick={onReset}>RESET</button>
+        <button className="px-btn sm ghost" onClick={() => { sfx('click'); onOpenSettings() }}>⚙ SETTINGS</button>
+        <button className="px-btn sm ghost" onClick={() => { sfx('click'); onReset() }}>RESET</button>
       </div>
     </div>
   )
@@ -772,7 +780,7 @@ function QuestList({ schedule, onComplete, sect, activeIdx, boss }) {
               background: 'rgba(177,62,83,0.08)',
             } : {}}
           >
-            <div className={'quest-check' + (q.done ? ' on' : '')} onClick={() => !q.done && onComplete(idx)}>
+            <div className={'quest-check' + (q.done ? ' on' : '')} onClick={() => { if (!q.done) { sfx('tick'); onComplete(idx) } }}>
               {q.done ? '✓' : ''}
             </div>
             <div>

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { SECTIONS } from '../constants.js'
+import { sfx } from '../sfx.js'
 
 export default function SectionPicker({ hero, onComplete }) {
   const [sect, setSect] = useState('FAR')
@@ -44,7 +45,7 @@ export default function SectionPicker({ hero, onComplete }) {
         <div className="grid-3 mb-16">
           {Object.entries(SECTIONS).map(([k, s]) => (
             <div key={k}
-                 onClick={() => setSect(k)}
+                 onClick={() => { sfx('select'); setSect(k) }}
                  className={'choice' + (sect === k ? ' picked' : '')}
                  style={{ padding: 14, textAlign: 'left' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -117,7 +118,7 @@ export default function SectionPicker({ hero, onComplete }) {
           </div>
         </div>
 
-        <button className="px-btn blood" style={{ width: '100%', padding: 18, fontSize: 12 }} onClick={go}>
+        <button className="px-btn blood" style={{ width: '100%', padding: 18, fontSize: 12 }} onClick={() => { sfx('confirm'); go() }}>
           ⚔ ENTER {sectData.name} DUNGEON ⚔
         </button>
       </div>

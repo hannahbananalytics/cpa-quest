@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { AVATARS, CLASSES, WEAPONS, TITLES } from '../constants.js'
+import { sfx } from '../sfx.js'
 
 export default function CharacterCreator({ onComplete, initial }) {
   const [step, setStep] = useState(initial?.step ?? 0)
@@ -34,7 +35,7 @@ export default function CharacterCreator({ onComplete, initial }) {
 
         <div style={{ display: 'flex', justifyContent: 'center', gap: 10, margin: '20px 0' }}>
           {steps.map((s, i) => (
-            <div key={s} onClick={() => setStep(i)} style={{
+            <div key={s} onClick={() => { sfx('click'); setStep(i) }} style={{
               width: 14, height: 14,
               border: '3px solid var(--ink)',
               background: i < step ? 'var(--grass)' : i === step ? 'var(--gold)' : 'var(--dusk)',
@@ -53,10 +54,10 @@ export default function CharacterCreator({ onComplete, initial }) {
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 20 }}>
-          <button className="px-btn ghost" onClick={() => go(-1)} disabled={step === 0}>◀ BACK</button>
+          <button className="px-btn ghost" onClick={() => { sfx('cancel'); go(-1) }} disabled={step === 0}>◀ BACK</button>
           {step < steps.length - 1
-            ? <button className="px-btn" onClick={() => go(1)}>NEXT ▶</button>
-            : <button className="px-btn grass" onClick={finish}>START QUEST ⚔</button>}
+            ? <button className="px-btn" onClick={() => { sfx('click'); go(1) }}>NEXT ▶</button>
+            : <button className="px-btn grass" onClick={() => { sfx('confirm'); finish() }}>START QUEST ⚔</button>}
         </div>
       </div>
     </div>
@@ -70,7 +71,7 @@ function StepAvatar({ avatar, setAvatar }) {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(8, 1fr)', gap: 10 }}>
         {AVATARS.map(a => (
           <div key={a}
-               onClick={() => setAvatar(a)}
+               onClick={() => { sfx('select'); setAvatar(a) }}
                className={'choice' + (avatar === a ? ' picked' : '')}
                style={{ padding: 0, aspectRatio: '1', display: 'grid', placeItems: 'center' }}>
             <div style={{ fontSize: 54, lineHeight: 1 }}>{a}</div>
@@ -114,7 +115,7 @@ function StepClass({ clsId, setClsId }) {
       <div className="grid-4">
         {CLASSES.map(c => (
           <div key={c.id}
-               onClick={() => setClsId(c.id)}
+               onClick={() => { sfx('select'); setClsId(c.id) }}
                className={'choice' + (clsId === c.id ? ' picked' : '')}>
             <div className="choice-icon">{c.emoji}</div>
             <div className="choice-name">{c.name}</div>
@@ -134,7 +135,7 @@ function StepWeapon({ weaponId, setWeaponId }) {
       <div className="grid-3">
         {WEAPONS.map(w => (
           <div key={w.id}
-               onClick={() => setWeaponId(w.id)}
+               onClick={() => { sfx('select'); setWeaponId(w.id) }}
                className={'choice' + (weaponId === w.id ? ' picked' : '')}>
             <div className="choice-icon">{w.emoji}</div>
             <div className="choice-name">{w.name}</div>
@@ -153,7 +154,7 @@ function StepTitle({ title, setTitle }) {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
         {TITLES.map(t => (
           <div key={t}
-               onClick={() => setTitle(t)}
+               onClick={() => { sfx('select'); setTitle(t) }}
                className={'choice' + (title === t ? ' picked' : '')}
                style={{ padding: '14px 10px' }}>
             <div className="choice-desc" style={{ fontSize: 18, color: 'var(--bone)' }}>{t}</div>

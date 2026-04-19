@@ -3,6 +3,7 @@ import CharacterCreator from './components/CharacterCreator.jsx'
 import SectionPicker from './components/SectionPicker.jsx'
 import Dashboard from './components/Dashboard.jsx'
 import { SECTIONS } from './constants.js'
+import { sfx, isMuted as isSfxMuted, setMuted as setSfxMuted } from './sfx.js'
 
 const STORAGE_KEY = 'cpa-quest-8bit-v1'
 
@@ -102,6 +103,7 @@ export default function App() {
   // Bumped on every reset so the setup-stage components (which hold their
   // own wizard step in local state) remount and clear their selections.
   const [resetNonce, setResetNonce] = useState(0)
+  const [sfxOff, setSfxOff] = useState(() => isSfxMuted())
   const toastRef = useRef()
 
   useEffect(() => { saveState(state) }, [state])
@@ -181,8 +183,8 @@ export default function App() {
 
       {showFloatingNav && (
         <div style={{ position: 'fixed', top: 16, right: 16, display: 'flex', gap: 8, zIndex: 700 }}>
-          <button className="px-btn sm ghost" onClick={() => setTweaksOpen(v => !v)}>⚙ SETTINGS</button>
-          <button className="px-btn sm ghost" onClick={reset}>RESET</button>
+          <button className="px-btn sm ghost" onClick={() => { sfx('click'); setTweaksOpen(v => !v) }}>⚙ SETTINGS</button>
+          <button className="px-btn sm ghost" onClick={() => { sfx('click'); reset() }}>RESET</button>
         </div>
       )}
 
@@ -191,7 +193,16 @@ export default function App() {
           <h4>SETTINGS</h4>
           <div className="tweak-row">
             <label>CRT SCANLINES</label>
-            <button className="px-btn sm" onClick={() => setCrtOn(c => !c)}>{crtOn ? 'ON' : 'OFF'}</button>
+            <button className="px-btn sm" onClick={() => { sfx('click'); setCrtOn(c => !c) }}>{crtOn ? 'ON' : 'OFF'}</button>
+          </div>
+          <div className="tweak-row">
+            <label>SOUND EFFECTS</label>
+            <button className="px-btn sm" onClick={() => {
+              const next = !sfxOff
+              setSfxMuted(next)
+              setSfxOff(next)
+              if (!next) sfx('click')
+            }}>{sfxOff ? 'OFF' : 'ON'}</button>
           </div>
         </div>
       )}
@@ -211,8 +222,8 @@ export default function App() {
               Your hero, schedule, streaks, and badges will be erased.
             </div>
             <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
-              <button className="px-btn ghost" onClick={() => setResetConfirmOpen(false)}>◀ CANCEL</button>
-              <button className="px-btn blood" onClick={confirmReset}>☠ RESET</button>
+              <button className="px-btn ghost" onClick={() => { sfx('cancel'); setResetConfirmOpen(false) }}>◀ CANCEL</button>
+              <button className="px-btn blood" onClick={() => { sfx('confirm'); confirmReset() }}>☠ RESET</button>
             </div>
           </div>
         </div>
