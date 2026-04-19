@@ -111,7 +111,6 @@ export default function SectionPicker({ hero, onComplete }) {
               </div>
             </div>
           </div>
-          <div className="chip">DUNGEON LVL {sectData.topics.length * 10}</div>
         </div>
 
         <button className="px-btn blood" style={{ width: '100%', padding: 18, fontSize: 12 }} onClick={go}>
