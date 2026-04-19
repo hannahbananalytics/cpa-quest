@@ -119,7 +119,7 @@ h1,h2,h3,h4 { font-family: 'Press Start 2P', monospace; font-weight: normal; }
 .px-btn.grass { background: var(--grass); box-shadow: inset 2px 2px 0 0 var(--sand), inset -2px -2px 0 0 var(--grass-dk), 4px 4px 0 0 var(--ink); color: var(--ink); }
 .px-btn.blood { background: var(--blood); box-shadow: inset 2px 2px 0 0 #e07388, inset -2px -2px 0 0 #7a1f33, 4px 4px 0 0 var(--ink); color: var(--bone); }
 .px-btn.ghost { background: transparent; color: var(--bone); box-shadow: inset 0 0 0 2px var(--ash), inset 0 0 0 4px var(--ink), 4px 4px 0 0 var(--ink); }
-.px-btn.sm { padding: 8px 10px; font-size: 8px; box-shadow: inset 2px 2px 0 0 #fff5c9, inset -2px -2px 0 0 #c99a3d, 3px 3px 0 0 var(--ink); }
+.px-btn.sm { padding: 8px 10px; font-size: 10px; box-shadow: inset 2px 2px 0 0 #fff5c9, inset -2px -2px 0 0 #c99a3d, 3px 3px 0 0 var(--ink); }
 .px-btn.sm:active { transform: translate(3px, 3px); box-shadow: inset 2px 2px 0 0 #fff5c9, inset -2px -2px 0 0 #c99a3d, 0 0 0 0 var(--ink); }
 .px-btn:disabled { opacity: 0.45; cursor: not-allowed; filter: grayscale(0.6); }
 
@@ -346,14 +346,14 @@ h1,h2,h3,h4 { font-family: 'Press Start 2P', monospace; font-weight: normal; }
 .hp-card.hero-card { bottom: 4%; right: 4%; }
 .hp-card .nm {
   font-family: 'Press Start 2P', monospace;
-  font-size: 9px;
+  font-size: 10px;
   letter-spacing: 0;
   margin-bottom: 6px;
   display: flex; justify-content: space-between; align-items: center;
   gap: 8px;
 }
 .hp-card .lvl {
-  font-size: 9px;
+  font-size: 10px;
   color: var(--blood);
 }
 
@@ -410,7 +410,7 @@ h1,h2,h3,h4 { font-family: 'Press Start 2P', monospace; font-weight: normal; }
 .quest-check.on { background: var(--grass); color: var(--ink); }
 .quest-day {
   font-family: 'Press Start 2P', monospace;
-  font-size: 9px;
+  font-size: 10px;
   color: var(--ash);
   min-width: 64px;
 }
@@ -429,13 +429,13 @@ h1,h2,h3,h4 { font-family: 'Press Start 2P', monospace; font-weight: normal; }
 .hud-stat .ic { font-size: 28px; }
 .hud-stat .lbl {
   font-family: 'Press Start 2P', monospace;
-  font-size: 8px;
+  font-size: 10px;
   color: var(--ash);
   margin-bottom: 4px;
 }
 .hud-stat .val {
   font-family: 'Press Start 2P', monospace;
-  font-size: 14px;
+  font-size: 16px;
   color: var(--gold);
 }
 
@@ -467,7 +467,7 @@ h1,h2,h3,h4 { font-family: 'Press Start 2P', monospace; font-weight: normal; }
 .px-input::placeholder { color: #999; }
 .input-label {
   font-family: 'Press Start 2P', monospace;
-  font-size: 8px;
+  font-size: 10px;
   color: var(--ash);
   display: block; margin-bottom: 6px;
   letter-spacing: 0;
@@ -557,7 +557,7 @@ h1,h2,h3,h4 { font-family: 'Press Start 2P', monospace; font-weight: normal; }
 .bcard .bi { font-size: 28px; margin-bottom: 4px; }
 .bcard .bn {
   font-family: 'Press Start 2P', monospace;
-  font-size: 8px;
+  font-size: 10px;
   color: var(--ash);
   letter-spacing: 0;
 }
@@ -648,7 +648,7 @@ h1,h2,h3,h4 { font-family: 'Press Start 2P', monospace; font-weight: normal; }
 .tweak-row { margin-bottom: 10px; }
 .tweak-row label {
   font-family: 'Press Start 2P', monospace;
-  font-size: 8px;
+  font-size: 10px;
   color: var(--ash);
   display: block;
   margin-bottom: 4px;
@@ -678,7 +678,7 @@ h1,h2,h3,h4 { font-family: 'Press Start 2P', monospace; font-weight: normal; }
 .sky-text { color: var(--sky); }
 .grass-text { color: var(--grass); }
 .small { font-size: 16px; }
-.tiny { font-size: 14px; color: var(--ash); }
+.tiny { font-size: 16px; color: var(--ash); }
 
 /* =========== WORLD MAP =========== */
 .world-map {
@@ -725,7 +725,7 @@ h1,h2,h3,h4 { font-family: 'Press Start 2P', monospace; font-weight: normal; }
 }
 .section-hero .chip {
   font-family: 'Press Start 2P', monospace;
-  font-size: 9px;
+  font-size: 10px;
   color: var(--gold);
   background: var(--ink);
   padding: 6px 10px;

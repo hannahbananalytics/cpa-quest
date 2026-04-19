@@ -56,9 +56,9 @@ export default function BattleArena({ hero, mob, heroHp, heroMaxHp, mobHp, mobMa
               <div className={'px-bar-fill ' + (mobPct > 50 ? 'grass' : mobPct > 20 ? 'gold' : 'blood')}
                    style={{ width: mobPct + '%' }} />
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 4, fontSize: 14 }}>
-              <span className="ps" style={{ fontSize: 8 }}>HP</span>
-              <span>{mobHp}/{mobMaxHp}</span>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginTop: 4 }}>
+              <span className="ps" style={{ fontSize: 10 }}>HP</span>
+              <span style={{ fontSize: 20 }}>{mobHp}/{mobMaxHp}</span>
             </div>
           </div>
         )}
@@ -72,12 +72,9 @@ export default function BattleArena({ hero, mob, heroHp, heroMaxHp, mobHp, mobMa
             <div className={'px-bar-fill ' + (heroPct > 50 ? 'grass' : heroPct > 20 ? 'gold' : 'blood')}
                  style={{ width: heroPct + '%' }} />
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 4, fontSize: 14 }}>
-            <span className="ps" style={{ fontSize: 8 }}>HP</span>
-            <span>{heroHp}/{heroMaxHp}</span>
-          </div>
-          <div className="px-bar mt-8" style={{ height: 6 }}>
-            <div className="px-bar-fill sky" style={{ width: hero.xpPct + '%' }} />
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginTop: 4 }}>
+            <span className="ps" style={{ fontSize: 10 }}>HP</span>
+            <span style={{ fontSize: 20 }}>{heroHp}/{heroMaxHp}</span>
           </div>
         </div>
 
