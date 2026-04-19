@@ -14,15 +14,21 @@ export default function BattleArena({ hero, weapon, mob, heroHp, heroMaxHp, mobH
     phase === 'foe-attack' ? 'is-attacking' : '',
     phase === 'hit-foe' ? 'is-hit' : '',
     phase === 'faint-foe' ? 'is-fainted' : '',
+    phase === 'boss-finisher' ? 'is-finisher' : '',
+    phase === 'boss-shatter' ? 'is-shatter' : '',
   ].join(' ')
+
+  const inFinisher = phase === 'boss-finisher' || phase === 'boss-shatter'
 
   const mobShown = mobHp > 0 ? mob : null
 
   const envClass = env ? ` arena--${env}` : ''
+  const shakeClass = phase === 'boss-finisher' ? ' is-boss-finisher' : ''
 
   return (
     <div>
-      <div className={'arena' + envClass}>
+      <div className={'arena' + envClass + shakeClass}>
+        {inFinisher && <div className="boss-flash" />}
         <div className="arena-cloud c1" style={{ left: '10%' }} />
         <div className="arena-cloud c2" />
         <div className="arena-cloud c3" />

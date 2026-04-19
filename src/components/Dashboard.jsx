@@ -23,6 +23,7 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
   const [lastDmgHero, setLastDmgHero] = useState(0)
   const [lastDmgMob, setLastDmgMob] = useState(0)
   const [bossReveal, setBossReveal] = useState(false)
+  const [victoryBanner, setVictoryBanner] = useState(false)
 
   // Active quest = first undone quest in sequence (used for UI like "today's quest")
   const activeIdx = schedule.findIndex(q => !q.done)
@@ -144,9 +145,21 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
     const newMobHp = Math.max(0, currentMob.mobHp - dmg)
     if (newMobHp <= 0) {
       const xpGain = currentMob.isBoss ? 250 : (currentMob.isMiniBoss ? 150 : 60)
-      setBattleMsg(`${currentMob.mobName} was defeated! +${xpGain} XP`)
-      setBattlePhase('faint-foe')
-      await wait(700)
+      const isFinalBlow = currentMob.isBoss && state.bossHp <= dmgPerReview
+
+      if (isFinalBlow) {
+        // Epic finisher sequence for the final boss kill
+        setBattleMsg('☠ FINAL BLOW! ☠')
+        setBattlePhase('boss-finisher')
+        await wait(700)
+        setBattleMsg(`${currentMob.mobName.toUpperCase()} IS VANQUISHED!`)
+        setBattlePhase('boss-shatter')
+        await wait(1700)
+      } else {
+        setBattleMsg(`${currentMob.mobName} was defeated! +${xpGain} XP`)
+        setBattlePhase('faint-foe')
+        await wait(700)
+      }
       setState(p => {
         const newXp = p.hero.xp + xpGain
         const newLv = computeLevel(newXp)
@@ -172,6 +185,11 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
       })
       setBattlePhase('idle')
       pendingKills.current = Math.max(0, pendingKills.current - 1)
+
+      if (isFinalBlow) {
+        setVictoryBanner(true)
+        setTimeout(() => setVictoryBanner(false), 5000)
+      }
     } else {
       await wait(250)
       const foeDmg = Math.floor(8 + Math.random() * 8)
@@ -361,6 +379,19 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
               FINAL REVIEW PHASE BEGINS
             </div>
             <div className="tiny mt-8" style={{ color: 'var(--ash)' }}>{boss.tagline}</div>
+          </div>
+        </div>
+      )}
+
+      {/* Victory banner — fires once after the finisher sequence */}
+      {victoryBanner && (
+        <div className="victory-overlay">
+          <div style={{ textAlign: 'center' }}>
+            <div className="victory-text">VICTORY!</div>
+            <div className="victory-sub">{boss.name.toUpperCase()} HAS FALLEN</div>
+            <div className="victory-sub" style={{ fontSize: 11, color: 'var(--gold)', marginTop: 14 }}>
+              +500 XP · +1 BOSS SLAYER BADGE
+            </div>
           </div>
         </div>
       )}

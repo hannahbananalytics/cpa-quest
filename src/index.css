@@ -432,6 +432,111 @@ h1,h2,h3,h4 { font-family: 'Press Start 2P', monospace; font-weight: normal; }
   100% { transform: translateY(220px); opacity: 0; }
 }
 
+/* Final boss finisher — build-up: charges up, glows, grows. */
+.fighter.is-finisher {
+  animation: boss-finisher-charge 0.7s steps(10) forwards;
+  z-index: 7;
+}
+@keyframes boss-finisher-charge {
+  0%   { transform: scale(1);   filter: brightness(1) drop-shadow(3px 3px 0 var(--ink)); }
+  30%  { transform: scale(1.1); filter: brightness(2) drop-shadow(0 0 12px var(--gold)); }
+  60%  { transform: scale(1.25); filter: brightness(3) drop-shadow(0 0 24px var(--gold)) drop-shadow(0 0 32px var(--blood)); }
+  100% { transform: scale(1.35); filter: brightness(4) drop-shadow(0 0 36px var(--gold)); }
+}
+
+/* Shatter: boss scales, spins, and fades to nothing. */
+.fighter.is-shatter {
+  animation: boss-shatter 1.7s steps(20) forwards;
+  z-index: 7;
+}
+@keyframes boss-shatter {
+  0%   { transform: scale(1.35) rotate(0);    opacity: 1;  filter: brightness(4); }
+  15%  { transform: scale(2)    rotate(15deg);  opacity: 1;  filter: brightness(5); }
+  35%  { transform: scale(2.4)  rotate(-20deg); opacity: 0.9; filter: brightness(3); }
+  55%  { transform: scale(2.7)  rotate(25deg);  opacity: 0.6; filter: brightness(2); }
+  80%  { transform: scale(3)    rotate(-10deg); opacity: 0.3; }
+  100% { transform: scale(3.3)  rotate(0);    opacity: 0; }
+}
+
+/* Screen flashes during finisher */
+.boss-flash {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  opacity: 0;
+  z-index: 15;
+  pointer-events: none;
+  animation: boss-flash 2.4s steps(12) forwards;
+}
+@keyframes boss-flash {
+  0%   { opacity: 0; }
+  5%   { opacity: 0.9; }
+  15%  { opacity: 0.15; }
+  22%  { opacity: 0.8; }
+  35%  { opacity: 0.1; }
+  50%  { opacity: 0.55; }
+  70%  { opacity: 0.05; }
+  100% { opacity: 0; }
+}
+
+/* Arena shake during the finisher build-up */
+.arena.is-boss-finisher { animation: arena-quake 0.7s steps(12) forwards; }
+@keyframes arena-quake {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-4px, 2px); }
+  20% { transform: translate(4px, -2px); }
+  30% { transform: translate(-3px, -3px); }
+  40% { transform: translate(3px, 3px); }
+  50% { transform: translate(-4px, 2px); }
+  60% { transform: translate(4px, -2px); }
+  70% { transform: translate(-2px, -3px); }
+  80% { transform: translate(3px, 2px); }
+  90% { transform: translate(-2px, 1px); }
+}
+
+/* Post-finisher VICTORY overlay */
+.victory-overlay {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 920;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0) 0%, rgba(0,0,0,0.6) 80%);
+  animation: victory-fade 5s linear forwards;
+}
+@keyframes victory-fade {
+  0%   { opacity: 0; }
+  10%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+.victory-text {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 64px;
+  color: var(--gold);
+  letter-spacing: 6px;
+  text-shadow:
+    4px 0 0 var(--ink), -4px 0 0 var(--ink),
+    0 4px 0 var(--ink), 0 -4px 0 var(--ink),
+    4px 4px 0 var(--ink), -4px 4px 0 var(--ink),
+    4px -4px 0 var(--ink), -4px -4px 0 var(--ink),
+    8px 8px 0 var(--blood);
+  animation: victory-pulse 0.6s steps(2) infinite;
+}
+@keyframes victory-pulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.06); }
+}
+.victory-sub {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 14px;
+  color: var(--bone);
+  margin-top: 22px;
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 0 var(--ink);
+}
+
 .dmg-float {
   position: absolute;
   font-family: 'Press Start 2P', monospace;
