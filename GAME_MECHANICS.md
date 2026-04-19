@@ -216,9 +216,11 @@ Boss HP is calculated from the full schedule length (including practice quests) 
   earned: string[],      // badge IDs
   bossHp: number,
   bossMaxHp: number,
-  mobState: object|null, // persisted current mob
+  mobState: object|null, // persisted current mob (the one in the arena)
+  mobBank: {},           // { [topicKey]: mobHp } — HP of mobs not currently in the arena
+  focusIdx: number|null, // index of the last-clicked quest; drives which mob spawns
   startDate: string,     // ISO date string (when plan was created)
-  xpMult: number,        // always 1, never used (see §19)
+  xpMult: number,        // always 1, never used (see §20)
 }
 ```
 
@@ -308,7 +310,7 @@ Per-quest heal (`completeQuest`) is the main regen source: **+8 HP on every ques
 
 ### Mini-boss Flurry Drain
 
-When the mini-boss dies, any remaining queued flurry hits in `pendingAttacks` are cleared so they don't spill onto the next mob.
+When the mini-boss dies, any remaining queued flurry hits in `pendingQueue` for that `topicKey` are pruned so they don't spill onto the next mob.
 
 ### Weapon Throw
 
@@ -375,16 +377,11 @@ Each mob carries a `topicKey` to identify what it represents:
 | `'PRACTICE:<idx>'` | Mini-boss checkpoint after a topic block (3–5 hit flurry) |
 | `'REVIEW'` | Persistent final boss during the Full Review phase |
 
-### Active Quest Drives Spawning
+### Spawn Trigger
 
-```
-activeIdx = schedule.findIndex(q => !q.done)
-activeQuest = schedule[activeIdx]
+When `mobState` is null and `combatQuest` is non-null, `currentMob` is derived from `combatQuest` and committed to `mobState` after a 600 ms delay (to let the faint animation finish). When `mobState` is non-null it is returned unchanged so the death animation can finish without a sprite swap.
 
-inReviewPhase = activeQuest?.type === 'review'
-```
-
-When `mobState` is null, `currentMob` is derived from `combatQuest` (see below). When `mobState` is non-null, it is returned unchanged (even at 0 HP during faint) so the death animation can finish without a sprite swap.
+`inReviewPhase` is driven by `combatQuest?.type === 'review'`, not `activeQuest` — so the boss reveal and boss HP bar switch in sync with whichever quest the user just clicked, not the global progress cursor.
 
 ### Focus-driven Combat (`combatQuest` vs `activeQuest`)
 
@@ -438,7 +435,7 @@ Concrete example: user ticks a Topic A content quest (mob drops to 100/150), ski
 For a content topic with N content quests, the mob has `mobMaxHp = N × 50`. Each content-quest hit deals a flat 50 damage, so the last content quest of the topic is always the kill.
 
 ```
-topicKey = activeQuest.topic
+topicKey = combatQuest.topic
 topicObj = sectData.topics.find(t => t.n === topicKey)
 topicQuestCount = schedule.filter(q => q.topic === topicKey && q.type === 'content').length
 mobMaxHp = max(50, topicQuestCount × 50)
@@ -463,7 +460,7 @@ Prev content = nearest content quest before this practice in the schedule
 topic        = sectData.topics.find(t.n === prevContent.topic) ?? topics[0]
 
 mob:
-  topicKey   = 'PRACTICE:' + activeIdx
+  topicKey   = 'PRACTICE:' + combatIdx
   mob        = 👺
   mobName    = topic.n + ' MINI-BOSS'
   level      = hero.level + 2
@@ -473,11 +470,11 @@ mob:
   mobHp      = 240
 ```
 
-Mini-bosses are **flurry fights**: the owning practice quest queues 3–5 hits that chain through `pendingAttacks`. Per-hit damage rolls 35–70, adjusted by weapon ATK and ×2 for Strategist (weak-topic bonus), ×1.5 on crit. Counter-attacks fire ~50% of the time when the mini-boss survives a hit. Defeating the mini-boss heals the hero by 30 HP (Scholar: 45).
+Mini-bosses are **flurry fights**: the owning practice quest queues 3–5 hits that chain through `pendingQueue`. Per-hit damage rolls 35–70, adjusted by weapon ATK and ×2 for Strategist (weak-topic bonus), ×1.5 on crit. Counter-attacks fire ~50% of the time when the mini-boss survives a hit. On kill: no HP restore by default — the Scholar class fully restores HP; all other classes get only the +8 per-quest heal that already fired on the click.
 
 ### Final Boss (Review Phase, Persistent)
 
-When `activeQuest.type === 'review'`, `currentMob` returns the section's final boss — the **same mob** across every review quest:
+When `combatQuest.type === 'review'`, `currentMob` returns the section's final boss — the **same mob** across every review quest:
 
 ```
 reviewCount = schedule.filter(q => q.type === 'review').length
@@ -507,13 +504,13 @@ Each section has one final boss. The boss is hidden during normal quests and onl
 ### Boss HP
 
 ```
-bossMaxHp = max(600, totalSlots × 20)
+bossMaxHp = max(600, schedule.length × 20)
 ```
-where `totalSlots = dl` (total quest count derived from exam date and hours/day).
+Calculated from the full schedule length (content + practice + review quests) after the schedule is built.
 
 ### Boss HP Bar Visibility
 
-The Boss HP bar is **hidden during normal quests** (content and practice phases). It only renders when `inReviewPhase === true` (i.e., the active quest has `type === 'review'`).
+The Boss HP bar is **hidden during normal quests** (content and practice phases). It only renders when `inReviewPhase === true` (i.e., `combatQuest.type === 'review'`).
 
 ### Boss HP Loss
 
@@ -737,13 +734,13 @@ Checks for `s3`, `s7`, `log5`, `hrs10`, `half`, `ready` run on every `completeQu
 
 ## 14. Skill Tree / Mastery
 
-The Skills tab shows all topics for the current section with a 4-pip mastery bar (bronze → silver → gold → plat).
+The `SkillTree` component exists and renders all topics with a 4-pip mastery bar (bronze → silver → gold → plat), but the **SKILLS tab has been hidden from the tab bar** — it no longer appears in the UI. The component code is retained for future use.
 
 ```
 mastery[topicIdx] = tier (0–4)
 ```
 
-**The mastery object is initialized as `{}` and is never updated anywhere in the codebase.** Every topic always displays tier 0. The `gold1` badge (tier 3 on any topic) is therefore unearnable.
+**The mastery object is initialized as `{}` and is never updated anywhere in the codebase.** Every topic always displays tier 0. The `gold1` badge (tier 3 on any topic) is therefore unearnable. This system is the intended integration point for the question bank (see §21).
 
 ---
 
@@ -773,9 +770,8 @@ For each quest i:
 | `q.done` | ✓ |
 | Last quest AND `type === 'review'` | `boss.emoji` (Final Boss node) |
 | `type === 'review'` (other) | 📖 |
-| `type !== 'review'` AND `(i+1) % 7 === 0` | 👺 (Mini-boss) |
-| `type === 'practice'` | 🎯 |
-| Default | `topic.mob` emoji |
+| `type === 'practice'` | 🎯 👺 (mini-boss checkpoint) |
+| Default (`type === 'content'`) | `topic.mob` emoji |
 
 **Additional map elements:**
 - SVG polyline connector trail linking all node positions (dashed, non-scaling stroke)
@@ -840,12 +836,15 @@ On mount, `loadState()` reads and parses this key. If absent or unparseable, `de
 
 **There is no migration logic.** Old saves from before the scheduling refactor (which stored `day` and `date` fields per quest) will load but the Pace Tracker may not work correctly if `startDate` is null.
 
+`mobBank` and `focusIdx` were added in the combat refactor. Old saves without these fields will load safely — `mobBank` defaults to `{}` and `focusIdx` defaults to `null` (falls back to `activeIdx`).
+
 ---
 
 ## 19. Settings & Reset
 
 ### Settings Panel
 - **CRT Scanlines**: toggles `.no-crt` class on the root div. ON by default.
+- **Sound Effects**: toggles `isMuted` in `sfx.js` via `setMuted()`. State held in `sfxOff` (React state in App.jsx) and the mute flag in `sfx.js` itself. ON by default. Toggle persists for the session only (not saved to localStorage).
 
 ### Reset Flow
 1. User clicks RESET → `resetConfirmOpen = true`
@@ -859,12 +858,11 @@ On mount, `loadState()` reads and parses this key. If absent or unparseable, `de
 
 | Item | Location | Issue |
 |------|----------|-------|
-| `mastery` state | App.jsx, Dashboard.jsx | State field exists, SkillTree renders it, but nothing ever writes to it. All topics permanently show tier 0. `gold1` badge is unreachable. |
+| `mastery` state | App.jsx, Dashboard.jsx | Field exists, SkillTree renders it, but nothing ever writes to it. All topics permanently show tier 0. `gold1` badge unreachable. Skills tab is hidden from UI but component code is retained. |
 | `xpMult` | App.jsx defaultState | Always `1`, never read or applied. |
-| Weapon stats | constants.js | All weapon `desc` values mention stat bonuses — none are read by any game logic. Purely cosmetic. |
+| Weapon `desc` text | constants.js | Weapon flavor text mentions stat bonuses but these are display-only. The actual bonuses (ATK, crit) are hardcoded in `WEAPON_ATK` / `WEAPON_CRIT` in Dashboard.jsx and apply only to mini-boss flurry hits. |
 | Title choice | CharacterCreator.jsx | Purely cosmetic, no gameplay effect. |
-| Stale saves | localStorage | Saves from before this refactor may contain `mcqFreq` in state or old `'MCQ Practice'` topic strings. These fields are harmless but the topic label in old saves will show "MCQ Practice" instead of "MCQ / TBS Practice". Reset clears this. |
-| Regular attack UI | Dashboard.jsx | `attack(false)` logic exists but is never triggered via UI. Combat only happens automatically via `attack(true)` on quest complete. |
+| Stale saves | localStorage | Saves from before the combat refactor lack `mobBank` and `focusIdx` — they default safely. Saves with old `'MCQ Practice'` topic strings will show the old label in the quest log. Reset clears all of this. |
 
 ---
 

@@ -523,7 +523,7 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
             <HeroCard hero={hero} streak={state.streak} sectData={sectData} />
 
             <div className="tab-bar mt-16">
-              {[['quests', 'QUESTS'], ['map', 'MAP'], ['skills', 'SKILLS'], ['badges', 'BADGES']].map(([k, l]) => (
+              {[['quests', 'QUESTS'], ['map', 'MAP'], ['badges', 'BADGES']].map(([k, l]) => (
                 <div key={k} className={'tab' + (tab === k ? ' on' : '')} onClick={() => { sfx('click'); setTab(k) }}>{l}</div>
               ))}
             </div>
