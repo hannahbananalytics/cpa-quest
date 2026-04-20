@@ -123,7 +123,7 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
         // Also re-arms the Clutch death-save, same as a successful revival.
         setState(p => ({
           ...p,
-          hero: { ...p.hero, hp: Math.max(1, Math.floor(p.hero.maxHp * 0.5)) },
+          hero: { ...p.hero, hp: Math.max(1, Math.floor(p.hero.maxHp * 0.4)) },
           clutchSaveReady: true,
         }))
         setRevival(null)
@@ -333,7 +333,7 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
     if (mobState.mobHp <= 0) return
     attacking.current = true
 
-    const baseCrit = hero.clsId === 'clutch' ? 0.25 : 0.1
+    const baseCrit = hero.clsId === 'clutch' ? 0.20 : 0.1
     const crit = Math.random() < (baseCrit + (WEAPON_CRIT[hero.weaponId] || 0))
 
     // Damage by mob type:
@@ -383,11 +383,11 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
     // so the Clutch class can inspect them. If Clutch is about to die to the
     // counter, we convert this beat into a kill (death-save). The normal
     // counter branch below consumes these same rolls — no re-rolling.
-    const counterFires = newMobHp > 0 && (currentMob.isMiniBoss ? Math.random() < 0.5 : true)
+    const counterFires = newMobHp > 0 && (currentMob.isMiniBoss ? Math.random() < 0.7 : true)
     const foeDmg = !counterFires ? 0
-      : currentMob.isBoss       ? Math.floor(14 + Math.random() * 12)   // boss: 14–25
-      : currentMob.isMiniBoss   ? Math.floor(8  + Math.random() * 10)   // mini: 8–17
-      :                           Math.floor(5  + Math.random() * 7)    // mob:  5–11
+      : currentMob.isBoss       ? Math.floor(18 + Math.random() * 13)   // boss: 18–30
+      : currentMob.isMiniBoss   ? Math.floor(12 + Math.random() * 11)   // mini: 12–22
+      :                           Math.floor(9  + Math.random() * 9)    // mob:  9–17
 
     // Clutch class ability: lethal counter → survive at 1 HP and instant-kill
     // the mob. Non-boss only — the boss gauntlet is designed around HP mgmt.
@@ -432,8 +432,8 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
       //   mini-boss:    +40 (bigger fight, more counter damage absorbed)
       //   boss:         no heal (run is over either way)
       const killHeal = currentMob.isBoss ? 0
-        : currentMob.isMiniBoss ? 40
-        : 20
+        : currentMob.isMiniBoss ? 22
+        : 8
 
       if (isFinalBlow) {
         setBattleMsg('☠ FINAL BLOW! ☠')
@@ -471,7 +471,7 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
         // the bump is immediately usable. Applied before the kill heal so
         // the Scholar's full-restore fills to the new max.
         const levelsGained = Math.max(0, newLv - p.hero.level)
-        const hpBonus = levelsGained * 10
+        const hpBonus = levelsGained * 6
         const newMaxHp = p.hero.maxHp + hpBonus
         const hpAfterLevel = Math.min(newMaxHp, p.hero.hp + hpBonus)
         const newHp = Math.min(newMaxHp, hpAfterLevel + killHeal)
@@ -596,7 +596,7 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
       // Level-up bonus: every level gained adds +10 to `maxHp` and heals the
       // hero by the same amount so the bonus is immediately usable.
       const levelsGained = Math.max(0, newLv - p.hero.level)
-      const hpBonus = levelsGained * 10
+      const hpBonus = levelsGained * 6
       const newMaxHp = p.hero.maxHp + hpBonus
       const newHp = Math.min(newMaxHp, p.hero.hp + hpBonus)
 
@@ -661,7 +661,7 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
       setRevival(p => ({ ...p, phase: 'correct', selectedAnswer: letter }))
       setTimeout(() => {
         setState(p => {
-          const reviveHp = p.hero.clsId === 'scholar' ? p.hero.maxHp : Math.round(p.hero.maxHp * 0.8)
+          const reviveHp = p.hero.clsId === 'scholar' ? Math.round(p.hero.maxHp * 0.85) : Math.round(p.hero.maxHp * 0.55)
           // Re-arm the Clutch death-save on every successful revival so the
           // ability is available again for the next life.
           return { ...p, hero: { ...p.hero, hp: reviveHp }, clutchSaveReady: true }

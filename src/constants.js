@@ -144,8 +144,8 @@ export const SECTIONS = {
 export const CLASSES = [
   { id: 'grinder',    name: 'The Grinder',    emoji: '⚔️', color: '#ffcd75', bonus: '+20% XP (all sources)',    stat: 'XP' },
   { id: 'strategist', name: 'The Strategist', emoji: '🧠', color: '#41a6f6', bonus: 'Eliminates 1 wrong Revival Trial answer', stat: 'INT' },
-  { id: 'clutch',     name: 'The Clutch',     emoji: '⚡', color: '#a7f070', bonus: '+15% crit chance · Once per life: survive a lethal hit at 1 HP and instant-kill the mob (resets on revival)', stat: 'CRIT' },
-  { id: 'scholar',    name: 'The Scholar',    emoji: '📚', color: '#ef7d57', bonus: 'Revive at 100% HP on Revival Trial', stat: 'CON' },
+  { id: 'clutch',     name: 'The Clutch',     emoji: '⚡', color: '#a7f070', bonus: '+10% crit chance · Once per life: survive a lethal hit at 1 HP and instant-kill the mob (resets on revival)', stat: 'CRIT' },
+  { id: 'scholar',    name: 'The Scholar',    emoji: '📚', color: '#ef7d57', bonus: 'Revive at 85% HP on Revival Trial', stat: 'CON' },
 ]
 
 export const WEAPONS = [

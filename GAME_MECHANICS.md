@@ -74,11 +74,11 @@ A 6-step wizard. All choices are saved to `state.hero` at the end.
 ```
 level: 1
 xp: 0
-hp: 100
-maxHp: 100
+hp: 70
+maxHp: 70
 ```
 
-`maxHp` is not fixed — every level gained adds **+10 maxHp** and **+10 HP** so the bonus is immediately usable. See §9.
+`maxHp` is not fixed — every level gained adds **+6 maxHp** and **+6 HP** so the bonus is immediately usable. See §9.
 
 ### Classes — actual implemented effects
 
@@ -86,8 +86,8 @@ maxHp: 100
 |----|------|-------------|
 | `grinder` | The Grinder | All XP × 1.2 (quest check-off **and** mob-kill bonuses) |
 | `strategist` | The Strategist | Mini-boss damage × 2 (weak-topic bonus) · Boss damage × 1.5 (stacks on crit multiplier) · One random wrong answer is crossed out on every Revival Trial question |
-| `clutch` | The Clutch | Crit chance 25% (others: 10%) · **Death-save**: *once per life*, if a counter-attack would reduce HP to 0, survive at 1 HP and instant-kill the mob (non-boss only). Re-arms when the Revival Trial restores HP. |
-| `scholar` | The Scholar | Revive at **100% max HP** on Revival Trial (others: 80%) |
+| `clutch` | The Clutch | Crit chance 20% (others: 10%) · **Death-save**: *once per life*, if a counter-attack would reduce HP to 0, survive at 1 HP and instant-kill the mob (non-boss only). Re-arms when the Revival Trial restores HP. |
+| `scholar` | The Scholar | Revive at **85% max HP** on Revival Trial (others: 55%) |
 
 ### Weapons
 
@@ -265,7 +265,7 @@ Runs in this order:
 
 One **MCQ / TBS Practice** quest is inserted automatically after every topic block. There is no user-configurable frequency — the number of practice quests always equals the number of topics in the section (12–22 depending on section).
 
-These quests spawn a **mini-boss** encounter (see §7) — a tanky 240-HP checkpoint fought via a 3–5 hit flurry with random, class/weapon-scaled damage. Defeating the mini-boss heals +40 HP for all classes (see §6).
+These quests spawn a **mini-boss** encounter (see §7) — a tanky 240-HP checkpoint fought via a 3–5 hit flurry with random, class/weapon-scaled damage. Defeating the mini-boss heals +22 HP for all classes (see §6).
 
 ---
 
@@ -288,7 +288,7 @@ PER_HIT = 50   // flat damage vs. content mobs
 WEAPON_ATK  = { pencil: 5, calc: 3, scroll: 0, laptop: 2, coffee: 1, highlight: 6 }
 WEAPON_CRIT = { scroll: 0.15, laptop: 0.02 }
 
-baseCrit = clutch ? 0.25 : 0.10
+baseCrit = clutch ? 0.20 : 0.10
 crit = random() < (baseCrit + WEAPON_CRIT[hero.weaponId])
 
 if currentMob.isBoss:
@@ -314,11 +314,11 @@ Healing fires **only when the fight is actually won** (mob HP → 0 in the `atta
 
 | Kill type | Heal |
 |-----------|------|
-| Content mob | +20 HP |
-| Mini-boss | +40 HP |
+| Content mob | +8 HP |
+| Mini-boss | +22 HP |
 | Boss | 0 (run is over) |
 
-All heals are capped at `hero.maxHp`. Over a multi-quest content topic, the hero absorbs 5–11 counter damage per non-killing hit and earns the +20 payout only on the final quest that kills the topic mob — so HP management across a topic matters more than before.
+All heals are capped at `hero.maxHp`. Over a multi-quest content topic, the hero absorbs 9–17 counter damage per non-killing hit and earns the +8 payout only on the final quest that kills the topic mob — net HP loss across longer topics, so HP management matters and the Revival Trial fires regularly.
 
 ### Mini-boss Flurry Drain
 
@@ -333,14 +333,14 @@ A separate `attacksUntilThrow` ref resets to `1 + floor(random × 4)` (1–4 att
 Fires when the mob survives a hit (hero HP matters):
 
 ```
-if mob is content:    foeDmg = 5 + random(0–6)    // 5–11  (always)
-if mob is mini-boss:  foeDmg = 8 + random(0–9)    // 8–17  (50% chance per survived hit)
-if mob is boss:       foeDmg = 14 + random(0–11)  // 14–25 (always)
+if mob is content:    foeDmg = 9  + random(0–8)    // 9–17   (always)
+if mob is mini-boss:  foeDmg = 12 + random(0–10)   // 12–22  (70% chance per survived hit)
+if mob is boss:       foeDmg = 18 + random(0–12)   // 18–30  (always)
 
 hero.hp = max(0, hero.hp - foeDmg)
 ```
 
-No counter on the killing blow. Mini-bosses only counter ~50% of the time so a flurry doesn't grind the hero.
+No counter on the killing blow. Mini-bosses counter ~70% of the time so a flurry can drop the hero in one bad streak.
 
 ### Clutch Death-save
 
@@ -501,7 +501,7 @@ mob:
   mobHp      = 240
 ```
 
-Mini-bosses are **flurry fights**: the owning practice quest queues 3–5 hits that chain through `pendingQueue`. Per-hit damage rolls 35–70, adjusted by weapon ATK and ×2 for Strategist (weak-topic bonus), ×1.5 on crit. Counter-attacks fire ~50% of the time when the mini-boss survives a hit. On kill: heal +40 HP (capped at maxHp).
+Mini-bosses are **flurry fights**: the owning practice quest queues 3–5 hits that chain through `pendingQueue`. Per-hit damage rolls 35–70, adjusted by weapon ATK and ×2 for Strategist (weak-topic bonus), ×1.5 on crit. Counter-attacks fire ~70% of the time when the mini-boss survives a hit. On kill: heal +22 HP (capped at maxHp).
 
 ### Final Boss (Review Phase, Persistent)
 
@@ -557,7 +557,7 @@ Both `state.bossHp` and `mobState.mobHp` stay in sync across hits. With base dam
 
 Unlike content mobs, the boss counters hard when it survives a hit:
 ```
-foeDmg = 14 + random(0–11)   // 14–25 damage
+foeDmg = 18 + random(0–12)   // 18–30 damage
 ```
 
 This makes hero HP management meaningful during the boss push — entering review at low HP is dangerous. Practice quests interleaved earlier in the schedule can be used to top up HP.
@@ -658,12 +658,12 @@ Both XP-granting code paths (`completeQuest` and the `attack()` kill branch) com
 
 ```
 levelsGained = max(0, newLv - p.hero.level)
-hpBonus      = levelsGained × 10
+hpBonus      = levelsGained × 6
 maxHp       += hpBonus
 hp          += hpBonus        // capped at the new maxHp
 ```
 
-In the kill branch the bonus is applied **before** the kill heal (see §6), so the Scholar's full-restore fills to the newly-raised max. If multiple levels are gained in one XP burst, the bonus scales (`levelsGained × 10`).
+In the kill branch the bonus is applied **before** the kill heal (see §6), so the Scholar's revive heal fills to the newly-raised max. If multiple levels are gained in one XP burst, the bonus scales (`levelsGained × 6`).
 
 ---
 
@@ -1033,8 +1033,8 @@ Questions are loaded lazily via Vite `import.meta.glob`. Each section's 100-ques
 
 | Class | Revived HP |
 |-------|------------|
-| The Scholar | `hero.maxHp` (100%) |
-| All others | `Math.round(hero.maxHp * 0.8)` (80%) |
+| The Scholar | `Math.round(hero.maxHp * 0.85)` (85%) |
+| All others | `Math.round(hero.maxHp * 0.55)` (55%) |
 
 ### Strategist: Eliminated Answer
 
@@ -1047,7 +1047,7 @@ The eliminated key is stored on the revival state as `revival.eliminated` and re
 
 ### Edge Case: No Questions Available
 
-If `loadSectionQuestions` returns an empty array (network failure, missing file), the hero is revived immediately at 50% max HP with no trial. This is the silent fallback.
+If `loadSectionQuestions` returns an empty array (network failure, missing file), the hero is revived immediately at 40% max HP with no trial. This is the silent fallback.
 
 ### Queue Resume After Revival
 

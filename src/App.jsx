@@ -148,7 +148,7 @@ export default function App() {
   function onHeroComplete(hero) {
     setState(p => ({
       ...p,
-      hero: { ...hero, level: 1, xp: 0, hp: 100, maxHp: 100 },
+      hero: { ...hero, level: 1, xp: 0, hp: 70, maxHp: 70 },
       phase: 'section',
     }))
   }
