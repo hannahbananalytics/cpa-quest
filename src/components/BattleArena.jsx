@@ -61,7 +61,7 @@ export default function BattleArena({ hero, weapon, mob, heroHp, heroMaxHp, mobH
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginTop: 4 }}>
               <span className="ps" style={{ fontSize: 10 }}>HP</span>
-              <span style={{ fontSize: 20 }}>{mobHp}/{mobMaxHp}</span>
+              <span className="hp-val">{mobHp}/{mobMaxHp}</span>
             </div>
           </div>
         )}
@@ -77,7 +77,7 @@ export default function BattleArena({ hero, weapon, mob, heroHp, heroMaxHp, mobH
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginTop: 4 }}>
             <span className="ps" style={{ fontSize: 10 }}>HP</span>
-            <span style={{ fontSize: 20 }}>{heroHp}/{heroMaxHp}</span>
+            <span className="hp-val">{heroHp}/{heroMaxHp}</span>
           </div>
         </div>
 

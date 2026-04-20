@@ -68,7 +68,7 @@ function StepAvatar({ avatar, setAvatar }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: 364 }}>
       <div className="section-label">PICK YOUR AVATAR</div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(8, 1fr)', gap: 10 }}>
+      <div className="avatar-grid">
         {AVATARS.map(a => (
           <div key={a}
                onClick={() => { sfx('select'); setAvatar(a) }}
@@ -90,7 +90,7 @@ function StepName({ name, setName, avatar }) {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: 364 }}>
       <div className="section-label">NAME YOUR HERO</div>
-      <div style={{ display: 'flex', gap: 24, alignItems: 'center', marginTop: 10 }}>
+      <div className="step-name-layout">
         <div style={{
           fontSize: 96, lineHeight: 1,
           background: 'var(--dusk)', border: '4px solid var(--ink)',

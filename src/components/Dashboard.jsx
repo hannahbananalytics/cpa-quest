@@ -760,7 +760,7 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
           <BossBar boss={boss} sectData={sectData} bossHp={state.bossHp} bossMaxHp={state.bossMaxHp} bossPct={bossPct} />
         )}
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 16, marginTop: 16 }}>
+        <div className="dashboard-grid">
           <div>
             {mobForArena
               ? <BattleArena
@@ -1295,7 +1295,7 @@ function RevivalModal({ revival, onAnswer, onNext, heroName }) {
 
   return (
     <div style={overlayStyle}>
-      <div className="px-panel" style={{ maxWidth: 720, width: '100%', padding: '28px 32px', maxHeight: '90vh', overflowY: 'auto' }}>
+      <div className="px-panel revival-panel" style={{ maxWidth: 720, width: '100%', maxHeight: '90vh', overflowY: 'auto' }}>
 
         {/* Header */}
         <div style={{ textAlign: 'center', marginBottom: 20 }}>

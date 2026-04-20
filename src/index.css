@@ -999,3 +999,163 @@ h1,h2,h3,h4 { font-family: 'Press Start 2P', monospace; font-weight: normal; }
   border: 2px solid var(--gold);
   letter-spacing: 0;
 }
+
+/* =========== RESPONSIVE — MOBILE POLISH =========== */
+
+/* HP number value in the arena cards (replaces inline fontSize: 20) */
+.hp-val { font-size: 20px; }
+
+/*
+ * Layout classes extracted from inline JSX styles so media queries can
+ * override them. The JSX files reference these classes instead of the
+ * equivalent inline style={{ }} props.
+ */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 16px;
+  margin-top: 16px;
+}
+.avatar-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 10px;
+}
+.step-name-layout {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  margin-top: 10px;
+}
+.revival-panel {
+  padding: 28px 32px;
+}
+
+/* ── Tablet ≤ 900px ─────────────────────────────────────── */
+@media (max-width: 900px) {
+  .grid-4  { grid-template-columns: 1fr 1fr; }
+  .grid-6  { grid-template-columns: repeat(3, 1fr); }
+  .grid-8  { grid-template-columns: repeat(4, 1fr); }
+  .grid-10 { grid-template-columns: repeat(5, 1fr); }
+  .avatar-grid { grid-template-columns: repeat(6, 1fr); }
+
+  .title-logo { font-size: 22px; }
+  .victory-text { font-size: 48px; }
+}
+
+/* ── Phone ≤ 640px ──────────────────────────────────────── */
+@media (max-width: 640px) {
+  .app-wrap { padding: 10px; }
+
+  .title-logo { font-size: 18px; letter-spacing: 1px; }
+  .victory-text { font-size: 36px; letter-spacing: 3px; }
+
+  /* Main dashboard: two columns → single column */
+  .dashboard-grid { grid-template-columns: 1fr; }
+
+  /* Grid fallbacks */
+  .grid-3 { grid-template-columns: 1fr 1fr; }
+  .grid-4 { grid-template-columns: 1fr 1fr; }
+  .grid-6 { grid-template-columns: repeat(3, 1fr); }
+  .avatar-grid { grid-template-columns: repeat(5, 1fr); gap: 6px; }
+
+  /* TopHud / section banner — stack vertically on small screens */
+  .section-hero {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 12px 14px;
+    gap: 10px;
+  }
+
+  /* Tab bar */
+  .tab { font-size: 9px; padding: 10px 10px; }
+
+  /* Toast — allow wrap, prevent horizontal bleed */
+  .toast {
+    white-space: normal;
+    max-width: calc(100vw - 40px);
+    text-align: center;
+    font-size: 9px;
+    left: 50%;
+  }
+
+  /* Settings panel — keep within screen edge */
+  .tweak-panel {
+    width: calc(100vw - 20px);
+    max-width: 280px;
+    right: 10px;
+    bottom: 10px;
+  }
+
+  /* Revival modal — tighter padding */
+  .revival-panel { padding: 16px 14px; }
+
+  /* Larger touch targets on buttons */
+  .px-btn { min-height: 44px; }
+
+  /* Name step: avatar + input stack vertically */
+  .step-name-layout {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+  }
+
+  /* Hud stats: slightly tighter */
+  .hud-stat .ic  { font-size: 22px; }
+  .hud-stat .val { font-size: 13px; }
+
+  /* ── Battle arena on mobile ── */
+
+  /* Drop the 1.25× scale — cards are too large in a narrow arena */
+  .hp-card {
+    transform: scale(1.0);
+    transform-origin: top left;
+    min-width: 110px;
+    padding: 4px 8px;
+  }
+  .hp-card.hero-card {
+    transform: scale(1.0);
+    transform-origin: bottom right;
+  }
+
+  /* Remap keyframes to not hardcode scale(1.25) */
+  @keyframes hp-fade-in {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes hp-fade-out {
+    from { opacity: 1; transform: translateY(0); }
+    to   { opacity: 0; transform: translateY(-6px); }
+  }
+
+  /* Smaller HP number text */
+  .hp-val { font-size: 15px; }
+
+  /* Smaller fighters so they don't crowd the arena */
+  .fighter { font-size: 50px; }
+  .fighter.hero { width: 100px; }
+  .fighter.foe  { width: 80px; }
+}
+
+/* ── Small phone ≤ 430px ────────────────────────────────── */
+@media (max-width: 430px) {
+  .app-wrap { padding: 8px; }
+  .title-logo { font-size: 15px; }
+
+  .grid-2 { gap: 8px; }
+  .grid-3 { gap: 8px; }
+  .grid-4 { gap: 8px; }
+  .grid-6 { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .avatar-grid { grid-template-columns: repeat(4, 1fr); gap: 6px; }
+
+  .nes-box { margin: 8px; }
+
+  /* Quest rows */
+  .quest-row { gap: 8px; padding: 8px 10px; font-size: 18px; }
+  .quest-meta { font-size: 14px; }
+
+  /* HP bars in arena */
+  .hp-card { min-width: 130px; padding: 4px 8px; }
+
+  .hud-stat { padding: 6px 8px; }
+}
