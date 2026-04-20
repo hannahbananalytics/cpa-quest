@@ -139,7 +139,6 @@ function StepWeapon({ weaponId, setWeaponId }) {
                className={'choice' + (weaponId === w.id ? ' picked' : '')}>
             <div className="choice-icon">{w.emoji}</div>
             <div className="choice-name">{w.name}</div>
-            <div className="choice-desc">{w.desc}</div>
           </div>
         ))}
       </div>

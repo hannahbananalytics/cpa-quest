@@ -18,6 +18,16 @@ async function loadSectionQuestions(sect) {
   }
 }
 
+// Strategist class ability: eliminate one incorrect answer on each Revival
+// Trial question. Returns the choice key to cross out, or null for other
+// classes / malformed questions.
+function pickEliminated(q, clsId) {
+  if (clsId !== 'strategist' || !q || !Array.isArray(q.choices)) return null
+  const wrongKeys = q.choices.map(c => c.key).filter(k => k !== q.answer)
+  if (wrongKeys.length === 0) return null
+  return wrongKeys[Math.floor(Math.random() * wrongKeys.length)]
+}
+
 function localDateKey(d = new Date()) {
   return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`
 }
@@ -109,13 +119,23 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
       sfx('hurt')
       const questions = await loadSectionQuestions(sect)
       if (questions.length === 0) {
-        // No question file available — free revive at half HP as fallback
-        setState(p => ({ ...p, hero: { ...p.hero, hp: Math.max(1, Math.floor(p.hero.maxHp * 0.5)) } }))
+        // No question file available — free revive at half HP as fallback.
+        // Also re-arms the Clutch death-save, same as a successful revival.
+        setState(p => ({
+          ...p,
+          hero: { ...p.hero, hp: Math.max(1, Math.floor(p.hero.maxHp * 0.5)) },
+          clutchSaveReady: true,
+        }))
         setRevival(null)
         return
       }
       const q = questions[Math.floor(Math.random() * questions.length)]
-      setRevival({ phase: 'challenge', questions, currentQ: q, usedIds: new Set([q.id]), selectedAnswer: null, correctAnswer: null })
+      setRevival({
+        phase: 'challenge', questions, currentQ: q,
+        usedIds: new Set([q.id]),
+        selectedAnswer: null, correctAnswer: null,
+        eliminated: pickEliminated(q, hero.clsId),
+      })
     })()
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.hero.hp])
@@ -256,6 +276,15 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
   const completeQuestRef = useRef()
   const attacksUntilThrow = useRef(1 + Math.floor(Math.random() * 4))
 
+  // Unmount cleanup: if the user resets (or otherwise leaves the Dashboard)
+  // mid-combat, drain the attack queue so any chain `setTimeout`s scheduled
+  // from inside `attack()` find an empty queue and short-circuit at entry
+  // instead of landing on a now-reset (hero-less) state tree.
+  useEffect(() => () => {
+    pendingQueue.current = []
+    attacking.current = false
+  }, [])
+
   // Weapon flat ATK bonus (applied to variable-damage fights: mini-boss)
   const WEAPON_ATK = { pencil: 5, calc: 3, scroll: 0, laptop: 2, coffee: 1, highlight: 6 }
   // Weapon crit-chance bonus
@@ -348,18 +377,63 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
     })
     await waitS(500)
 
-    const newMobHp = Math.max(0, currentMob.mobHp - dmg)
+    let newMobHp = Math.max(0, currentMob.mobHp - dmg)
+
+    // Pre-roll counter-attack params before deciding the kill-vs-survive branch
+    // so the Clutch class can inspect them. If Clutch is about to die to the
+    // counter, we convert this beat into a kill (death-save). The normal
+    // counter branch below consumes these same rolls — no re-rolling.
+    const counterFires = newMobHp > 0 && (currentMob.isMiniBoss ? Math.random() < 0.5 : true)
+    const foeDmg = !counterFires ? 0
+      : currentMob.isBoss       ? Math.floor(14 + Math.random() * 12)   // boss: 14–25
+      : currentMob.isMiniBoss   ? Math.floor(8  + Math.random() * 10)   // mini: 8–17
+      :                           Math.floor(5  + Math.random() * 7)    // mob:  5–11
+
+    // Clutch class ability: lethal counter → survive at 1 HP and instant-kill
+    // the mob. Non-boss only — the boss gauntlet is designed around HP mgmt.
+    // One-shot per life: `clutchSaveReady` is consumed on fire and re-armed
+    // by the Revival Trial heal (so if the hero later dies while the save is
+    // spent, they drop into the normal revival flow).
+    const clutchSave = counterFires
+      && hero.clsId === 'clutch'
+      && hero.hp - foeDmg <= 0
+      && !currentMob.isBoss
+      && state.clutchSaveReady !== false
+    if (clutchSave) {
+      setLastDmgHero(hero.hp - 1)
+      setLastDmgMob(currentMob.mobHp)
+      setBattleMsg(`${hero.name} CLUTCHES OUT! ⚡`)
+      sfx('counter')
+      setBattlePhase('hit-hero')
+      await waitS(300)
+      sfx('finisher')
+      setBattlePhase('hit-foe')
+      setState(p => p.mobState ? {
+        ...p,
+        hero: { ...p.hero, hp: 1, lastDmg: p.hero.hp - 1 },
+        mobState: { ...p.mobState, mobHp: 0, lastDmg: p.mobState.mobHp },
+        clutchSaveReady: false,
+      } : p)
+      await waitS(500)
+      newMobHp = 0
+    }
 
     if (newMobHp <= 0) {
       // --- KILL ---
       const baseKillXp = currentMob.isBoss ? 250 : (currentMob.isMiniBoss ? 150 : 100)
-      const xpGain = crit ? Math.ceil(baseKillXp * 1.5) : baseKillXp
+      let xpGain = crit ? Math.ceil(baseKillXp * 1.5) : baseKillXp
+      // Grinder class: +20% XP applies to every XP source, including kills.
+      if (hero.clsId === 'grinder') xpGain = Math.round(xpGain * 1.2)
       const isFinalBlow = currentMob.isBoss
 
-      // Kill-heals are off by default (per-quest heal in completeQuest is the
-      // main regen source). Scholar's class ability: full HP restore on any
-      // mini-boss kill.
-      const fullRestoreOnMiniBoss = currentMob.isMiniBoss && hero.clsId === 'scholar'
+      // Kill heal — fires when the fight is actually won (mob HP → 0). This
+      // is the sole regen source now; quest check-off no longer heals.
+      //   content mob:  +20
+      //   mini-boss:    +40 (bigger fight, more counter damage absorbed)
+      //   boss:         no heal (run is over either way)
+      const killHeal = currentMob.isBoss ? 0
+        : currentMob.isMiniBoss ? 40
+        : 20
 
       if (isFinalBlow) {
         setBattleMsg('☠ FINAL BLOW! ☠')
@@ -386,10 +460,21 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
         .filter(i => questMobKey(schedule[i], i) !== killedKey)
 
       setState(p => {
+        // Reset fired mid-combat — state tree was blown away. Bail so we
+        // don't try to dereference a null hero (would crash the app and
+        // unmount the whole tree to a blank page).
+        if (!p.hero) return p
         const newXp = p.hero.xp + xpGain
         const newLv = computeLevel(newXp)
         const newKills = p.kills + 1
-        const newHp = fullRestoreOnMiniBoss ? p.hero.maxHp : p.hero.hp
+        // Level-up bonus: every level gained adds +10 maxHp and +10 HP so
+        // the bump is immediately usable. Applied before the kill heal so
+        // the Scholar's full-restore fills to the new max.
+        const levelsGained = Math.max(0, newLv - p.hero.level)
+        const hpBonus = levelsGained * 10
+        const newMaxHp = p.hero.maxHp + hpBonus
+        const hpAfterLevel = Math.min(newMaxHp, p.hero.hp + hpBonus)
+        const newHp = Math.min(newMaxHp, hpAfterLevel + killHeal)
         const newEarned = [...p.earned]
         if (newKills >= 10 && !newEarned.includes('mob10')) newEarned.push('mob10')
         if (p.mobState?.isMiniBoss && !newEarned.includes('mini1')) newEarned.push('mini1')
@@ -407,7 +492,7 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
           : p.mobBank
         return {
           ...p,
-          hero: { ...p.hero, xp: newXp, level: newLv, hp: newHp },
+          hero: { ...p.hero, xp: newXp, level: newLv, hp: newHp, maxHp: newMaxHp },
           kills: newKills,
           earned: newEarned,
           mobState: null,
@@ -424,15 +509,10 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
       }
     } else {
       // --- MOB SURVIVES — COUNTER-ATTACK ---
-      // Mini-bosses only counter ~50% of the time so the flurry doesn't grind the hero.
-      const counters = currentMob.isMiniBoss ? Math.random() < 0.5 : true
-      if (counters) {
+      // counterFires already factors in the mini-boss 50% miss-rate and the
+      // Clutch save handled above, so no extra gating is needed here.
+      if (counterFires) {
         await waitS(250)
-        const foeDmg = currentMob.isBoss
-          ? Math.floor(14 + Math.random() * 12)   // boss: 14–25
-          : currentMob.isMiniBoss
-            ? Math.floor(8 + Math.random() * 10)  // mini: 8–17
-            : Math.floor(5 + Math.random() * 7)   // mob:  5–11
         setLastDmgHero(foeDmg)
         setBattleMsg(`${currentMob.mobName} strikes back!`)
         sfx('counter')
@@ -440,10 +520,10 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
         await waitS(450)
         sfx('hurt')
         setBattlePhase('hit-hero')
-        setState(p => ({
+        setState(p => p.hero ? ({
           ...p,
           hero: { ...p.hero, hp: Math.max(0, p.hero.hp - foeDmg), lastDmg: foeDmg },
-        }))
+        }) : p)
         await waitS(500)
       }
       setBattlePhase('idle')
@@ -497,7 +577,12 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
       const yk = localDateKey(addDays(new Date(), -1))
       const streak = (p.activity[yk] === 'done' || sessions === 1) ? p.streak + 1 : 1
       const bestStreak = Math.max(streak, p.bestStreak)
-      const readiness = Math.min(100, p.readiness + Math.round(80 / Math.max(p.schedule.length, 30)))
+      // True progress % — derived from the just-updated schedule, so badge
+      // gates compare against the real completion ratio instead of the old
+      // per-quest-increment counter.
+      const progressPct = newSchedule.length
+        ? Math.round((newSchedule.filter(q => q.done).length / newSchedule.length) * 100)
+        : 0
       const newActivity = { ...p.activity, [todayKey()]: 'done' }
 
       let xpGain = 80 + streak * 10
@@ -505,10 +590,15 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
       const newXp = p.hero.xp + xpGain
       const newLv = computeLevel(newXp)
 
-      // Small heal on every quest completion. Main source of regen — kill
-      // heals are gone (except Scholar's full-restore on mini-boss kills).
-      const QUEST_HEAL = 8
-      const newHp = Math.min(p.hero.maxHp, p.hero.hp + QUEST_HEAL)
+      // HP is no longer granted on check-off — the heal fires in the
+      // `attack()` kill branch when the mob is actually defeated. See §6.
+      //
+      // Level-up bonus: every level gained adds +10 to `maxHp` and heals the
+      // hero by the same amount so the bonus is immediately usable.
+      const levelsGained = Math.max(0, newLv - p.hero.level)
+      const hpBonus = levelsGained * 10
+      const newMaxHp = p.hero.maxHp + hpBonus
+      const newHp = Math.min(newMaxHp, p.hero.hp + hpBonus)
 
       // Topic mastery: completing all content quests for a topic marks it gold (tier 3).
       // gold1 badge fires on the first topic mastered.
@@ -528,16 +618,16 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
       if (streak >= 3 && !earned.includes('s3')) earned.push('s3')
       if (streak >= 7 && !earned.includes('s7')) earned.push('s7')
       if (hrs >= 10 && !earned.includes('hrs10')) earned.push('hrs10')
-      if (readiness >= 50 && !earned.includes('half')) earned.push('half')
-      if (readiness >= 80 && !earned.includes('ready')) earned.push('ready')
+      if (progressPct >= 50 && !earned.includes('half')) earned.push('half')
+      if (progressPct >= 80 && !earned.includes('ready')) earned.push('ready')
       if (Object.values(newMastery).some(t => t >= 3) && !earned.includes('gold1')) earned.push('gold1')
 
       return {
         ...p,
-        schedule: newSchedule, sessions, hrs, streak, bestStreak, readiness,
+        schedule: newSchedule, sessions, hrs, streak, bestStreak,
         activity: newActivity,
         mastery: newMastery,
-        hero: { ...p.hero, xp: newXp, level: newLv, hp: newHp },
+        hero: { ...p.hero, xp: newXp, level: newLv, hp: newHp, maxHp: newMaxHp },
         earned,
       }
     })
@@ -572,7 +662,9 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
       setTimeout(() => {
         setState(p => {
           const reviveHp = p.hero.clsId === 'scholar' ? p.hero.maxHp : Math.round(p.hero.maxHp * 0.8)
-          return { ...p, hero: { ...p.hero, hp: reviveHp } }
+          // Re-arm the Clutch death-save on every successful revival so the
+          // ability is available again for the next life.
+          return { ...p, hero: { ...p.hero, hp: reviveHp }, clutchSaveReady: true }
         })
         setRevival(null)
         setBattleMsg(`${hero.name} rises again!`)
@@ -618,6 +710,7 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
       usedIds: nextUsedIds,
       selectedAnswer: null,
       correctAnswer: null,
+      eliminated: pickEliminated(nextQ, hero.clsId),
       nextQ: undefined,
       nextUsedIds: undefined,
     }) : null)
@@ -646,6 +739,8 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
   const totalQuests = schedule.length
   const doneQuests = schedule.filter(s => s.done).length
   const progress = totalQuests ? doneQuests / totalQuests : 0
+  // Stat-card progress: true % of the schedule completed.
+  const progressPct = Math.round(progress * 100)
   const firstReviewIdx = schedule.findIndex(q => q.type === 'review')
   const hasReachedHell = firstReviewIdx >= 0
     && (activeIdx < 0 || activeIdx >= firstReviewIdx)
@@ -703,7 +798,7 @@ export default function Dashboard({ state, setState, showToast, onOpenSettings, 
               <StatBox ic="🔥" lbl="STREAK"     val={state.streak + 'd'} />
               <StatBox ic="⏱️" lbl="HOURS"      val={state.hrs + 'h'} />
               <StatBox ic="⚔️" lbl="MOBS SLAIN" val={state.kills} />
-              <StatBox ic="📊" lbl="READINESS"  val={state.readiness + '%'} />
+              <StatBox ic="📊" lbl="PROGRESS"   val={progressPct + '%'} />
             </div>
           </div>
 
@@ -1043,14 +1138,25 @@ function WorldMap({ schedule, activeIdx, sectData, bossHp, bossMaxHp, hero }) {
         <span className="muted">JOURNEY </span><span className="gold-text">{doneCount} / {total}</span>
       </div>
       <div className="world-map" style={{ minHeight: mapHeight, position: 'relative' }}>
-        {/* Connector trail */}
+        {/* Connector trail — two layers give a pixel-art path look:
+            a dark outline underneath, a bone-colored dashed line on top. */}
         <svg className="map-trail" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
           <polyline
             points={trailPoints}
             fill="none"
-            stroke="rgba(0,0,0,0.35)"
-            strokeWidth="0.5"
-            strokeDasharray="1.5 1.2"
+            stroke="rgba(0,0,0,0.65)"
+            strokeWidth="6"
+            strokeLinecap="square"
+            strokeLinejoin="miter"
+            vectorEffect="non-scaling-stroke"
+          />
+          <polyline
+            points={trailPoints}
+            fill="none"
+            stroke="var(--bone)"
+            strokeWidth="3"
+            strokeDasharray="4 3"
+            strokeLinecap="square"
             vectorEffect="non-scaling-stroke"
           />
         </svg>
@@ -1212,8 +1318,12 @@ function RevivalModal({ revival, onAnswer, onNext, heroName }) {
           {currentQ?.question}
         </div>
 
-        {/* Answer choices — each entry is { key: "A", text: "..." } */}
+        {/* Answer choices — each entry is { key: "A", text: "..." }. If the
+            hero is a Strategist, `revival.eliminated` is a wrong-answer key
+            that gets rendered crossed-out and non-clickable (the class's
+            ability to rule out one distractor up front). */}
         {choices.map(({ key, text }) => {
+          const isEliminated = revival.eliminated === key
           let borderColor = 'var(--dusk)'
           let bg = 'transparent'
           let color = 'var(--bone)'
@@ -1226,22 +1336,29 @@ function RevivalModal({ revival, onAnswer, onNext, heroName }) {
             } else {
               color = 'var(--ash)'; keyColor = 'var(--dusk)'
             }
+          } else if (isEliminated) {
+            color = 'var(--ash)'; keyColor = 'var(--dusk)'
           }
+          const disabled = isWrong || isEliminated
           return (
             <button
               key={key}
-              disabled={isWrong}
+              disabled={disabled}
               onClick={() => onAnswer(key)}
               style={{
                 display: 'block', width: '100%', textAlign: 'left',
                 marginBottom: 8, padding: '11px 15px',
                 background: bg, border: '2px solid ' + borderColor, color,
-                cursor: isWrong ? 'default' : 'pointer',
+                cursor: disabled ? 'default' : 'pointer',
                 fontFamily: 'inherit', fontSize: 19,
-                opacity: isWrong && key !== revival.correctAnswer && key !== revival.selectedAnswer ? 0.45 : 1,
+                opacity: isEliminated ? 0.4
+                  : (isWrong && key !== revival.correctAnswer && key !== revival.selectedAnswer ? 0.45 : 1),
               }}
             >
-              <span style={{ color: keyColor, fontWeight: 700, marginRight: 6 }}>{key}.</span>{text.charAt(0).toUpperCase() + text.slice(1)}
+              <span style={{ color: keyColor, fontWeight: 700, marginRight: 6 }}>{key}.</span>
+              <span style={{ textDecoration: isEliminated ? 'line-through' : 'none' }}>
+                {text.charAt(0).toUpperCase() + text.slice(1)}
+              </span>
             </button>
           )
         })}

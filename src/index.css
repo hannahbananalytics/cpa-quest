@@ -739,9 +739,9 @@ h1,h2,h3,h4 { font-family: 'Press Start 2P', monospace; font-weight: normal; }
 }
 .choice.picked .choice-name { color: var(--gold); }
 .choice-desc {
-  font-size: 15px;
+  font-size: 17px;
   color: var(--ash);
-  line-height: 1.2;
+  line-height: 1.3;
 }
 
 /* =========== TABS =========== */

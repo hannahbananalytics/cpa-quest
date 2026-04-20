@@ -23,7 +23,6 @@ function defaultState() {
     sessions: 0,
     hrs: 0,
     kills: 0,
-    readiness: 0,
     earned: [],
     bossHp: 1000,
     bossMaxHp: 1000,
@@ -33,6 +32,10 @@ function defaultState() {
     xpMult: 1,
     focusIdx: null,
     bossIntroShown: false,
+    // Clutch class: one-shot "death save" that's armed at start, consumed
+    // when a lethal counter triggers the save, re-armed when the Revival
+    // Trial restores the hero's HP.
+    clutchSaveReady: true,
   }
 }
 
@@ -157,7 +160,6 @@ export default function App() {
       sect, edate, dhrs,
       schedule, bossMaxHp, bossHp: bossMaxHp,
       startDate,
-      readiness: 0,
       plan: true,
       phase: 'dashboard',
       earned: p.earned.includes('start') ? p.earned : [...p.earned, 'start'],

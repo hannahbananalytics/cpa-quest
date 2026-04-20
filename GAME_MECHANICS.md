@@ -25,7 +25,7 @@
 7. [Mob System](#7-mob-system)
 8. [Boss System](#8-boss-system)
 9. [XP & Leveling](#9-xp--leveling)
-10. [Readiness](#10-readiness)
+10. [Progress](#10-progress)
 11. [Streak & Activity Tracking](#11-streak--activity-tracking)
 12. [Pace Tracker](#12-pace-tracker)
 13. [Badges](#13-badges)
@@ -78,14 +78,16 @@ hp: 100
 maxHp: 100
 ```
 
+`maxHp` is not fixed — every level gained adds **+10 maxHp** and **+10 HP** so the bonus is immediately usable. See §9.
+
 ### Classes — actual implemented effects
 
 | ID | Name | Real Effect |
 |----|------|-------------|
-| `grinder` | The Grinder | Quest-complete XP × 1.2 |
-| `strategist` | The Strategist | Mini-boss damage × 2 (weak-topic bonus) · Boss damage × 1.5 (stacks on crit multiplier) |
-| `clutch` | The Clutch | Crit chance 25% (others: 10%) |
-| `scholar` | The Scholar | Full HP restore on mini-boss kill · Revive at **100% max HP** on Revival Trial (others: 80%) |
+| `grinder` | The Grinder | All XP × 1.2 (quest check-off **and** mob-kill bonuses) |
+| `strategist` | The Strategist | Mini-boss damage × 2 (weak-topic bonus) · Boss damage × 1.5 (stacks on crit multiplier) · One random wrong answer is crossed out on every Revival Trial question |
+| `clutch` | The Clutch | Crit chance 25% (others: 10%) · **Death-save**: *once per life*, if a counter-attack would reduce HP to 0, survive at 1 HP and instant-kill the mob (non-boss only). Re-arms when the Revival Trial restores HP. |
+| `scholar` | The Scholar | Revive at **100% max HP** on Revival Trial (others: 80%) |
 
 ### Weapons
 
@@ -213,7 +215,7 @@ Boss HP is calculated from the full schedule length (including practice quests) 
   sessions: number,
   hrs: number,           // cumulative hours (sessions × dhrs)
   kills: number,
-  readiness: number,     // 0–100
+  // progress is no longer stored — derived at render time from schedule
   earned: string[],      // badge IDs
   bossHp: number,
   bossMaxHp: number,
@@ -221,6 +223,7 @@ Boss HP is calculated from the full schedule length (including practice quests) 
   mobBank: {},           // { [topicKey]: mobHp } — HP of mobs not currently in the arena
   focusIdx: number|null, // index of the last-clicked quest; drives which mob spawns
   startDate: string,     // ISO date string (when plan was created)
+  clutchSaveReady: bool, // true = Clutch's once-per-life death-save is available
   xpMult: number,        // always 1, never used (see §20)
 }
 ```
@@ -248,10 +251,10 @@ Runs in this order:
 2. `sessions += 1`
 3. `hrs += dhrs` (adds configured daily hours, not actual elapsed time)
 4. Calculates streak (see §11)
-5. `readiness += round(80 / max(schedule.length, 30))`, capped at 100
+5. (No state write — progress is derived as `round(done / total × 100)` at render time.)
 6. `xpGain = 80 + (streak × 10)` — if Grinder class, `xpGain × 1.2`
 7. `hero.xp += xpGain`, level recalculated via `computeLevel(xp)`
-8. **Partial heal**: `hero.hp = min(maxHp, hero.hp + 8)`. This is the main HP-regen source; kill-heals no longer fire (except Scholar's class ability).
+8. (No HP change on check-off. The heal fires in the `attack()` kill branch when the mob is actually defeated — see §6.)
 9. `activity[todayKey()] = 'done'`
 10. Badge checks run (see §13)
 11. Queues combat beats in `pendingQueue` and triggers `attack()` after 350ms if idle. Subsequent completions queue via the same ref and chain at the end of each attack.
@@ -262,7 +265,7 @@ Runs in this order:
 
 One **MCQ / TBS Practice** quest is inserted automatically after every topic block. There is no user-configurable frequency — the number of practice quests always equals the number of topics in the section (12–22 depending on section).
 
-These quests spawn a **mini-boss** encounter (see §7) — a tanky 240-HP checkpoint fought via a 3–5 hit flurry with random, class/weapon-scaled damage. Defeating the mini-boss restores the Scholar to full HP; other classes get no bonus on kill (the +8 per-quest heal still fires on the click that triggered the flurry).
+These quests spawn a **mini-boss** encounter (see §7) — a tanky 240-HP checkpoint fought via a 3–5 hit flurry with random, class/weapon-scaled damage. Defeating the mini-boss heals +40 HP for all classes (see §6).
 
 ---
 
@@ -307,7 +310,15 @@ Because content mob HP = `topicQuestCount × 50` (§7), exactly `topicQuestCount
 
 ### Heals
 
-Per-quest heal (`completeQuest`) is the main regen source: **+8 HP on every quest completion**, capped at `maxHp`. Kill branches do not heal by default — except the Scholar class ability, which **fully restores HP on any mini-boss kill**. Boss kill: no heal (run is over).
+Healing fires **only when the fight is actually won** (mob HP → 0 in the `attack()` kill branch). Quest check-off no longer grants HP — ticking a quest only queues the next combat beat.
+
+| Kill type | Heal |
+|-----------|------|
+| Content mob | +20 HP |
+| Mini-boss | +40 HP |
+| Boss | 0 (run is over) |
+
+All heals are capped at `hero.maxHp`. Over a multi-quest content topic, the hero absorbs 5–11 counter damage per non-killing hit and earns the +20 payout only on the final quest that kills the topic mob — so HP management across a topic matters more than before.
 
 ### Mini-boss Flurry Drain
 
@@ -330,6 +341,25 @@ hero.hp = max(0, hero.hp - foeDmg)
 ```
 
 No counter on the killing blow. Mini-bosses only counter ~50% of the time so a flurry doesn't grind the hero.
+
+### Clutch Death-save
+
+When the Clutch class is about to take a lethal counter-attack from a non-boss mob, the ability fires instead of the normal counter:
+
+- `hero.hp` is set to `1` (instead of `0`).
+- The mob's HP is set to `0` (instant kill) and the attack beat resolves as a kill (XP, faint animation, queue prune, focus advance — same path as any other kill).
+- The Battle Arena shows a "{hero} CLUTCHES OUT! ⚡" message and plays `counter` → `finisher` sfx before the standard faint animation.
+
+The counter roll (both `counterFires` and `foeDmg`) is **pre-rolled before the kill-vs-survive branch** so the ability can inspect the incoming damage. When the save doesn't fire, the normal counter branch consumes those same rolls — there is no double-rolling.
+
+**Bosses are exempt.** The `!currentMob.isBoss` gate keeps the boss gauntlet's HP-management tension intact. A Clutch hero can still fall to the boss and drop into the normal Revival Trial flow (§22).
+
+**One-shot per life.** The save is gated on `state.clutchSaveReady !== false`:
+
+- Consumed on fire (the same `setState` that writes `hp: 1` / `mobHp: 0` also writes `clutchSaveReady: false`).
+- Re-armed whenever the Revival Trial restores HP — both the correct-answer path and the no-questions fallback path (§22) flip the flag back to `true`.
+
+If the Clutch hero's save is already spent when the next lethal counter lands, the counter resolves normally, `hero.hp` drops to `0`, and the Revival Trial fires. Answering correctly re-arms the save for the next life. Bossed deaths also trigger the Revival Trial and re-arm the save (though the save itself can't fire against the boss).
 
 ### Attack Queue (Rapid Completions)
 
@@ -471,7 +501,7 @@ mob:
   mobHp      = 240
 ```
 
-Mini-bosses are **flurry fights**: the owning practice quest queues 3–5 hits that chain through `pendingQueue`. Per-hit damage rolls 35–70, adjusted by weapon ATK and ×2 for Strategist (weak-topic bonus), ×1.5 on crit. Counter-attacks fire ~50% of the time when the mini-boss survives a hit. On kill: no HP restore by default — the Scholar class fully restores HP; all other classes get only the +8 per-quest heal that already fired on the click.
+Mini-bosses are **flurry fights**: the owning practice quest queues 3–5 hits that chain through `pendingQueue`. Per-hit damage rolls 35–70, adjusted by weapon ATK and ×2 for Strategist (weak-topic bonus), ×1.5 on crit. Counter-attacks fire ~50% of the time when the mini-boss survives a hit. On kill: heal +40 HP (capped at maxHp).
 
 ### Final Boss (Review Phase, Persistent)
 
@@ -601,7 +631,6 @@ Run complete. Well done.
 | Event | XP Gained |
 |-------|-----------|
 | Quest complete (base) | 80 + (streak × 10) |
-| Quest complete (Grinder) | (80 + streak × 10) × 1.2 |
 | Content mob kill (final hit of topic) | 100 |
 | Content mob kill on crit | 150 |
 | Mini-boss kill (flurry) | 150 |
@@ -610,6 +639,8 @@ Run complete. Well done.
 | Boss mob kill on crit | 375 |
 
 XP is awarded twice: once by `completeQuest()` (per check-off) and again by `attack()` when the hit actually kills a mob. For one topic: `(N × quest XP) + 100` for the kill bonus.
+
+**Grinder class** multiplies every row in the table above by `1.2` (both the check-off XP and the kill XP). Crit multipliers are applied first, then the Grinder multiplier (both use `round`/`ceil` so rounding is consistent with the pre-multiplier values).
 
 ### Level Computation
 
@@ -621,21 +652,32 @@ computeLevel(xp):
   return lv
 ```
 
+### Level-up HP Bonus
+
+Both XP-granting code paths (`completeQuest` and the `attack()` kill branch) compare the pre- and post-XP levels and apply:
+
+```
+levelsGained = max(0, newLv - p.hero.level)
+hpBonus      = levelsGained × 10
+maxHp       += hpBonus
+hp          += hpBonus        // capped at the new maxHp
+```
+
+In the kill branch the bonus is applied **before** the kill heal (see §6), so the Scholar's full-restore fills to the newly-raised max. If multiple levels are gained in one XP burst, the bonus scales (`levelsGained × 10`).
+
 ---
 
-## 10. Readiness
+## 10. Progress
 
-Readiness represents exam prep progress, shown as 0–100%.
+Progress is a true completion percentage, shown as 0–100% on the stat card labeled **PROGRESS**.
 
 ```
-initialReadiness = 0  (set when section is confirmed)
-
-per quest completed:
-  readiness += round(80 / max(schedule.length, 30))
-  readiness = min(100, readiness)
+progressPct = schedule.length > 0
+  ? round((done / schedule.length) × 100)
+  : 0
 ```
 
-At 30+ scheduled quests, each quest adds ~2–3%. For shorter plans the increment is larger.
+It is **not** stored in state — both the UI card and the `half` / `ready` badge gates in `completeQuest` compute it on demand from the schedule (the badge checks use `newSchedule` so the just-ticked quest is counted). Hits exactly 100% only when every scheduled quest is done.
 
 ---
 
@@ -724,8 +766,8 @@ Badges are earned once and stored as IDs in `state.earned`. They never un-earn. 
 | `mob10` | ⚔️ | MOB HUNTER | Slay 10 mobs | `kills >= 10` | `attack()` kill branch |
 | `mini1` | 👺 | MINI-BOSS | Defeated a mini-boss | `mobState.isMiniBoss === true` on kill | `attack()` kill branch |
 | `boss1` | 👑 | BOSS SLAYER | Defeated the final boss | `mobState.isBoss === true` on kill | `attack()` kill branch |
-| `half` | 🎯 | HALFWAY | 50% readiness | `readiness >= 50` | `completeQuest` |
-| `ready` | 🏆 | BOARD READY | 80% readiness | `readiness >= 80` | `completeQuest` |
+| `half` | 🎯 | HALFWAY | 50% progress | `progressPct >= 50` (derived from `newSchedule`) | `completeQuest` |
+| `ready` | 🏆 | BOARD READY | 80% progress | `progressPct >= 80` (derived from `newSchedule`) | `completeQuest` |
 | `gold1` | 🌟 | GOLD MASTERY | Complete all quests in any topic | All content quests for a topic done → `mastery[topicIdx] = 3` → badge fires | `completeQuest` |
 | `hrs10` | 📚 | SCHOLAR | 10+ hours logged | `hrs >= 10` (hrs = sessions × dhrs) | `completeQuest` |
 
@@ -839,7 +881,7 @@ Four stat boxes below the battle arena on the left:
 | STREAK | `state.streak + 'd'` | Consecutive days with a quest completed |
 | HOURS | `state.hrs + 'h'` | `sessions × dhrs`, not real clock time |
 | MOBS SLAIN | `state.kills` | Counts regular + mini-boss kills |
-| READINESS | `state.readiness + '%'` | 0–100%, see §10 |
+| PROGRESS | `progressPct + '%'` (derived from `schedule`) | 0–100%, see §10 |
 
 ---
 
@@ -993,6 +1035,15 @@ Questions are loaded lazily via Vite `import.meta.glob`. Each section's 100-ques
 |-------|------------|
 | The Scholar | `hero.maxHp` (100%) |
 | All others | `Math.round(hero.maxHp * 0.8)` (80%) |
+
+### Strategist: Eliminated Answer
+
+If the hero is a Strategist, one random **wrong** answer is pre-selected and rendered crossed-out (line-through, dimmed, `disabled`) on every Revival Trial question. This is re-rolled per question:
+
+- On the initial question load (`state.hero.hp === 0` effect).
+- On `handleRevivalNext` when the player advances past a wrong answer.
+
+The eliminated key is stored on the revival state as `revival.eliminated` and resolved by `pickEliminated(q, clsId)`, which returns `null` for all other classes. The Strategist still has to pick between the remaining three choices — the ability narrows the field, it doesn't free-revive.
 
 ### Edge Case: No Questions Available
 
